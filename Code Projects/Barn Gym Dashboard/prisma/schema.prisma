@@ -1,0 +1,408 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum LeadStatus {
+  LEAD
+  CLIENT
+}
+
+model ConnectionSecret {
+  id             String    @id @default(cuid())
+  provider       String    @unique
+  secret         Json?
+  webhookSecret  String?
+  status         String?
+  accountId      String?
+  lastVerifiedAt DateTime?
+  metadata       Json?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Lead {
+  id                     String                @id @default(cuid())
+  externalId             String?               @unique
+  glofoxMemberId         String?               @unique
+  stripeCustomerId       String?
+  ghlContactId           String?               @unique
+  fullName               String?
+  firstName              String?
+  lastName               String?
+  email                  String?
+  phone                  String?
+  goal                   String?
+  status                 LeadStatus?
+  source                 String?
+  isClient               Boolean               @default(false)
+  gender                 String?
+  dateOfBirth            DateTime?
+  street                 String?
+  city                   String?
+  state                  String?
+  country                String?
+  zipCode                String?
+  primaryMembershipPlan  String?
+  tags                   Json?
+  channel                String?
+  stage                  String?               @default("New")
+  owner                  String?
+  nextStep               String?
+  valueMinor             Int?
+  membershipName         String?
+  metadata               Json?
+  ltvAllCents            Int                   @default(0)
+  ltvAdsCents            Int                   @default(0)
+  ltvPTCents             Int                   @default(0)
+  ltvClassesCents        Int                   @default(0)
+  ltvSixWeekCents        Int                   @default(0)
+  ltvOnlineCoachingCents Int                   @default(0)
+  ltvCommunityCents      Int                   @default(0)
+  ltvCorporateCents      Int                   @default(0)
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+  transactions           Transaction[]
+  payments               Payment[]
+  adsRevenue             AdsRevenue[]
+  counterpartyMappings   CounterpartyMapping[]
+  leadTracking           LeadTracking[]
+  leadEvents             LeadEvent[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([ghlContactId])
+}
+
+model Payment {
+  id                String       @id @default(cuid())
+  externalPaymentId String
+  amountCents       Int
+  currency          String
+  timestamp         DateTime
+  productName       String?
+  productType       String?
+  sourceSystem      String
+  rawPayload        Json
+  leadId            String?
+  lead              Lead?        @relation(fields: [leadId], references: [id])
+  adsRevenue        AdsRevenue[]
+  createdAt         DateTime     @default(now())
+
+  @@index([externalPaymentId, sourceSystem])
+}
+
+model AdsRevenue {
+  id          String   @id @default(cuid())
+  leadId      String
+  paymentId   String
+  amountCents Int
+  timestamp   DateTime
+  createdAt   DateTime @default(now())
+
+  lead    Lead    @relation(fields: [leadId], references: [id])
+  payment Payment @relation(fields: [paymentId], references: [id])
+
+  @@index([leadId])
+  @@index([paymentId])
+}
+
+model AdsSpend {
+  id          String   @id @default(cuid())
+  periodStart DateTime
+  periodEnd   DateTime
+  amountCents Int
+  source      String
+  createdAt   DateTime @default(now())
+
+  @@index([periodStart, periodEnd])
+}
+
+model MetaAdAccount {
+  id        String             @id
+  name      String?
+  currency  String?
+  timezone  String?
+  insights  MetaDailyInsight[]
+  campaigns MetaCampaign[]
+  adsets    MetaAdSet[]
+  ads       MetaAd[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+model MetaCampaign {
+  id        String             @id
+  account   MetaAdAccount      @relation(fields: [accountId], references: [id])
+  accountId String
+  name      String?
+  objective String?
+  status    String?
+  adsets    MetaAdSet[]
+  ads       MetaAd[]
+  insights  MetaDailyInsight[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+model MetaAdSet {
+  id               String             @id
+  account          MetaAdAccount      @relation(fields: [accountId], references: [id])
+  accountId        String
+  campaign         MetaCampaign?      @relation(fields: [campaignId], references: [id])
+  campaignId       String?
+  name             String?
+  status           String?
+  optimizationGoal String?
+  billingEvent     String?
+  dailyBudget      Int?
+  lifetimeBudget   Int?
+  insights         MetaDailyInsight[]
+  ads              MetaAd[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+model MetaAd {
+  id           String             @id
+  account      MetaAdAccount      @relation(fields: [accountId], references: [id])
+  accountId    String
+  campaign     MetaCampaign?      @relation(fields: [campaignId], references: [id])
+  campaignId   String?
+  adset        MetaAdSet?         @relation(fields: [adsetId], references: [id])
+  adsetId      String?
+  name         String?
+  status       String?
+  creativeName String?
+  insights     MetaDailyInsight[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+model MetaDailyInsight {
+  id          String        @id @default(cuid())
+  account     MetaAdAccount @relation(fields: [accountId], references: [id])
+  accountId   String
+  campaign    MetaCampaign? @relation(fields: [campaignId], references: [id])
+  campaignId  String?
+  adset       MetaAdSet?    @relation(fields: [adsetId], references: [id])
+  adsetId     String?
+  ad          MetaAd?       @relation(fields: [adId], references: [id])
+  adId        String?
+  date        DateTime
+  spend       Float         @default(0)
+  impressions Int           @default(0)
+  clicks      Int           @default(0)
+  cpm         Float?
+  cpc         Float?
+  results     Int           @default(0)
+  resultType  String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([accountId, campaignId, adsetId, adId, date])
+  @@index([accountId, date])
+  @@index([campaignId, date])
+  @@index([adsetId, date])
+  @@index([adId, date])
+}
+
+model UnmatchedPayment {
+  id                String   @id @default(cuid())
+  externalPaymentId String
+  sourceSystem      String
+  customerEmail     String?
+  customerPhone     String?
+  reason            String?
+  rawPayload        Json
+  createdAt         DateTime @default(now())
+
+  @@index([externalPaymentId, sourceSystem])
+}
+
+model Contact {
+  id                String    @id @default(cuid())
+  fullName          String?
+  email             String?
+  phone             String?
+  status            String    @default("lead")
+  sourceTags        String[]  @default([])
+  segmentTags       String[]  @default([])
+  isActive          Boolean   @default(false)
+  firstSeenAt       DateTime?
+  lastPaymentAt     DateTime?
+  renewalDate       DateTime?
+  membershipType    String?
+  membershipEndDate DateTime?
+  trainerizeId      String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  transactions      Transaction[]
+
+  @@unique([email])
+  @@index([phone])
+}
+
+model Transaction {
+  id             String   @id @default(cuid())
+  contactId      String?
+  contact        Contact? @relation(fields: [contactId], references: [id])
+  source         String
+  externalId     String?
+  transactionUid String?  @unique
+  occurredAt     DateTime
+  amountMinor    Int
+  currency       String   @default("GBP")
+  description    String?
+  reference      String?
+  category       String?
+  status         String?
+  confidence     String?
+  raw            Json?
+  metadata       Json?
+  provider       String?
+  personName     String?
+  productType    String?
+  leadId         String?
+  lead           Lead?    @relation(fields: [leadId], references: [id])
+  paymentMethod  String?
+  membershipPlan String?
+  notes          String?
+  sourceFile     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  manualMatches  ManualMatchQueue[]
+
+  @@unique([externalId, source])
+  @@index([contactId])
+  @@index([reference])
+  @@index([occurredAt])
+}
+
+model UnmatchedTransaction {
+  id            String   @id @default(cuid())
+  source        String
+  externalId    String?
+  occurredAt    DateTime
+  amountMinor   Int
+  currency      String   @default("GBP")
+  description   String?
+  reference     String?
+  referenceHint String?
+  createdAt     DateTime @default(now())
+
+  @@index([reference])
+}
+
+model Product {
+  id             String   @id @default(cuid())
+  externalId     String?
+  externalSystem String
+  name           String
+  type           String
+  priceMinor     Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([externalSystem, externalId])
+}
+
+model RevenueGoal {
+  id            String   @id @default(cuid())
+  category      String // e.g. "Total Revenue", "PT", "Classes", "Online", "Corporate", "Retreats", "Q1", etc.
+  period        String // "Yearly", "Quarterly", "Monthly"
+  targetAmount  Float
+  currentAmount Float    @default(0)
+  progress      Float    @default(0)
+  notes         String?
+  createdAt     DateTime @default(now())
+}
+
+model SyncLog {
+  id        String   @id @default(cuid())
+  source    String
+  detail    String
+  records   String?
+  errors    String?
+  createdAt DateTime @default(now())
+}
+
+model ManualMatchQueue {
+  id                 String    @id @default(cuid())
+  transactionId      String
+  reason             String
+  suggestedMemberIds Json?
+  referencePattern   String?
+  createdAt          DateTime  @default(now())
+  resolvedAt         DateTime?
+  resolvedBy         String?
+
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+}
+
+model LeadTracking {
+  id          String   @id @default(cuid())
+  leadId      String
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmTerm     String?
+  utmContent  String?
+  fbclid      String?
+  gclid       String?
+  formId      String?
+  adId        String?
+  campaignId  String?
+  adsetId     String?
+  platform    String?
+  rawPayload  Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  lead Lead @relation(fields: [leadId], references: [id])
+
+  @@index([leadId])
+}
+
+model LeadEvent {
+  id        String   @id @default(cuid())
+  leadId    String
+  eventType String
+  payload   Json?
+  createdAt DateTime @default(now())
+
+  lead Lead @relation(fields: [leadId], references: [id])
+
+  @@index([leadId])
+  @@index([eventType])
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  name        String
+  metric      String
+  targetValue Float
+  periodStart DateTime
+  periodEnd   DateTime
+  createdAt   DateTime @default(now())
+}
+
+model CounterpartyMapping {
+  id        String   @id @default(cuid())
+  provider  String
+  key       String
+  leadId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  lead Lead @relation(fields: [leadId], references: [id])
+
+  @@unique([provider, key])
+}

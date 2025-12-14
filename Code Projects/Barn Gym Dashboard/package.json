@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "build": "cd app && npm ci && npm run build",
+    "start": "cd app && npm run start"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "csv-parse": "^6.1.0",
+    "prisma": "^6.19.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
+  }
+}
