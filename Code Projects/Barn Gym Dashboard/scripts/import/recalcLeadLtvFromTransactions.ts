@@ -47,7 +47,10 @@ export async function recalculateLeadLtv() {
         const transactions = await prisma.transaction.findMany({
             where: {
                 contactId: contact.id,
-                status: { in: ['Completed', 'succeeded', 'SETTLED', 'Paid'] }
+                status: {
+                    in: ['Completed', 'succeeded', 'SETTLED', 'Paid', 'PAID', 'paid', 'success'],
+                    mode: 'insensitive'
+                }
             },
             select: { amountMinor: true, productType: true, source: true }
         });
@@ -92,7 +95,10 @@ export async function recalculateLeadLtv() {
         const txWithTags = await prisma.transaction.findMany({
             where: {
                 contactId: contact.id,
-                status: { in: ['Completed', 'succeeded', 'SETTLED', 'Paid'] }
+                status: {
+                    in: ['Completed', 'succeeded', 'SETTLED', 'Paid', 'PAID', 'paid', 'success'],
+                    mode: 'insensitive'
+                }
             },
             select: { amountMinor: true, productType: true, tags: true }
         });
