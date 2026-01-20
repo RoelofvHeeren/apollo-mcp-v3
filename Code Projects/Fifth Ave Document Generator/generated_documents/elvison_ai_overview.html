@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elvison AI - System Overview</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Tailwind CSS (via CDN for standalone file) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'teal-accent': '#139187',
+                        'primary': '#000000',
+                        'primary-dim': '#1a1a1a',
+                        'primary-glow': '#333333',
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Inter"', 'sans-serif'],
+                        serif: ['"Instrument Serif"', 'serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'gradient-dark': 'linear-gradient(135deg, #1a1a1a 0%, #000000 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            /* Enhance print to PDF */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* A4 Page Layout for PDF */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            body {
+                margin: 0;
+            }
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 0 auto;
+            background-color: #000000;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid #333;
+            /* Separator for screen viewing */
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .step-number {
+            font-family: 'Instrument Serif', serif;
+            font-size: 2.5rem;
+            color: #139187;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Subtle background gradient */
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(19, 145, 135, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            top: -200px;
+            right: -200px;
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased selection:bg-teal-accent selection:text-white">
+    <!-- COVER PAGE -->
+    <div class="page justify-center items-center text-center relative">
+        <div class="bg-glow"></div>
+        <div class="z-10 relative">
+            <h1 class="font-serif text-6xl md:text-8xl text-white mb-6">Elvison AI</h1>
+            <p class="text-xl md:text-2xl text-teal-accent font-light tracking-wide uppercase mb-12">Automated Partner
+                Recruitment System</p>
+            <div class="glass-card max-w-2xl mx-auto text-left">
+                <p class="text-gray-300 text-lg leading-relaxed">
+                    An autonomous AI workforce designed to identify, qualify, and engage strategic partners in
+                    international markets.
+                    <br><br>
+                    <strong>Target:</strong> Dubai Partner Network for Tax Advisory & Wealth Management.
+                </p>
+            </div>
+        </div>
+        <div class="absolute bottom-10 text-gray-500 text-sm font-mono">
+            CONFIDENTIAL &bull; INTERNAL OVERVIEW &bull; 2026
+        </div>
+    </div>
+    <!-- OVERVIEW CONTENT PAGE -->
+    <div class="page">
+        <div class="bg-glow" style="top: auto; bottom: -200px; right: auto; left: -200px;"></div>
+        <div class="relative z-10">
+            <header class="mb-12 border-b border-white/10 pb-6">
+                <h2 class="font-serif text-4xl text-white">System Architecture</h2>
+                <p class="text-teal-accent text-lg mt-2">End-to-End Recruitment Pipeline</p>
+            </header>
+            <div class="grid gap-8">
+                <!-- Step 1 -->
+                <div class="flex gap-6">
+                    <div class="shrink-0 w-16 text-center">
+                        <div class="step-number">01</div>
+                        <div class="h-full w-px bg-gradient-to-b from-teal-accent/50 to-transparent mx-auto"></div>
+                    </div>
+                    <div class="pb-8">
+                        <h3 class="text-xl font-bold text-white mb-2">Target Profiling & Configuration</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            The system is initialized with strict "Ideal Customer Profile" (ICP) criteria.
+                            We target firms such as Tax Advisory and Wealth Management groups that manage High-Net-Worth
+                            Individuals (HNWIs)
+                            but lack a Dubai presence. Automatic exclusion rules filter out irrelevant prospects.
+                        </p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="flex gap-6">
+                    <div class="shrink-0 w-16 text-center">
+                        <div class="step-number">02</div>
+                        <div class="h-full w-px bg-gradient-to-b from-teal-accent/50 to-transparent mx-auto"></div>
+                    </div>
+                    <div class="pb-8">
+                        <h3 class="text-xl font-bold text-white mb-2">Automated Discovery</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            AI agents perform broad-spectrum searches across search engines, corporate registries, and
+                            professional directories.
+                            The system uses iterative logic to aggregate a comprehensive list of potential firms in
+                            target geographic regions
+                            (e.g., London, Paris, Zurich).
+                        </p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex gap-6">
+                    <div class="shrink-0 w-16 text-center">
+                        <div class="step-number">03</div>
+                        <div class="h-full w-px bg-gradient-to-b from-teal-accent/50 to-transparent mx-auto"></div>
+                    </div>
+                    <div class="pb-8">
+                        <h3 class="text-xl font-bold text-white mb-2">Qualification & Analysis</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            An autonomous research agent visits every website to verify suitability. It analyzes "About
+                            Us" and "Service" pages
+                            to confirm HNWI focus and strictly filters out firms that already have a Dubai partner.
+                            Firms are scored on a 1-10 scale for fit.
+                        </p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="flex gap-6">
+                    <div class="shrink-0 w-16 text-center">
+                        <div class="step-number">04</div>
+                        <div class="h-full w-px bg-gradient-to-b from-teal-accent/50 to-transparent mx-auto"></div>
+                    </div>
+                    <div class="pb-8">
+                        <h3 class="text-xl font-bold text-white mb-2">Decision Maker Identification</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            For qualified firms, the system identifies key stakeholders (Partners, Directors, Heads of
+                            Tax)
+                            and retrieves verified contact information to ensure outreach is directed to the correct
+                            decision-makers.
+                        </p>
+                    </div>
+                </div>
+                <!-- Step 5 -->
+                <div class="flex gap-6">
+                    <div class="shrink-0 w-16 text-center">
+                        <div class="step-number">05</div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Outreach Workflow</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            The system generates hyper-personalized messages citing specific business context found
+                            during research.
+                            It manages multi-channel delivery (Email, LinkedIn) and automatically hands off interested
+                            leads
+                            to the sales team upon response.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

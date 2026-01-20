@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Plan - Kaba Kaba Villa Development</title>
+    <style>
+        /* 
+         * FIFTH AVENUE BRANDING - CSS SYSTEM
+         * Based on FIFTH_AVENUE_BRANDING_GUIDE.md
+         */
+
+        /* Fonts */
+        @font-face {
+            font-family: 'Inter';
+            src: url('../Design_And_Branding/fonts/Inter-Light.otf') format('opentype');
+            font-weight: 300;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Inter';
+            src: url('../Design_And_Branding/fonts/Inter-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Inter';
+            src: url('../Design_And_Branding/fonts/Inter-Medium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Inter';
+            src: url('../Design_And_Branding/fonts/Inter-SemiBold.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Inter';
+            src: url('../Design_And_Branding/fonts/Inter-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        :root {
+            /* Colors */
+            --color-black: #000000;
+            --color-charcoal: #1A1A1A;
+            --color-gray: #9A9A9A;
+            --color-light-gray: #F5F5F3;
+            --color-white: #FFFFFF;
+            --color-sage: #A5B5A5;
+            --color-tan: #D4C5A8;
+
+            /* Spacing */
+            --margin-page: 0.75in;
+            --spacing-section: 60px;
+        }
+
+        /* Reset & Base */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: #e0e0e0;
+            /* Visual distinction for screen viewing */
+            -webkit-print-color-adjust: exact;
+        }
+
+        .document-container {
+            width: 210mm;
+            /* A4 width */
+            margin: 0 auto;
+        }
+
+        /* Page Structure */
+        .page {
+            position: relative;
+            width: 210mm;
+            height: 297mm;
+            /* A4 height */
+            background: var(--color-light-gray);
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media print {
+            body {
+                background: none;
+            }
+
+            .document-container {
+                width: 100%;
+            }
+
+            .page {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin: 0;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-black);
+        }
+
+        p {
+            font-size: 11pt;
+            line-height: 1.6;
+            color: var(--color-charcoal);
+            font-weight: 300;
+            /* Inter Light */
+            margin-bottom: 1em;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 1.5em;
+        }
+
+        ul li {
+            position: relative;
+            margin-bottom: 0.5em;
+            font-weight: 300;
+            font-size: 11pt;
+            color: var(--color-charcoal);
+        }
+
+        ul li::before {
+            content: "•";
+            position: absolute;
+            left: -1em;
+            color: var(--color-black);
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        /* Shared Components */
+        .vertical-text {
+            position: absolute;
+            top: 50%;
+            /* Center vertically */
+            left: 20px;
+            /* Moved further left as requested */
+            transform: translateY(-50%) rotate(-90deg);
+            /* Center and rotate */
+            transform-origin: center;
+            font-size: 60pt;
+            /* Reduced size as requested */
+            font-weight: 300;
+            color: #CCCCCC;
+            /* A visible gray, not white/invisible */
+            letter-spacing: 12px;
+            white-space: nowrap;
+            z-index: 0;
+            /* opacity removed so it's solid color */
+        }
+
+        .vertical-text.white {
+            color: var(--color-white);
+        }
+
+        .logo-mark {
+            position: absolute;
+            bottom: var(--margin-page);
+            right: var(--margin-page);
+            width: 150px;
+        }
+
+        .content-area {
+            position: absolute;
+            top: 15mm;
+            /* Top padding */
+            left: 20mm;
+            /* Standardized left padding since vertical text is gone */
+            right: 20mm;
+            /* Symmetric right padding */
+            bottom: 30mm;
+            /* Safe zone bottom padding to clear footer */
+            /* border: 1px solid red;  Debug: Visualize content box */
+            overflow: hidden;
+            /* Prevent spillover */
+        }
+
+        /* --- PAGE 1: COVER --- */
+        #page-1 {
+            position: relative;
+            background: black;
+            color: white;
+        }
+
+        #page-1 .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        #page-1 .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        #page-1 .cover-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #page-1 .main-title {
+            font-size: 48pt;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 15px;
+            margin-bottom: 20px;
+            color: var(--color-white);
+        }
+
+        #page-1 .subtitle {
+            font-size: 16pt;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 400;
+            color: var(--color-white);
+            margin-bottom: 60px;
+        }
+
+        #page-1 .logo {
+            position: absolute;
+            bottom: 60px;
+            width: 180px;
+        }
+
+        /* --- PAGE 2: EXECUTIVE SUMMARY --- */
+        #page-2 .vertical-text {
+            display: none;
+            /* Ensure hidden if present */
+        }
+
+        .section-header {
+            font-size: 24pt;
+            margin-bottom: 30px;
+            border-bottom: 1px solid black;
+            padding-bottom: 10px;
+            letter-spacing: 3px;
+        }
+
+        .two-column {
+            column-count: 2;
+            column-gap: 40px;
+        }
+
+        .highlight-box {
+            background: white;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        /* Clean style for "Why This Works" (removes box) */
+        .clean-list-section {
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        .highlight-title,
+        .clean-title {
+            font-size: 12pt;
+            font-weight: 600;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            /* Ensure all consistency */
+        }
+
+        /* --- PAGE 3: STRATEGIC APPROACH (Risk) --- */
+        #page-3 .split-layout {
+            display: flex;
+            height: 100%;
+            width: 100%;
+        }
+
+        #page-3 .split-left {
+            width: 35%;
+            /* Reduced to avoid logo overlap */
+            position: relative;
+            overflow: hidden;
+        }
+
+        #page-3 .split-left img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #page-3 .split-left .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            /* Darker overlay for text pop */
+        }
+
+        #page-3 .split-left .risk-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-90deg);
+            color: white;
+            font-size: 24pt;
+            /* Matches Executive Summary Header */
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            text-align: center;
+            border-bottom: 1px solid white;
+            padding-bottom: 10px;
+        }
+
+        #page-3 .split-right {
+            width: 65%;
+            /* Adjusted for new split */
+            padding: 15mm 15mm 30mm 15mm;
+            position: relative;
+        }
+
+        /* Remove old vertical text styling for this page since it's custom */
+        #page-3 .vertical-text {
+            display: none;
+        }
+
+        /* --- PAGE 6: FINANCIALS (Tables) --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th {
+            text-align: left;
+            font-weight: 400;
+            font-size: 9pt;
+            text-transform: uppercase;
+            color: var(--color-gray);
+            border-bottom: 1px solid var(--color-black);
+            padding: 10px 0;
+        }
+
+        td {
+            padding: 12px 0;
+            font-size: 11pt;
+            border-bottom: 1px solid #ddd;
+        }
+
+        td.amount {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        tr:last-child td {
+            border-bottom: 1px solid var(--color-black);
+        }
+
+        /* New helper for sub-headers */
+        h3.sub-header {
+            font-size: 14pt;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* Footer Logo for content pages */
+        .footer-logo {
+            position: absolute;
+            bottom: 10mm;
+            /* Lowered further per request */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            opacity: 1;
+            z-index: 10;
+        }
+
+        /* End Page Styles */
+        #page-9 {
+            position: relative;
+            background: black;
+            color: white;
+        }
+
+        #page-9 .end-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        #page-9 .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            /* Stronger overlay */
+            z-index: 2;
+        }
+
+        #page-9 .cover-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* Center horizontally */
+            text-align: center;
+            padding: 60px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="document-container">
+
+        <!-- PAGE 1: COVER -->
+        <div id="page-1" class="page">
+            <img src="../new_land_pack_pages/cover_hero.jpg" class="hero-image" alt="Villa Exterior">
+            <div class="overlay"></div>
+
+            <div class="cover-content">
+                <div class="main-title">Business Plan</div>
+                <div class="subtitle">Kaba Kaba Villa Development</div>
+                <img src="../Design_And_Branding/logos/properties_white/FifthAveProp_FullLogo_White.png" class="logo"
+                    alt="Fifth Avenue Properties">
+            </div>
+        </div>
+
+        <!-- PAGE 2: EXECUTIVE SUMMARY -->
+        <div id="page-2" class="page">
+            <!-- Vertical Text Removed -->
+
+            <div class="content-area">
+                <div class="section-header">Project Overview</div>
+
+                <p>The <strong>Kaba Kaba Villa Development</strong> is a <em>sales-led, risk-controlled residential
+                        project</em> structured to prioritise <em>capital preservation first, followed by
+                        high-probability upside</em> through off-plan execution.</p>
+
+                <p>Unlike traditional speculative developments, this project has been deliberately designed so that
+                    <em>full capital deployment only occurs once real market demand is proven</em>. A deposit-first land
+                    structure, combined with a 90-day pre-sales validation window and a proven off-plan sales engine,
+                    significantly reduces downside risk while preserving strong return potential.
+                </p>
+
+                <div class="highlight-box">
+                    <div class="highlight-title">TARGET OUTCOMES</div>
+                    <table style="margin-bottom: 0;">
+                        <tr>
+                            <td><strong>Capital Cycle</strong></td>
+                            <td class="amount">~20 Months</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Annualized IRR</strong></td>
+                            <td class="amount">~32.2%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Upside Potential</strong></td>
+                            <td class="amount">Price escalation as pre-sales accelerate</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <p
+                        style="font-size: 10pt; color: var(--color-gray); text-transform: uppercase; letter-spacing: 1px;">
+                        Key Project Data</p>
+                    <div style="display: flex; gap: 40px; margin-top: 20px; font-family: 'Inter', sans-serif;">
+                        <!-- Changed font here -->
+                        <div>
+                            <div style="font-weight: 600; font-size: 16pt;">Fifth Avenue Properties</div>
+                            <div style="font-size: 9pt; color: var(--color-gray);">Developer</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 16pt;">Kaba Kaba, Bali</div>
+                            <div style="font-size: 9pt; color: var(--color-gray);">Location</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 16pt;">20 Villas</div>
+                            <div style="font-size: 9pt; color: var(--color-gray);">Project Size</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 16pt;">25-Year</div>
+                            <div style="font-size: 9pt; color: var(--color-gray);">Leasehold</div>
+                        </div>
+                    </div>
+                </div>
+                <img src="../Design_And_Branding/logos/properties_black/FifthAveProp_FullLogo_Black.png"
+                    class="footer-logo">
+            </div>
+        </div>
+
+        <!-- PAGE 3: LAND ACQUISITION & RISK -->
+        <div id="page-3" class="page">
+            <div class="split-layout">
+                <div class="split-left">
+                    <img src="../new_land_pack_pages/risk_mitigation_vertical.png" alt="Rice Fields">
+                    <div class="overlay"></div>
+                    <div class="risk-title">Risk Mitigation</div>
+                </div>
+                <div class="split-right">
+                    <!-- Content inside the safe zone (padding defined in CSS) -->
+
+                    <div class="section-header">Land & Risk Strategy</div>
+                    <p
+                        style="font-size: 9pt; text-transform: uppercase; color: var(--color-gray); margin-bottom: 20px;">
+                        Primary Strength of the Deal</p>
+
+                    <h3 class="sub-header">Deposit-First, Conditional Land Execution</h3>
+                    <p>A deposit has already been placed on the land, securing exclusivity while allowing <strong>90
+                            days to
+                            achieve targeted pre-sales</strong> before the balance of the land payment is due.</p>
+                    <p>This structure fundamentally <em>reverses the traditional development risk profile</em>:</p>
+                    <ul>
+                        <li>Validates real buyer demand <em>before</em> full capital commitment</li>
+                        <li>Avoids speculative land exposure</li>
+                        <li>Preserves capital flexibility at the earliest stage</li>
+                    </ul>
+
+                    <div
+                        style="background: var(--color-light-gray); padding: 20px; border-left: 3px solid black; margin-top: 30px;">
+                        <p style="font-size: 10pt;">Instead of: Buy land -> build -> hope to sell</p>
+                        <p style="font-weight: 600; font-size: 11pt; margin-top: 5px;">The project follows: Secure land
+                            ->
+                            prove demand -> proceed</p>
+                    </div>
+
+                    <h3 class="sub-header">Downside Protection & Capital Safety</h3>
+                    <p>If pre-sales do <em>not</em> meet expectations within the 90-day window, the project <em>does not
+                            proceed</em>. The land can be resold (flipped) at a profit due to the emerging Buduk / Kaba
+                        Kaba
+                        corridor, clean zoning, and development-ready status.</p>
+                    <p><strong>Result:</strong> A <em>hard downside floor</em> where all invested capital can be
+                        returned
+                        rather than trapped in illiquid land.</p>
+                </div>
+            </div>
+            <img src="../Design_And_Branding/logos/properties_black/FifthAveProp_FullLogo_Black.png"
+                class="footer-logo">
+        </div>
+
+        <!-- PAGE 4: DEVELOPER & EXECUTION -->
+        <div id="page-4" class="page">
+
+            <div class="content-area">
+                <div class="section-header">Developer & Execution Capability</div>
+
+                <div class="two-column">
+                    <div>
+                        <h3 class="sub-header">Fifth Avenue Properties</h3>
+                        <p
+                            style="text-transform: uppercase; font-size: 9pt; color: var(--color-gray); margin-bottom: 10px;">
+                            Developer & Sales Execution</p>
+                        <p>Fifth Avenue Properties is the lead developer and brings:</p>
+                        <ul>
+                            <li>A <strong>fully in-house marketing department</strong></li>
+                            <li>A <strong>systemised off-plan sales infrastructure</strong></li>
+                            <li>International buyer reach</li>
+                            <li>Repeatable execution across comparable developments</li>
+                        </ul>
+                        <p>This is not a first-time or opportunistic developer — the project is being executed by a team
+                            with <em>proven systems</em>, not ad-hoc sales efforts.</p>
+                    </div>
+                    <div>
+                        <h3 class="sub-header">Royal Bali Group</h3>
+                        <p
+                            style="text-transform: uppercase; font-size: 9pt; color: var(--color-gray); margin-bottom: 10px;">
+                            Construction & Comparable Sales Proof</p>
+                        <p>The contractor team behind this project has:</p>
+                        <ul>
+                            <li>Delivered comparable villas in the same market</li>
+                            <li>Recently sold <strong>two villas off-plan at approximately USD $350,000 each</strong> in
+                                the immediate area</li>
+                            <li>Demonstrated strong buyer acceptance for off-plan product at this price level</li>
+                        </ul>
+                        <p>These <strong>$350,000 off-plan sales</strong> provide direct market validation that pricing
+                            assumptions are realistic and off-plan execution risk is materially reduced.</p>
+                    </div>
+                </div>
+
+                <!-- Replaced Logo Section -->
+                <div
+                    style="margin-top: 60px; display: flex; align-items: baseline; justify-content: center; gap: 40px;">
+                    <img src="../Design_And_Branding/logos/properties_black/FifthAveProp_StackedLogo_Black.png"
+                        style="height: 60px;" alt="Fifth Avenue">
+                    <span style="font-size: 30pt; font-weight: 300; color: #ccc;">&</span>
+                    <!-- Royal Bali logo lowered via margin-top to align visually -->
+                    <img src="../Design_And_Branding/logos/royal_bali_logo.webp" style="height: 50px; margin-top: 10px;"
+                        alt="Royal Bali Group">
+                </div>
+
+                <!-- Footer logo removed -->
+            </div>
+        </div>
+
+        <!-- PAGE 5: SALES STRATEGY PART 1 -->
+        <div id="page-5" class="page">
+            <!-- Vertical Text Removed -->
+            <div class="content-area">
+                <div class="section-header">Sales Strategy & Execution</div>
+                <p style="font-size: 9pt; text-transform: uppercase; color: var(--color-gray); margin-bottom: 20px;">
+                    Second Core Strength of the Deal (Part 1)</p>
+
+                <div class="two-column">
+                    <div>
+                        <h3 class="sub-header">Sales Philosophy</h3>
+                        <p>The sales strategy is built around: <strong>Velocity first, Margin optimisation
+                                second</strong>.</p>
+                        <p>Early pricing is intentionally conservative to drive fast absorption and validate demand.
+                            Once momentum is established, pricing is adjusted upward to maximise returns.</p>
+
+                        <h3 class="sub-header">Lead Generation & Marketing</h3>
+                        <p>Fifth Avenue’s in-house marketing team will deploy systems already live and tested across
+                            other projects:</p>
+                        <ul>
+                            <li>Meta Ads (Facebook & Instagram)</li>
+                            <li>High-conversion Video Sales Letters (VSLs)</li>
+                            <li>Targeted international lifestyle-investor campaigns</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="sub-header">Sales Process</h3>
+                        <ol
+                            style="margin: 0; padding-left: 20px; font-weight: 300; font-size: 11pt; color: var(--color-charcoal);">
+                            <li style="margin-bottom: 5px;">Inbound lead generated</li>
+                            <li style="margin-bottom: 5px;"><em>Contact within 60 seconds</em> by trained appointment
+                                setters</li>
+                            <li style="margin-bottom: 5px;">Immediate qualification to filter serious buyers</li>
+                            <li style="margin-bottom: 5px;">Qualified prospects booked directly into calls with
+                                experienced closers</li>
+                            <li style="margin-bottom: 5px;">Closers focus exclusively on conversion</li>
+                        </ol>
+                        <p style="margin-top: 15px;">This separation of marketing, qualification, and closing
+                            significantly improves conversion rates and reduces lead leakage.</p>
+                    </div>
+                </div>
+                <img src="../Design_And_Branding/logos/properties_black/FifthAveProp_FullLogo_Black.png"
+                    class="footer-logo">
+            </div>
+        </div>
+
+        <!-- PAGE 6: SALES STRATEGY PART 2 -->
+        <div id="page-6" class="page">
+            <!-- Vertical Text Removed -->
+
+            <div class="content-area">
+                <div class="section-header">Pre-Sales & Risk Control</div>
+                <p style="font-size: 9pt; text-transform: uppercase; color: var(--color-gray); margin-bottom: 20px;">
+                    Second Core Strength of the Deal (Part 2)</p>
+
+                <h3 class="sub-header" style="margin-top: 40px;">Pre-Sales Targets & Phasing</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Timeline</th>
+                            <th>Target</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Phase 1</td>
+                            <td>Days 1–30</td>
+                            <td>25–30% sold</td>
+                            <td>Demand validation</td>
+                        </tr>
+                        <tr>
+                            <td>Phase 2</td>
+                            <td>Days 31–60</td>
+                            <td>20–25% sold</td>
+                            <td>Equity coverage</td>
+                        </tr>
+                        <tr>
+                            <td>Phase 3</td>
+                            <td>Days 61–90</td>
+                            <td>10–15% sold</td>
+                            <td>Margin optimisation</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>Target pre-sales: ~60–65% before full land payment.</strong> This aligns with best-practice
+                    off-plan development thresholds.</p>
+
+                <h3 class="sub-header">Sales Risk Controls</h3>
+                <p>Sales risk is <em>actively managed</em>, not passively accepted. If velocity underperforms: pricing
+                    incentives can be applied, marketing spend reallocated, or the land flip option exercised.</p>
+                <img src="../Design_And_Branding/logos/properties_black/FifthAveProp_FullLogo_Black.png"
+                    class="footer-logo">
+            </div>
+        </div>
+
+        <!-- PAGE 7: BUYER PROFILE & CAPTIAL STRATEGY -->
+        <div id="page-7" class="page">
+            <!-- Vertical Text Removed -->
+
+            <div class="content-area">
+                <div class="section-header">Buyer Profile & Capital Strategy</div>
+
+                <div class="two-column">
+                    <div>
+                        <h3 class="sub-header">Ideal Client Profile</h3>
+                        <p>The project is designed for Bali’s strongest demand segment:</p>
+                        <ul>
+                            <li>Families seeking a second home</li>
+                            <li>Entrepreneurs and remote business owners</li>
+                            <li>Lifestyle investors combining personal use with rental income</li>
+                        </ul>
+
+                        <h3 class="sub-header">"Live + Earn" Ownership Model</h3>
+                        <p>Post-COVID buyer behaviour strongly favours flexible ownership, part-time use, and
+                            professionally managed rentals during non-occupancy. This buyer group is less speculative,
+                            more decisive, and comfortable with off-plan purchases when the developer is credible.</p>
+                    </div>
+                    <div>
+                        <h3 class="sub-header">Pre-Sales as Capital Strategy</h3>
+                        <p>Pre-sales are used to:</p>
+                        <ul>
+                            <li>Fund the majority of required equity</li>
+                            <li>Reduce external capital exposure</li>
+                            <li>Improve IRR efficiency</li>
+                            <li>Lower overall project risk</li>
+                        </ul>
+                        <p>This ensures investor capital is deployed <em>only once demand is proven</em>.</p>
+
+                        <!-- Cleaned up "Why This Works" section -->
+                        <div class="clean-list-section">
+                            <p class="clean-title"
+                                style="font-size: 12pt; font-weight: 600; text-transform: uppercase;">WHY THIS WORKS
+                                (INVESTOR PERSPECTIVE)</p>
+                            <ol style="margin-top:0; padding-left: 15px;">
+                                <li>Exceptional Risk Mitigation</li>
+                                <li>Proven Off-Plan Sales Capability ($350k comps)</li>
+                                <li>Sales-Led Execution</li>
+                                <li>Aligned Buyer Demand</li>
+                                <li>Multiple Exit Paths</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <img src="../Design_And_Branding/logos/properties_black/FifthAveProp_FullLogo_Black.png"
+                    class="footer-logo">
+            </div>
+        </div>
+
+        <!-- PAGE 8: FINANCIALS -->
+        <div id="page-8" class="page">
+            <!-- Vertical Text Removed -->
+
+            <div class="content-area">
+                <div class="section-header">Financial Performance Summary</div>
+
+                <div class="two-column">
+                    <div>
+                        <h3 class="sub-header">Base Case</h3>
+                        <ul>
+                            <li><strong>Capital cycle:</strong> ~20 months</li>
+                            <li><strong>Annualised IRR:</strong> ~32.2%</li>
+                            <li>Strong margin buffer</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="sub-header">Upside Case</h3>
+                        <ul>
+                            <li>Price increases as pre-sales accelerate</li>
+                            <li>Improved net profit and IRR</li>
+                            <li>Earlier capital recovery</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px; font-style: italic;">Returns are driven by sales execution and capital
+                    efficiency, not leverage or speculation.</p>
+
+                <h3 class="sub-header" style="margin-top: 40px;">Projections (Base Case)</h3>
+
+                <div class="two-column">
+                    <div>
+                        <h4 style="font-size: 10pt; margin-bottom: 10px;">Capital Breakdown</h4>
+                        <table>
+                            <tr>
+                                <td>Pre-Sales Revenue</td>
+                                <td class="amount">~$2.7M (60%)</td>
+                            </tr>
+                            <tr>
+                                <td>Equity Required</td>
+                                <td class="amount">~$1.7M (40%)</td>
+                            </tr>
+                            <tr style="border-top: 2px solid black;">
+                                <td><strong>Total Project Cost</strong></td>
+                                <td class="amount"><strong>$4,354,750</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 10pt; margin-bottom: 10px;">Profitability</h4>
+                        <table>
+                            <tr>
+                                <td>Gross Revenue</td>
+                                <td class="amount">$6,420,000</td>
+                            </tr>
+                            <tr>
+                                <td>Net Revenue</td>
+                                <td class="amount">$6,099,000</td>
+                            </tr>
+                            <tr style="border-top: 2px solid black;">
+                                <td><strong>Projected Profit</strong></td>
+                                <td class="amount"><strong>$1,744,250</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="highlight-box" style="background: var(--color-sage); color: white;">
+                    <h3 style="font-size: 14pt; margin-bottom: 10px; color: white;">Final Conclusion</h3>
+                    <p style="color: white;">This project is not speculative development. It is a <strong>controlled,
+                            demand-validated execution strategy</strong> designed to ensure:</p>
+                    <ul style="color: white;">
+                        <li style="color: white;">Capital is protected first</li>
+                        <li style="color: white;">Sales are proven early</li>
+                        <li style="color: white;">Upside is unlocked only after risk is removed</li>
+                    </ul>
+                    <p
+                        style="color: white; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 10px;">
+                        <em>This is how disciplined real estate development should be structured.</em>
+                    </p>
+                </div>
+                <img src="../Design_And_Branding/logos/properties_black/FifthAveProp_FullLogo_Black.png"
+                    class="footer-logo">
+            </div>
+        </div>
+
+        <!-- PAGE 9: BACK COVER -->
+        <div id="page-9" class="page">
+            <img src="../new_land_pack_pages/end_page_bg.png" class="end-bg" alt="Interior">
+            <div class="overlay" style="background: rgba(0,0,0,0.6);"></div> <!-- Deeper overlay -->
+
+            <div class="cover-content"> <!-- Reusing cover content for center alignment -->
+                <div
+                    style="font-size: 36pt; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 40px; color: white;">
+                    Invest in<br>Kaba Kaba</div>
+
+                <div style="display: flex; gap: 60px; text-align: left;">
+                    <div>
+                        <p style="color: white; margin-bottom: 5px; font-weight: 600;">Calgary Office</p>
+                        <p style="color: #ddd; font-size: 10pt;">920-10201 Southport Road SW,<br>AB T2W 4X9</p>
+                    </div>
+                    <div>
+                        <p style="color: white; margin-bottom: 5px; font-weight: 600;">Kelowna Office</p>
+                        <p style="color: #ddd; font-size: 10pt;">407-1708 Dolphin Avenue,<br>BC V1Y 9S4</p>
+                    </div>
+                </div>
+
+                <img src="../Design_And_Branding/logos/properties_white/FifthAveProp_FullLogo_White.png"
+                    style="width: 200px; position: absolute; bottom: 60px;" alt="Logo">
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
