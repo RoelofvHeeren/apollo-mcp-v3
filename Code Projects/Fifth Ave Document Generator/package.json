@@ -1,0 +1,8 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "start": "cd web-app && npm run start",
+    "build": "cd web-app && npm run build"
+  }
+}
