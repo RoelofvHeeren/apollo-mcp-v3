@@ -1,206 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="h-full bg-black" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenClaw // Mission Control Hub</title>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Mission Control - Elvison Claw</title>
+    <!-- BEGIN: Tailwind CSS & Plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                brand: { teal: '#14b8a6', dark: '#000000' },
+              }
+            }
+          }
+        }
+    </script>
 </head>
-<body>
-    <!-- Looping Video Background -->
-    <video id="bg-video-yoyo" class="bg-video" muted playsInline>
-        <source src="Background video.mp4" type="video/mp4">
+<body class="h-full flex overflow-hidden font-sans antialiased text-white">
+    
+    <!-- 🎥 Global Cinematic Backdrop (Neutral Black Overlay) -->
+    <video id="bg-video" class="bg-video" autoplay muted loop playsinline poster="background.png">
+        <source src="background.mp4" type="video/mp4">
     </video>
+    <div class="video-overlay"></div>
 
-    <div class="app-container">
-        <!-- 🧭 Sidebar -->
-        <aside class="sidebar">
-            <div class="logo-container">
-                <div class="logo-wrapper">
-                    <!-- Absolute path for Caddy root -->
-                    <img src="/Transparent Logo Elvison.png" alt="OpenClaw Logo" onerror="this.src='https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/shield.svg'">
-                </div>
-                <h1 class="brand-text">OPENCLAW</h1>
+    <!-- BEGIN: Global Sidebar (Floating White) -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i data-lucide="shield" style="width: 24px; height: 24px;"></i>
             </div>
-            
-            <nav class="nav-menu">
-                <a href="#dashboard" class="nav-link active" id="nav-dashboard"><i data-lucide="layout-grid"></i><span>Pulse Dashboard</span></a>
-                <a href="#command-center" class="nav-link" id="nav-command-center"><i data-lucide="terminal"></i><span>Command Center</span></a>
-                <a href="#hierarchy" class="nav-link" id="nav-hierarchy"><i data-lucide="layers"></i><span>Chain of Command</span></a>
-                <a href="#operations" class="nav-link" id="nav-operations"><i data-lucide="check-square"></i><span>Operations</span></a>
-                <a href="#claw-hub" class="nav-link" id="nav-claw-hub"><i data-lucide="box"></i><span>Claw Hub</span></a>
-                <a href="#ai-architect" class="nav-link" id="nav-ai-architect"><i data-lucide="sparkles"></i><span>AI Architect</span></a>
-                <a href="#memory" class="nav-link" id="nav-memory"><i data-lucide="archive"></i><span>Memory Vault</span></a>
-                <a href="#engine" class="nav-link" id="nav-engine"><i data-lucide="settings"></i><span>Core Engine</span></a>
-            </nav>
-        </aside>
-
-        <!-- 🏢 Workspace -->
-        <main class="main-content">
-            
-            <!-- 1. Dashboard -->
-            <section class="tab-content active" id="screen-dashboard">
-                <div class="card-header">
-                    <h2 class="card-title">Agency Pulse</h2>
-                    <button class="btn-primary" id="trigger-report">FULL REPORT</button>
-                </div>
-
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-label">Active Deployments</div>
-                        <div class="metric-value">12</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">Success Rate</div>
-                        <div class="metric-value" style="color:var(--status-success)">99.8%</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">API Consumption</div>
-                        <div class="metric-value" style="color:var(--status-warning)">$12.45</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">System Health</div>
-                        <div class="metric-value">NOMINAL</div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Intelligence Stream</h2>
-                    </div>
-                    <div class="stream-container" id="intelligence-stream">
-                        <!-- Logs inject here -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- 2. Command Center (Multi-Level) -->
-            <section class="tab-content" id="screen-command-center">
-                <!-- Level 1: Project List -->
-                <div id="cc-level-projects" class="cc-view active">
-                    <div class="card-header">
-                        <h2 class="card-title">Select Operational Theater</h2>
-                    </div>
-                    <div class="project-grid">
-                        <div class="project-card" onclick="openProject('Project Elvison')">
-                            <h3>Project Elvison</h3>
-                            <p>Active - 12 Tasks - 4 Agents</p>
-                        </div>
-                        <div class="project-card" onclick="openProject('OpenClaw Core')">
-                            <h3>OpenClaw Core</h3>
-                            <p>Active - 5 Tasks - 2 Agents</p>
-                        </div>
-                        <div class="project-card new-project-btn">
-                            <i data-lucide="plus-circle"></i>
-                            <span>INITIATE PROJECT</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Level 2: Project Control Room -->
-                <div id="cc-level-control" class="cc-view">
-                    <div class="back-btn" onclick="goBackToProjects()"><i data-lucide="arrow-left"></i> Back to Projects</div>
-                    <h2 class="card-title" id="cc-project-name" style="margin-bottom:24px;">Project Elvison</h2>
-                    <div class="control-room">
-                        <div class="directive-panel">
-                            <div class="card">
-                                <h2 class="card-title">Executive Directive</h2>
-                                <textarea class="directive-textarea" id="cc-input" placeholder="Instruct agents in this theater..."></textarea>
-                                <div style="margin-top:20px;">
-                                    <button class="btn-primary" id="cc-send">EXECUTE</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="terminal-panel">
-                            <div class="terminal-container">
-                                <div class="terminal-header">
-                                    <span>VPS TERMINAL</span>
-                                    <span>srv1497997</span>
-                                </div>
-                                <div class="terminal-body" id="term-output"></div>
-                                <div class="terminal-input-row">
-                                    <span>root@srv1497997:~#</span>
-                                    <input type="text" id="term-input" placeholder="Execute command...">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 3. Chain of Command (Premium Empty State) -->
-            <section class="tab-content" id="screen-hierarchy">
-                <div class="card">
-                    <div class="card-header"><h2 class="card-title">Agency Topology</h2></div>
-                    <div class="empty-state" id="hierarchy-stage">
-                        <i data-lucide="network"></i>
-                        <h2>Loading Topology...</h2>
-                        <p>Establishing secure link to agent neuro-registry. Please stand by for isometric mapping.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 4. Operations (Premium Empty State) -->
-            <section class="tab-content" id="screen-operations">
-                <div class="card">
-                    <div class="card-header"><h2 class="card-title">Operations Board</h2></div>
-                    <div class="empty-state">
-                        <i data-lucide="trello"></i>
-                        <h2>Strategic Roadmap</h2>
-                        <p>No active tasks in current theater. Initiative 'Executive Directives' to populate backlog.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Lower Level Hubs -->
-            <section class="tab-content" id="screen-claw-hub">
-                <div class="card"><div class="empty-state"><i data-lucide="cpu"></i><h2>Claw Hub</h2><p>Agent registry offline.</p></div></div>
-            </section>
-            
-            <!-- AI ARCHITECT (The "You" in the dashboard) -->
-            <section class="tab-content" id="screen-ai-architect">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">System Architect Console</h2>
-                        <div class="status-pill success">NEURAL LINK ACTIVE</div>
-                    </div>
-                    <div class="ai-console-wrapper">
-                        <div class="ai-chat-history" id="ai-chat-history">
-                            <div class="ai-msg bot">Hello Commander. I am your integrated development agent. I can modify the dashboard, optimize code, and manage VPS resources directly. What shall we build today?</div>
-                        </div>
-                        <div class="ai-input-wrapper">
-                            <input type="text" id="ai-input" placeholder="Type a command to optimize our systems...">
-                            <button id="ai-send"><i data-lucide="send"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="tab-content" id="screen-memory">
-                <div class="card"><div class="empty-state"><i data-lucide="database"></i><h2>Memory Vault</h2><p>Soul.md synchronization in progress.</p></div></div>
-            </section>
-            <section class="tab-content" id="screen-engine">
-                <div class="card"><div class="empty-state"><i data-lucide="settings-2"></i><h2>Core Engine</h2><p>Gateway configuration locked.</p></div></div>
-            </section>
-
-        </main>
-    </div>
-
-    <!-- Reports Overlay -->
-    <div class="reports-overlay" id="reports-stage">
-        <div class="report-stage">
-            <button class="report-close" id="close-report">&times;</button>
-            <div id="report-content">
-                <h1 class="brand-text" style="font-size:48px; margin-bottom:20px;">Monthly Intelligence Brief</h1>
-                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin-bottom:40px;">
-                <div style="font-size:18px; line-height:1.8; color: var(--text-gray-300)">
-                    Loading final analysis from Agency Core...
-                </div>
-            </div>
+            <span class="sidebar-title">Elvison Claw</span>
         </div>
-    </div>
+        <nav class="nav-links">
+            <a class="nav-item active" href="index.html">
+                <i data-lucide="layout-grid"></i>
+                <span>Pulse Dashboard</span>
+            </a>
+            <a class="nav-item" href="command.html">
+                <i data-lucide="terminal"></i>
+                <span>Command Center</span>
+            </a>
+            <a class="nav-item" href="hierarchy.html">
+                <i data-lucide="layers"></i>
+                <span>Chain of Command</span>
+            </a>
+            <a class="nav-item" href="architect.html">
+                <i data-lucide="sparkles"></i>
+                <span>AI Architect</span>
+            </a>
+            <a class="nav-item" href="#">
+                <i data-lucide="activity"></i>
+                <span>Operations</span>
+            </a>
+            <a class="nav-item" href="#">
+                <i data-lucide="database"></i>
+                <span>Claw Hub</span>
+            </a>
+            <a class="nav-item" href="#">
+                <i data-lucide="settings"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        <div class="sidebar-toggle" id="sidebar-toggle">
+            <i data-lucide="chevron-left" id="toggle-icon"></i>
+        </div>
+    </aside>
+
+    <!-- BEGIN: Main Content Stage (Restored Spacing) -->
+    <main class="main-stage">
+        
+        <!-- Header area (Restored Padding) -->
+        <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
+            <div>
+                <h1 class="text-4xl font-light tracking-tight text-white">Mission Control</h1>
+                <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Real-time neural monitoring & deployment oversight.</p>
+            </div>
+            <div class="flex space-x-6">
+                <button class="px-8 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest border border-white/10 hover:bg-white/5 transition-all text-white backdrop-blur-md">
+                    Deploy New Agent
+                </button>
+                <div class="glass-card-white !p-2 !rounded-2xl flex items-center space-x-4 border-white/5 !bg-white/5">
+                    <div class="w-12 h-12 rounded-xl bg-brand-teal flex items-center justify-center font-black text-white shadow-lg">EL</div>
+                    <div class="pr-4">
+                        <div class="text-[10px] font-black leading-none text-white tracking-wider">ELVISON CLAW</div>
+                        <div class="text-[9px] text-brand-teal leading-none mt-2 uppercase font-black">Commander</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Grid (Transparency over video) -->
+        <div class="flex-1 grid grid-cols-3 grid-rows-[auto_1fr] gap-8 overflow-y-auto pr-4 custom-scrollbar">
+            <!-- Panel 1: API Cost -->
+            <section class="glass-card-white flex flex-col">
+                <div class="flex justify-between items-start mb-10">
+                    <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em]">API Cost Audit</h2>
+                    <span class="text-brand-teal text-2xl font-mono" id="cost-value">$1,482.20</span>
+                    <!-- Agent list hidden by default -->
+                    <div id="agent-cost-list" class="hidden flex-col gap-2 w-full mt-4">
+                        <div class="flex justify-between text-[10px] font-bold"><span class="text-white/40">Nexus-01</span><span class="text-brand-teal">$842.10</span></div>
+                        <div class="flex justify-between text-[10px] font-bold"><span class="text-white/40">Claw-Builder</span><span class="text-brand-teal">$420.05</span></div>
+                    </div>
+                </div>
+                <div class="mt-auto flex justify-between items-end">
+                    <div class="flex gap-1" id="cost-toggle">
+                        <button class="toggle-btn active" data-view="total">TOTAL</button>
+                        <button class="toggle-btn" data-view="agent">AGENT</button>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[9px] font-black text-white/20 uppercase tracking-widest">MTD Expenditure</p>
+                        <p class="text-[10px] font-bold text-brand-teal cursor-pointer hover:underline">VIEW LEDGER</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel 2: Task Pulse -->
+            <section class="glass-card-white flex flex-col">
+                <div class="flex justify-between items-center mb-10">
+                    <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em]">Task Pulse</h2>
+                    <div class="flex bg-white/5 p-1 rounded-xl border border-white/5" id="task-time-toggle">
+                        <button class="px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest bg-white/10 text-white">Day</button>
+                        <button class="px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors">Week</button>
+                    </div>
+                </div>
+                <div class="flex-1 flex flex-col justify-center gap-10">
+                    <div class="flex items-center gap-6">
+                        <div class="flex-1">
+                            <span class="text-4xl font-light">248</span>
+                            <div class="text-[9px] text-brand-teal font-black uppercase tracking-[0.2em] mt-2">Accomplished</div>
+                        </div>
+                        <div class="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-brand-teal w-3/4"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="flex-1">
+                            <span class="text-4xl font-light">12</span>
+                            <div class="text-[9px] text-brand-teal font-black uppercase tracking-[0.2em] mt-2">Active Nodes</div>
+                        </div>
+                        <div class="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-brand-teal w-1/4 animate-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel 3: Live Error Log -->
+            <section class="glass-card-white flex flex-col">
+                <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em] mb-10">System Anomalies</h2>
+                <div class="flex-1 space-y-6 overflow-y-auto pr-2 custom-scrollbar">
+                    <div class="p-6 bg-red-500/5 border border-red-500/10 rounded-3xl flex items-start space-x-5 transition-all hover:bg-red-500/10">
+                        <div class="w-2.5 h-2.5 rounded-full bg-red-500 mt-2 shadow-[0_0_12px_rgba(239,68,68,0.4)]"></div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-center mb-1">
+                                <h3 class="text-[10px] font-black text-red-400 uppercase tracking-widest">Critical Alert</h3>
+                                <span class="text-[9px] text-white/20 font-mono">14:22</span>
+                            </div>
+                            <p class="text-xs text-white/60 font-medium">Rate Limit Exceeded: OpenAI-API-Cluster-A</p>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-amber-500/5 border border-amber-500/10 rounded-3xl flex items-start space-x-5 transition-all hover:bg-amber-500/10">
+                        <div class="w-2.5 h-2.5 rounded-full bg-amber-500 mt-2"></div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-center mb-1">
+                                <h3 class="text-[10px] font-black text-amber-400 uppercase tracking-widest">Warning</h3>
+                                <span class="text-[9px] text-white/20 font-mono">13:58</span>
+                            </div>
+                            <p class="text-xs text-white/60 font-medium">Latency optimization required: node-secure-london-04</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel 4: System Report -->
+            <section class="col-span-3 glass-card-white !p-12">
+                <div class="flex justify-between items-center mb-12">
+                    <div>
+                        <h2 class="text-sm font-bold text-white/80 uppercase tracking-[0.3em]">Operational Directive</h2>
+                        <p class="text-[9px] text-white/30 mt-2 uppercase tracking-widest font-black">Unified Neural Node Status Report</p>
+                    </div>
+                    <div class="flex gap-6" id="report-source-toggle">
+                        <button class="text-[10px] font-black uppercase tracking-widest text-brand-teal border-b-2 border-brand-teal pb-1 toggle-btn active" data-src="system">System</button>
+                        <button class="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors toggle-btn" data-src="project">Project</button>
+                        <button class="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors toggle-btn" data-src="agent">Agent</button>
+                    </div>
+                </div>
+                <div class="relative min-h-[220px]">
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+                         <i data-lucide="shield" style="width: 200px; height: 200px;"></i>
+                    </div>
+                    <div class="relative z-10" id="report-content">
+                        <p class="text-brand-teal text-[10px] font-black uppercase tracking-[0.4em] mb-6">Commander,</p>
+                        <p class="text-4xl font-light text-white leading-tight max-w-4xl">
+                            We've successfully deployed the latest neural node update. Currently, we're optimizing the memory pool for Agent Alpha and indexing the Memory Vault. All systems are nominal.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <style>
+        .toggle-btn.active { cursor: default; }
+    </style>
 
     <script src="main.js"></script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>

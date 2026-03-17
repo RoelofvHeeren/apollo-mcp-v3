@@ -1,180 +1,245 @@
 document.addEventListener('DOMContentLoaded', () => {
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-    initYoyoVideo();
-    initRouting();
-    initDashboard();
-    initCommandCenter();
-    initAiArchitect();
+    initV4Navigation();
+    initV4Toggles();
+    initV4GlobalBackdrop();
+    initCommandStation();
+    initAiArchitectV4();
+    lucide.createIcons();
 });
 
-// --- 🎞️ YOYO VIDEO LOGIC ---
-function initYoyoVideo() {
-    const video = document.getElementById('bg-video-yoyo');
-    if (!video) return;
-    video.play();
-    video.addEventListener('timeupdate', () => {
-        if (video.currentTime >= video.duration - 0.5) video.playbackRate = -1.0;
-        if (video.currentTime <= 0.5) video.playbackRate = 1.0;
+// --- 🧭 NAVIGATION & SIDEBAR (Floating White) ---
+function initV4Navigation() {
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('sidebar-toggle');
+    if (!sidebar || !toggle) return;
+
+    // Check for saved state
+    const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+    if (isCollapsed) {
+        sidebar.classList.add('collapsed');
+        updateToggleIcon(true);
+    }
+
+    toggle.addEventListener('click', () => {
+        const collapsed = sidebar.classList.toggle('collapsed');
+        localStorage.setItem('sidebar-collapsed', collapsed);
+        updateToggleIcon(collapsed);
     });
 }
 
-// --- 🧭 HASH ROUTING ---
-function initRouting() {
-    const handleRoute = () => {
-        const hash = window.location.hash || '#dashboard';
-        const targetId = `screen-${hash.replace('#', '')}`;
-        
-        // Update Sidebar Active State
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === hash);
-        });
-
-        // Update Tab Visibility
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.toggle('active', tab.id === targetId || (tab.id === 'screen-command-center' && hash === '#command-center'));
-        });
-
-        // Specific Tab Logic
-        if (hash === '#hierarchy') initIsometricHierarchy();
-    };
-
-    window.addEventListener('hashchange', handleRoute);
-    handleRoute(); // Initial load
+function updateToggleIcon(collapsed) {
+    const icon = document.getElementById('toggle-icon');
+    if (!icon) return;
+    if (collapsed) {
+        icon.setAttribute('data-lucide', 'chevron-right');
+    } else {
+        icon.setAttribute('data-lucide', 'chevron-left');
+    }
+    lucide.createIcons();
 }
 
-// --- 📊 DASHBOARD ---
-async function initDashboard() {
-    const stream = document.getElementById('intelligence-stream');
-    const fetchIntelligence = async () => {
-        try {
-            const res = await fetch('/api/intelligence');
-            const data = await res.json();
-            if (data.recent_logs) renderLogs(data.recent_logs);
-        } catch (e) {
-            stream.innerHTML = '<div style="color:var(--status-error); padding:20px;">Establishing secure stream... (Gateway Connection Refused)</div>';
-        }
+// --- 🕹 UNIVERSAL TOGGLES ---
+function initV4Toggles() {
+    // API Cost Toggle
+    document.querySelectorAll('#cost-toggle .toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#cost-toggle .toggle-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const costValue = document.getElementById('cost-value');
+            const agentCostList = document.getElementById('agent-cost-list');
+            if (btn.dataset.view === 'agent') {
+                if (costValue) costValue.style.display = 'none';
+                if (agentCostList) agentCostList.classList.remove('hidden');
+                if (agentCostList) agentCostList.classList.add('flex');
+            } else {
+                if (costValue) costValue.style.display = 'block';
+                if (agentCostList) agentCostList.classList.add('hidden');
+                if (agentCostList) agentCostList.classList.remove('flex');
+            }
+        });
+    });
+
+    // Strategy Report Toggle
+    const reportContent = document.getElementById('report-content');
+    const reports = {
+        system: `
+            <p class="text-brand-teal text-[10px] font-black uppercase tracking-[0.4em] mb-6">Commander,</p>
+            <p class="text-4xl font-light text-white leading-tight max-w-4xl">
+                We've successfully deployed the latest neural node update. Currently, we're optimizing the memory pool for Agent Alpha and indexing the Memory Vault. All systems are nominal.
+            </p>
+        `,
+        project: `
+            <p class="text-brand-teal text-[10px] font-black uppercase tracking-[0.4em] mb-6">Commander,</p>
+            <p class="text-4xl font-light text-white leading-tight max-w-4xl">
+                Project <b class="text-brand-teal">Stardust</b> is performing at 92% velocity. Agent Claw-Builder has successfully initialized the deployment pipeline.
+            </p>
+        `,
+        agent: `
+            <p class="text-brand-teal text-[10px] font-black uppercase tracking-[0.4em] mb-6">Commander,</p>
+            <p class="text-4xl font-light text-white leading-tight max-w-4xl">
+                 <b class="text-brand-teal">Agent Nexus-01</b> has handled 48 strategic requests since the last cycle. Neural link stability is perfect.
+            </p>
+        `
     };
-    const renderLogs = (logs) => {
-        stream.innerHTML = logs.map(log => `
-            <div style="background:rgba(255,255,255,0.02); padding:16px; border-radius:8px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.05)">
-                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                    <span style="color:var(--teal-accent); font-weight:700;">${log.agent || 'SYSTEM'}</span>
-                    <span style="font-size:11px; opacity:0.5;">${new Date().toLocaleTimeString()}</span>
+    document.querySelectorAll('#report-source-toggle .toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+             document.querySelectorAll('#report-source-toggle .toggle-btn').forEach(b => {
+                 b.classList.remove('active', 'text-brand-teal', 'border-b-2', 'border-brand-teal');
+                 b.classList.add('text-white/30');
+             });
+             btn.classList.add('active', 'text-brand-teal', 'border-b-2', 'border-brand-teal');
+             btn.classList.remove('text-white/30');
+             if (reportContent) reportContent.innerHTML = reports[btn.dataset.src];
+             lucide.createIcons();
+        });
+    });
+}
+
+// --- 🎥 THE VIDEO BACKDROP CONTROL (Robust) ---
+function initV4GlobalBackdrop() {
+    const video = document.getElementById('bg-video');
+    if (!video) return;
+
+    const startBackdrop = () => {
+        video.play().catch(() => { /* handled */ });
+    };
+
+    video.play().catch(() => {
+        document.addEventListener('click', startBackdrop, { once: true });
+    });
+
+    video.addEventListener('ended', () => {
+        video.currentTime = 0;
+        video.play();
+    });
+}
+
+// --- 🖥 COMMAND PANE MAXIMIZER ---
+function maximizePane(side) {
+    const paneAgent = document.getElementById('pane-agent');
+    const paneVps = document.getElementById('pane-vps');
+    const divider = document.getElementById('divider');
+    const header = document.getElementById('command-header');
+    
+    if (side === 'agent') {
+        const isMax = paneAgent.classList.toggle('maximized');
+        paneVps.classList.toggle('minimized', isMax);
+        if (divider) divider.style.display = isMax ? 'none' : 'block';
+        if (header) header.style.display = isMax ? 'none' : 'flex';
+    } else {
+        const isMax = paneVps.classList.toggle('maximized');
+        paneAgent.classList.toggle('minimized', isMax);
+        if (divider) divider.style.display = isMax ? 'none' : 'block';
+        if (header) header.style.display = isMax ? 'none' : 'flex';
+    }
+    lucide.createIcons();
+}
+window.maximizePane = maximizePane;
+
+// --- ⌨ COMMAND STATION LOGIC ---
+function initCommandStation() {
+    const vpsInput = document.querySelector('.pane-dark input');
+    const termOutput = document.getElementById('terminal-output');
+    
+    if (vpsInput && termOutput) {
+        vpsInput.addEventListener('keypress', async (e) => {
+            if (e.key === 'Enter') {
+                const cmd = vpsInput.value;
+                if (!cmd) return;
+                vpsInput.value = '';
+                
+                termOutput.innerHTML += `<div class="mt-4"><span class="text-teal-500 font-bold">root@vps-infra:~$</span> ${cmd}</div>`;
+                termOutput.scrollTop = termOutput.scrollHeight;
+
+                try {
+                    const res = await fetch('/api/shell', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ command: cmd })
+                    });
+                    const data = await res.json();
+                    
+                    if (data.error) {
+                        termOutput.innerHTML += `<div class="text-red-500 mt-2 font-mono">[ERROR] ${data.error}</div>`;
+                    } else {
+                        const sanitized = data.output.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                        termOutput.innerHTML += `<pre class="text-teal-400 mt-2 font-mono whitespace-pre-wrap opacity-80">${sanitized}</pre>`;
+                    }
+                } catch (err) {
+                    termOutput.innerHTML += `<div class="text-red-500 mt-2 font-mono">[CONNECTION LOST] Gateway unreachable.</div>`;
+                }
+                termOutput.scrollTop = termOutput.scrollHeight;
+            }
+        });
+    }
+
+    const agentChatInput = document.querySelector('.pane-light textarea');
+    const sendBtn = document.querySelector('.pane-light button[data-lucide="send"]')?.parentElement;
+    const chatFeed = document.querySelector('.pane-light .flex-grow');
+
+    if (agentChatInput && sendBtn && chatFeed) {
+        const handleSend = async () => {
+            const msg = agentChatInput.value;
+            if (!msg) return;
+            agentChatInput.value = '';
+            
+            // Add User Message
+            chatFeed.innerHTML += `
+                <div class="bg-brand-teal/10 p-6 rounded-[32px] rounded-tr-none border border-brand-teal/20 shadow-sm ml-auto max-w-[90%] fade-in">
+                    <p class="text-sm text-slate-800 leading-relaxed font-bold">${msg}</p>
+                    <span class="text-[9px] text-brand-teal mt-3 block font-black uppercase tracking-widest text-right">COMMANDER // HUB</span>
                 </div>
-                <div style="font-size:13px; color:var(--text-gray-300)">${log.task || log.status}</div>
-            </div>
-        `).join('');
-    };
-    fetchIntelligence();
-    setInterval(fetchIntelligence, 5000);
-}
-
-// --- 🚢 COMMAND CENTER ---
-function initCommandCenter() {
-    const termOut = document.getElementById('term-output');
-    const termIn = document.getElementById('term-input');
-    const ccIn = document.getElementById('cc-input');
-    const ccSend = document.getElementById('cc-send');
-
-    // Terminal logic
-    termIn?.addEventListener('keypress', async (e) => {
-        if (e.key === 'Enter') {
-            const cmd = termIn.value;
-            if (!cmd) return;
-            termIn.value = '';
-            termOut.innerHTML += `<div><span style="color:var(--teal-accent)">root@vps:~#</span> ${cmd}</div>`;
-            termOut.scrollTop = termOut.scrollHeight;
+            `;
+            chatFeed.scrollTop = chatFeed.scrollHeight;
 
             try {
-                const res = await fetch('/api/shell', {
+                const res = await fetch('/api/prompt', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ command: cmd })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: msg, agent: 'pm' }) // Defaulting to PM agent
                 });
                 const data = await res.json();
-                if (data.error) {
-                    termOut.innerHTML += `<div style="color:var(--status-error); margin-bottom:10px;">Error: ${data.error}</div>`;
-                } else {
-                    const sanitizedOutput = data.output.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                    termOut.innerHTML += `<pre style="color:#4ade80; margin-bottom:10px; font-family:monospace; white-space:pre-wrap;">${sanitizedOutput}</pre>`;
-                }
-            } catch (err) {
-                termOut.innerHTML += `<div style="color:var(--status-error)">Execution Error. Check Gateway status.</div>`;
-            }
-            termOut.scrollTop = termOut.scrollHeight;
-        }
-    });
-
-    // Executive Directive logic
-    ccSend?.addEventListener('click', async () => {
-        const text = ccIn.value;
-        if (!text) return;
-        ccSend.textContent = "TRANSMITTING...";
-        try {
-            await fetch('/api/prompt', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ prompt: text, agent: 'pm', project: document.getElementById('cc-project-name').textContent })
-            });
-            ccIn.value = "";
-            ccSend.textContent = "EXECUTE";
-        } catch (e) {
-            ccSend.textContent = "ERROR";
-            setTimeout(() => ccSend.textContent = "EXECUTE", 2000);
-        }
-    });
-}
-
-// CC Navigation Logic (Global access)
-window.openProject = (name) => {
-    document.getElementById('cc-level-projects').classList.remove('active');
-    document.getElementById('cc-level-control').classList.add('active');
-    document.getElementById('cc-project-name').textContent = name;
-};
-
-window.goBackToProjects = () => {
-    document.getElementById('cc-level-control').classList.remove('active');
-    document.getElementById('cc-level-projects').classList.add('active');
-};
-
-// --- 🕸 ISOMETRIC HIERARCHY ---
-function initIsometricHierarchy() {
-    const stage = document.getElementById('hierarchy-stage');
-    if (stage.querySelector('.iso-card')) return; // Already init
-
-    const agents = [
-        { name: 'CEO (User)', role: 'Grandmaster', status: 'ONLINE', x: 200, y: 100 },
-        { name: 'PM Agent', role: 'Orchestrator', status: 'ACTIVE', x: 400, y: 250 },
-        { name: 'Dev Agent', role: 'Architect', status: 'WAITING', x: 200, y: 400 },
-        { name: 'Writer Agent', role: 'Scribe', status: 'IDLE', x: 600, y: 400 }
-    ];
-
-    stage.innerHTML = `
-        <div style="position:relative; width:100%; height:100%; perspective:1000px;">
-            <div style="position:absolute; width:2000px; height:2000px; top:-50%; left:-50%; transform: rotateX(60deg) rotateZ(45deg); background-image: linear-gradient(rgba(19,145,135,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(19,145,135,0.1) 1px, transparent 1px); background-size: 50px 50px;"></div>
-            ${agents.map(a => `
-                <div style="position:absolute; left:${a.x}px; top:${a.y}px; transition:0.5s;">
-                    <div style="background:rgba(0,0,0,0.8); border:2px solid var(--teal-accent); padding:16px; border-radius:8px; width:180px; box-shadow:0 10px 20px rgba(0,0,0,0.5); transform: rotatez(-45deg) rotateX(-60deg);">
-                        <div style="font-weight:700; color:white;">${a.name}</div>
-                        <div style="font-size:11px; color:var(--teal-accent); opacity:0.8;">${a.role}</div>
-                        <div style="font-size:10px; margin-top:8px; color:var(--status-success);">${a.status}</div>
+                
+                // Add Agent Response
+                chatFeed.innerHTML += `
+                    <div class="bg-white p-6 rounded-[32px] rounded-tl-none border border-slate-200 shadow-sm max-w-[90%] fade-in mt-4">
+                        <p class="text-sm text-slate-600 leading-relaxed font-medium">${data.response || data.output || "Neural link stable. Command indexed."}</p>
+                        <span class="text-[9px] text-slate-300 mt-3 block font-bold uppercase tracking-widest">SYSTEM // NEXUS-01</span>
                     </div>
-                </div>
-            `).join('')}
-        </div>
-    `;
+                `;
+            } catch (e) {
+                chatFeed.innerHTML += `
+                    <div class="text-red-500 text-[10px] text-center mt-4 uppercase font-black tracking-widest">Gateway Disconnected</div>
+                `;
+            }
+            chatFeed.scrollTop = chatFeed.scrollHeight;
+        };
+
+        sendBtn.addEventListener('click', handleSend);
+        agentChatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
+    }
 }
 
-// --- 🤖 AI ARCHITECT ---
-function initAiArchitect() {
-    const aiIn = document.getElementById('ai-input');
-    const aiSend = document.getElementById('ai-send');
-    const aiHistory = document.getElementById('ai-chat-history');
+// --- 🤖 AI ARCHITECT V4 ---
+function initAiArchitectV4() {
+    const aiIn = document.getElementById('ai-architect-input');
+    const aiSend = document.getElementById('ai-architect-send');
+    const aiHistory = document.getElementById('ai-architect-history');
+    
+    if (!aiIn || !aiHistory) return;
 
     const addMessage = (text, type) => {
         const msg = document.createElement('div');
-        msg.className = `ai-msg ${type}`;
-        msg.textContent = text;
+        msg.className = type === 'user' 
+            ? "bg-brand-teal/10 p-8 rounded-[40px] rounded-tr-none border border-brand-teal/20 ml-auto max-w-[80%] fade-in"
+            : "bg-white/5 backdrop-blur-3xl p-8 rounded-[40px] rounded-tl-none border border-white/10 max-w-[80%] fade-in";
+        
+        msg.innerHTML = `
+            <p class="text-base text-white leading-relaxed font-medium">${text}</p>
+            <span class="text-[10px] ${type === 'user' ? 'text-brand-teal' : 'text-white/30'} mt-4 block font-black uppercase tracking-[0.2em] ${type === 'user' ? 'text-right' : ''}">
+                ${type === 'user' ? 'COMMANDER // ARCHITECT' : 'NEURAL CORE // ANTIGRAVITY'}
+            </span>
+        `;
         aiHistory.appendChild(msg);
         aiHistory.scrollTop = aiHistory.scrollHeight;
     };
@@ -188,7 +253,7 @@ function initAiArchitect() {
         try {
             const res = await fetch('/api/meta-dev', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt: text })
             });
             const data = await res.json();
@@ -198,6 +263,6 @@ function initAiArchitect() {
         }
     };
 
-    aiSend?.addEventListener('click', handleSend);
-    aiIn?.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
+    if (aiSend) aiSend.addEventListener('click', handleSend);
+    aiIn.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
 }

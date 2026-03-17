@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Center - Elvison Claw</title>
+    <!-- BEGIN: Tailwind CSS & Plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- END: Tailwind CSS & Plugins -->
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                brand: { teal: '#14b8a6', dark: '#000000' },
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="h-full flex overflow-hidden font-sans antialiased text-white">
+    
+    <!-- 🎥 Global Cinematic Backdrop -->
+    <video id="bg-video" class="bg-video" autoplay muted loop playsinline poster="background.png">
+        <source src="background.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <!-- BEGIN: Global Sidebar (Floating White) -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i data-lucide="shield" style="width: 24px; height: 24px;"></i>
+            </div>
+            <span class="sidebar-title">Elvison Claw</span>
+        </div>
+        <nav class="nav-links">
+            <a class="nav-item" href="index.html">
+                <i data-lucide="layout-grid"></i>
+                <span>Pulse Dashboard</span>
+            </a>
+            <a class="nav-item active" href="command.html">
+                <i data-lucide="terminal"></i>
+                <span>Command Center</span>
+            </a>
+            <a class="nav-item" href="hierarchy.html">
+                <i data-lucide="layers"></i>
+                <span>Chain of Command</span>
+            </a>
+            <a class="nav-item" href="architect.html">
+                <i data-lucide="sparkles"></i>
+                <span>AI Architect</span>
+            </a>
+            <a class="nav-item" href="#">
+                <i data-lucide="activity"></i>
+                <span>Operations</span>
+            </a>
+            <a class="nav-item" href="#">
+                <i data-lucide="database"></i>
+                <span>Claw Hub</span>
+            </a>
+            <a class="nav-item" href="#">
+                <i data-lucide="settings"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        <div class="sidebar-toggle" id="sidebar-toggle">
+            <i data-lucide="chevron-left" id="toggle-icon"></i>
+        </div>
+    </aside>
+
+    <!-- BEGIN: Command Center Main View (Restored Spacing) -->
+    <main class="main-stage">
+        
+        <!-- Header area (Restored Padding) -->
+        <header class="relative z-10 pt-4 pb-8 flex justify-between items-end" id="command-header">
+            <div>
+                <h1 class="text-4xl font-light tracking-tight text-white">Neural Dashboard</h1>
+                <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Split-View Command & Infrastructure Console</p>
+            </div>
+        </header>
+
+        <div class="command-pane-set flex-1" id="command-container">
+            
+            <!-- PANE 1: AGENT COMMAND (Neural Chat Style) -->
+            <section class="pane pane-light flex flex-col relative" id="pane-agent">
+                <button class="absolute top-10 right-10 w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-all z-20" onclick="maximizePane('agent')" title="Toggle Full Screen">
+                    <i data-lucide="maximize-2" class="w-5 h-5 text-slate-400"></i>
+                </button>
+                
+                <div class="mb-10 flex items-center justify-between">
+                    <div class="flex flex-col gap-1">
+                        <h2 class="text-[13px] uppercase tracking-[0.3em] text-brand-teal font-black">Neural Interface</h2>
+                        <span class="text-[11px] text-slate-400 font-bold uppercase tracking-widest">Connected to Neural Node v4.0</span>
+                    </div>
+                </div>
+
+                <!-- Dropdowns for Project & Agent Selection -->
+                <div class="grid grid-cols-2 gap-6 mb-10">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] uppercase font-black text-slate-400 tracking-widest px-1">Namespace</label>
+                        <select class="bg-slate-50 border border-slate-200 rounded-2xl py-4 px-5 text-sm font-bold outline-none shadow-sm appearance-none cursor-pointer">
+                            <option>Openclaw-Main-Hub</option>
+                            <option>Project-Stardust-Development</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] uppercase font-black text-slate-400 tracking-widest px-1">Selected Agent</label>
+                        <select class="bg-slate-50 border border-slate-200 rounded-2xl py-4 px-5 text-sm font-bold outline-none shadow-sm appearance-none cursor-pointer">
+                            <option>Agent-Nexus-01 (PM)</option>
+                            <option>Agent-Claw-Builder</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Chat Feed -->
+                <div class="flex-grow rounded-[40px] border border-slate-100 bg-slate-50/50 p-10 overflow-y-auto custom-scrollbar flex flex-col gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-[32px] rounded-tl-none border border-slate-200 shadow-sm max-w-[90%]">
+                        <p class="text-sm text-slate-600 leading-relaxed font-medium">Strategic neural link established. I'm ready to receive mission parameters. How can I assist you today?</p>
+                        <span class="text-[9px] text-slate-300 mt-3 block font-bold uppercase tracking-widest">SYSTEM // NEXUS-01</span>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="relative mt-auto">
+                    <textarea class="w-full bg-white border-2 border-slate-100 rounded-[32px] py-6 px-8 pr-20 text-sm font-medium text-slate-800 placeholder:text-slate-300 focus:outline-none focus:border-brand-teal transition-all shadow-xl resize-none" rows="1" placeholder="Type mission instructions..."></textarea>
+                    <button class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-brand-teal rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all">
+                        <i data-lucide="send" class="w-5 h-5 text-white"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- CENTER DIVIDER -->
+            <div class="w-[1px] bg-slate-200 relative z-30" id="divider"></div>
+
+            <!-- PANE 2: VPS TERMINAL -->
+            <section class="pane pane-dark flex flex-col relative" id="pane-vps">
+                <button class="absolute top-10 right-10 w-12 h-12 rounded-full border border-teal-500/20 flex items-center justify-center hover:bg-teal-500/10 transition-all z-20" onclick="maximizePane('vps')" title="Toggle Full Screen">
+                    <i data-lucide="maximize-2" class="w-5 h-5 text-teal-500/50"></i>
+                </button>
+                
+                <div class="mb-12 flex flex-col gap-1">
+                    <h2 class="text-[13px] uppercase tracking-[0.3em] text-teal-400 font-black">Infrastructure Subsystem</h2>
+                    <span class="text-[11px] text-teal-500/50 uppercase tracking-widest">London-DataCenter-04 // node-secure</span>
+                </div>
+
+                <!-- Terminal Output -->
+                <div class="flex-1 font-mono text-sm leading-relaxed overflow-y-auto custom-scrollbar pr-6 text-teal-400/90 mb-6" id="terminal-output">
+# SECURE LINK ESTABLISHED via 192.168.1.104
+# SYSTEM STATUS: READY
+# NODE: LONDON-DATACENTER-04
+
+root@vps-infra:~$ system_monitor status
+- CPU usage: 4.2%
+- Memory load: stable [8.4GB / 32GB]
+- Uptime: 432:12:08
+
+root@vps-infra:~$ <span class="inline-block w-2.5 h-5 bg-teal-400 animate-pulse align-middle ml-1"></span>
+                </div>
+
+                <!-- Terminal Input Prompt -->
+                <div class="flex items-center gap-4 font-mono text-sm bg-white/5 border-t border-white/10 pt-6 pb-2 px-2">
+                    <span class="text-teal-500 font-bold">root@vps-infra:~$</span>
+                    <input type="text" class="flex-1 bg-transparent border-none outline-none text-teal-400 placeholder:text-teal-900" placeholder="enter_command_here">
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="main.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

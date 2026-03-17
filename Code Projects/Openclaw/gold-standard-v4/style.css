@@ -11,12 +11,12 @@
     /* Sidebar Config (Floating, White, Wide) */
     --sidebar-width: 280px;
     --sidebar-collapsed-width: 100px;
-    --sidebar-margin: 32px;
-    --sidebar-radius: 40px;
+    --sidebar-margin: 32px; /* Increased margin for "not crowded" feel */
+    --sidebar-radius: 40px; /* More rounded */
     
     /* Stage Config */
     --stage-radius: 48px;
-    --glass-blur: blur(60px); /* Deeper blur for Apple-tier glass */
+    --glass-blur: blur(40px);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
@@ -30,7 +30,7 @@ body {
     overflow: hidden;
     display: flex;
     position: relative;
-    padding: var(--sidebar-margin); 
+    padding: var(--sidebar-margin); /* Restore spacing to avoid "crowded" feel */
     gap: var(--sidebar-margin);
 }
 
@@ -48,14 +48,13 @@ body {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.6); /* Neutral black overlay - NO BLUE */
     z-index: -5;
 }
 
 /* 🧭 Floating White Sidebar */
 .sidebar {
     width: var(--sidebar-width);
-    min-width: var(--sidebar-width); /* Lock width */
     background: white;
     border-radius: var(--sidebar-radius);
     display: flex;
@@ -83,6 +82,7 @@ body {
     display: flex; align-items: center; justify-content: center;
     color: white;
     flex-shrink: 0;
+    box-shadow: 0 10px 20px -5px rgba(20, 184, 166, 0.4);
 }
 
 .sidebar-title {
@@ -148,22 +148,29 @@ body {
 }
 
 .modal-content {
-    background: rgba(10, 10, 10, 0.7); /* Slightly more transparent */
-    backdrop-filter: blur(80px); /* Extremely deep blur */
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(10, 10, 10, 0.9); /* Neutral dark glass */
+    backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     width: 100%;
-    max-width: 1600px;
-    max-height: 92vh;
+    max-width: 1500px;
+    max-height: 900px;
     height: 100%;
-    border-radius: 60px;
+    border-radius: 56px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 100px 150px -40px rgba(0, 0, 0, 0.8), 0 0 100px rgba(0,0,0,0.5);
+    box-shadow: 0 100px 200px -40px rgba(0, 0, 0, 0.9);
     color: white;
 }
 
-.modal-content h1 { font-size: 3rem !important; } /* Smaller title for more room */
+/* Text Refinements for Glassy Contrast */
+.modal-content h1, .modal-content h2, .modal-content h3, .modal-content h4 {
+    color: white;
+}
+
+.modal-content .text-white\/30, .modal-content .text-white\/20, .modal-content .text-white\/50 {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
 
 /* ⌨ Command Center Panes */
 .command-pane-set {
@@ -174,16 +181,14 @@ body {
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(0,0,0,0.3);
-    max-height: calc(100vh - 200px); /* Keep inside viewport */
 }
 
 .pane {
     flex: 1;
-    padding: 60px; /* Slightly reduced for better fit */
+    padding: 80px; /* Increased padding inside panes */
     transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* Internal scrolling */
 }
 
 .pane-light { background: rgba(255, 255, 255, 1); color: #111; }
@@ -191,12 +196,11 @@ body {
 
 /* Glass Cards (White Opacity) */
 .glass-card-white {
-    background: rgba(255, 255, 255, 0.03); /* Lighter for softer glass */
-    backdrop-filter: blur(60px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 40px;
     padding: 40px;
-    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.4); /* Apple-style soft shadow */
 }
 
 /* Custom Scrollbar */
@@ -207,32 +211,3 @@ body {
 /* Maximized/Minimized utility */
 .pane.maximized { flex: 100; }
 .pane.minimized { flex: 0; padding: 0; pointer-events: none; opacity: 0; }
-
-/* 🏷 Hierarchy Conduits Style */
-.conduit {
-    fill: none;
-    stroke: var(--accent-teal);
-    stroke-width: 2;
-    stroke-linecap: round;
-    opacity: 0.4;
-    transition: all 0.3s;
-}
-
-.conduit:hover {
-    stroke-width: 4;
-    opacity: 0.8;
-}
-
-.port {
-    width: 10px;
-    height: 10px;
-    background: var(--accent-teal);
-    border-radius: 50%;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 15;
-}
-
-.port-in { top: -5px; }
-.port-out { bottom: -5px; }

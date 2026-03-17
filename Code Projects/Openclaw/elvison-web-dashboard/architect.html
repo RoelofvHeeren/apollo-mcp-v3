@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html class="h-full bg-black" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>AI Architect - Elvison Claw</title>
+    <!-- BEGIN: Tailwind CSS & Plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                brand: { teal: '#14b8a6', dark: '#000000' },
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="h-full flex overflow-hidden font-sans antialiased text-white">
+    
+    <!-- 🎥 Global Cinematic Backdrop -->
+    <video id="bg-video" class="bg-video" autoplay muted loop playsinline poster="background.png">
+        <source src="background.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <!-- BEGIN: Global Sidebar (Floating White) -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i data-lucide="shield" style="width: 24px; height: 24px;"></i>
+            </div>
+            <span class="sidebar-title">Elvison Claw</span>
+        </div>
+        <nav class="nav-links">
+            <a class="nav-item" href="index.html">
+                <i data-lucide="layout-grid"></i>
+                <span>Pulse Dashboard</span>
+            </a>
+            <a class="nav-item" href="command.html">
+                <i data-lucide="terminal"></i>
+                <span>Command Center</span>
+            </a>
+            <a class="nav-item" href="hierarchy.html">
+                <i data-lucide="layers"></i>
+                <span>Chain of Command</span>
+            </a>
+            <a class="nav-item active" href="architect.html">
+                <i data-lucide="sparkles"></i>
+                <span>AI Architect</span>
+            </a>
+            <a class="nav-item" href="#">
+                <i data-lucide="database"></i>
+                <span>Claw Hub</span>
+            </a>
+            <a class="nav-item" href="#">
+                <i data-lucide="settings"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        <div class="sidebar-toggle" id="sidebar-toggle">
+            <i data-lucide="chevron-left" id="toggle-icon"></i>
+        </div>
+    </aside>
+
+    <!-- BEGIN: AI Architect View -->
+    <main class="main-stage">
+        
+        <!-- Header area -->
+        <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
+            <div>
+                <h1 class="text-4xl font-light tracking-tight text-white">AI Architect</h1>
+                <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Neural Code Optimization & System Evolution</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="px-4 py-2 bg-brand-teal/20 border border-brand-teal/30 rounded-full flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-brand-teal animate-pulse"></div>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-brand-teal">Neural Link Stable</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Architect Console -->
+        <div class="flex-1 flex flex-col gap-8 overflow-hidden pr-4 mb-4">
+            <section class="flex-1 bg-white/5 backdrop-blur-3xl rounded-[48px] border border-white/10 overflow-hidden flex flex-col p-12 shadow-2xl relative">
+                
+                <!-- Chat History -->
+                <div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-10 mb-10 pb-10" id="ai-architect-history">
+                    <div class="bg-white/5 backdrop-blur-3xl p-8 rounded-[40px] rounded-tl-none border border-white/10 max-w-[80%] fade-in">
+                        <p class="text-base text-white leading-relaxed font-medium">Greetings, Commander. I am Antigravity, your integrated system architect. I have direct access to our core codebase and VPS resources. What architectural evolution shall we initiate today?</p>
+                        <span class="text-[10px] text-white/30 mt-4 block font-black uppercase tracking-[0.2em]">NEURAL CORE // ANTIGRAVITY</span>
+                    </div>
+                </div>
+
+                <!-- Input Zone -->
+                <div class="relative z-20">
+                    <div class="absolute inset-0 bg-brand-teal/20 blur-[100px] opacity-20 pointer-events-none"></div>
+                    <div class="relative bg-white/5 border border-white/10 rounded-[40px] p-2 flex items-center gap-4 backdrop-blur-md">
+                        <input type="text" id="ai-architect-input" class="flex-1 bg-transparent border-none outline-none px-10 py-6 text-lg font-medium text-white placeholder:text-white/20" placeholder="Instruct the architect (e.g. 'Optimize the dashboard loading state')">
+                        <button id="ai-architect-send" class="w-16 h-16 bg-brand-teal rounded-[32px] flex items-center justify-center shadow-[0_0_30px_rgba(20,184,166,0.4)] hover:scale-105 active:scale-95 transition-all">
+                            <i data-lucide="arrow-up" class="w-6 h-6 text-white"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Background Decoration -->
+                <div class="absolute -bottom-20 -right-20 opacity-[0.02] pointer-events-none">
+                     <i data-lucide="sparkles" style="width: 400px; height: 400px;"></i>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="main.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
