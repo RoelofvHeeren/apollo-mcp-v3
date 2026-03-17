@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw // Connectivity Tester</title>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; background: #0a0a0a; color: #00ff9d; padding: 40px; }
+        .test-section { background: #111; border: 1px solid #333; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
+        h2 { color: #fff; margin-top: 0; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        pre { background: #000; padding: 15px; border-radius: 4px; overflow-x: auto; color: #4ade80; border: 1px solid #222; max-height: 200px; }
+        button { background: #139187; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-family: inherit; font-weight: bold; }
+        button:hover { background: #0d6b63; }
+        input { background: #000; border: 1px solid #333; color: #fff; padding: 10px; width: 70%; border-radius: 4px; font-family: inherit; }
+        .status { font-size: 12px; margin-bottom: 10px; }
+        .success { color: #4ade80; }
+        .error { color: #f87171; }
+    </style>
+</head>
+<body>
+    <h1>OpenClaw System Diagnostic</h1>
+    <p>Use this tool to verify the API Gateway is correctly processing requests.</p>
+
+    <!-- METRICS TEST -->
+    <div class="test-section">
+        <h2>1. System Metrics (/api/dashboard/metrics)</h2>
+        <div class="status" id="metrics-status">Ready</div>
+        <button onclick="testMetrics()">RETRIVE METRICS</button>
+        <pre id="metrics-output">Output will appear here...</pre>
+    </div>
+
+    <!-- LOGS TEST -->
+    <div class="test-section">
+        <h2>2. Intelligence Stream (/api/intelligence)</h2>
+        <div class="status" id="logs-status">Ready</div>
+        <button onclick="testLogs()">FETCH LIVE LOGS</button>
+        <pre id="logs-output">Output will appear here...</pre>
+    </div>
+
+    <!-- SHELL TEST -->
+    <div class="test-section">
+        <h2>3. Virtual Terminal (/api/shell)</h2>
+        <div class="status" id="shell-status">Ready</div>
+        <input type="text" id="shell-input" placeholder="Enter shell command (e.g. ls -la)">
+        <button onclick="testShell()">EXECUTE</button>
+        <pre id="shell-output">Output will appear here...</pre>
+    </div>
+
+    <!-- AI ARCHITECT TEST -->
+    <div class="test-section">
+        <h2>4. AI Architect Hub (/api/meta-dev)</h2>
+        <div class="status" id="ai-status">Ready</div>
+        <input type="text" id="ai-input" placeholder="Enter architectural prompt...">
+        <button onclick="testAi()">TRANSMIT</button>
+        <pre id="ai-output">Output will appear here...</pre>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:777/api'; // Updated to Port 777
+
+        async function callApi(endpoint, method = 'GET', body = null) {
+            const options = {
+                method,
+                headers: { 'Content-Type': 'application/json' }
+            };
+            if (body) options.body = JSON.stringify(body);
+            
+            const response = await fetch(`${API_BASE}${endpoint}`, options);
+            return await response.json();
+        }
+
+        async function testMetrics() {
+            try {
+                const data = await callApi('/dashboard/metrics');
+                document.getElementById('metrics-output').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('metrics-status').className = 'status success';
+                document.getElementById('metrics-status').textContent = 'CONNECTED';
+            } catch (e) {
+                document.getElementById('metrics-status').className = 'status error';
+                document.getElementById('metrics-status').textContent = 'CONNECTION FAILED';
+            }
+        }
+
+        async function testLogs() {
+            try {
+                const data = await callApi('/intelligence');
+                document.getElementById('logs-output').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('logs-status').className = 'status success';
+                document.getElementById('logs-status').textContent = 'STREAM ACTIVE';
+            } catch (e) {
+                document.getElementById('logs-status').className = 'status error';
+                document.getElementById('logs-status').textContent = 'STREAM INTERRUPTED';
+            }
+        }
+
+        async function testShell() {
+            const cmd = document.getElementById('shell-input').value;
+            try {
+                const data = await callApi('/shell', 'POST', { command: cmd });
+                document.getElementById('shell-output').textContent = data.output || data.error || 'Empty response';
+                document.getElementById('shell-status').className = 'status success';
+                document.getElementById('shell-status').textContent = 'EXECUTION COMPLETE';
+            } catch (e) {
+                document.getElementById('shell-status').className = 'status error';
+                document.getElementById('shell-status').textContent = 'EXECUTION FAILED';
+            }
+        }
+
+        async function testAi() {
+            const prompt = document.getElementById('ai-input').value;
+            try {
+                const data = await callApi('/meta-dev', 'POST', { prompt });
+                document.getElementById('ai-output').textContent = data.response;
+                document.getElementById('ai-status').className = 'status success';
+                document.getElementById('ai-status').textContent = 'NEURAL LINK STABLE';
+            } catch (e) {
+                document.getElementById('ai-status').className = 'status error';
+                document.getElementById('ai-status').textContent = 'LINK TIMEOUT';
+            }
+        }
+    </script>
+</body>
+</html>
