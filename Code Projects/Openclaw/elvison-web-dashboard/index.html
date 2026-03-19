@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full" lang="en">
+<html class="h-full bg-slate-950" lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -14,309 +14,204 @@
           theme: {
             extend: {
               colors: {
-                brand: { teal: '#14b8a6', dark: '#000000' },
-              }
+                brand: { teal: '#139187', dark: '#0a0a0a' },
+              },
+              backdropBlur: { 'glass': '20px' }
             }
           }
         }
     </script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .glass-sidebar {
+            background: rgba(248, 250, 252, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .active-nav {
+            background: rgba(19, 145, 135, 0.08) !important;
+            border: 1px solid rgba(19, 145, 135, 0.2) !important;
+            color: #139187 !important;
+        }
+        .glow-teal { box-shadow: 0 0 15px rgba(19, 145, 135, 0.4); }
+        .hidden { display: none !important; }
+    </style>
 </head>
-<body class="h-full flex overflow-hidden font-sans antialiased text-white">
+<body class="h-full flex overflow-hidden font-sans antialiased text-slate-200">
     
-    <!-- 🎥 Global Cinematic Backdrop -->
+    <!-- Video Backdrop from Elvison -->
     <video id="bg-video" class="bg-video" autoplay muted loop playsinline>
         <source src="background.mp4" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
 
-    <!-- BEGIN: Global Sidebar (Floating White) -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">
-                <img src="assets/logo.png" alt="Elvison Logo">
+    <!-- BEGIN: Sidebar -->
+    <aside class="w-64 glass-sidebar flex-shrink-0 flex flex-col h-full z-20" id="sidebar">
+        <div class="p-8 flex items-center space-x-3">
+            <div class="w-8 h-8 bg-black rounded flex items-center justify-center">
+                <i data-lucide="shield" class="w-5 h-5 text-white"></i>
             </div>
-            <span class="sidebar-title">Elvison Claw</span>
+            <span class="text-black font-bold tracking-widest text-sm uppercase">Elvison Claw</span>
         </div>
-        <nav class="nav-links">
-            <a class="nav-item active" href="javascript:void(0)" onclick="showSection('overview')">
-                <i data-lucide="layout-grid"></i>
-                <span>Pulse Dashboard</span>
+        <nav class="flex-1 px-4 mt-4 space-y-2 overflow-y-auto" id="nav-list">
+            <a class="nav-item flex items-center px-4 py-3 rounded-xl active-nav transition-all duration-200" href="javascript:void(0)" onclick="showSection('overview')">
+                <i data-lucide="zap" class="w-5 h-5 mr-3"></i>
+                <span class="font-semibold">Pulse Dashboard</span>
             </a>
-            <a class="nav-item" href="javascript:void(0)" onclick="showSection('command')">
-                <i data-lucide="terminal"></i>
-                <span>Command Center</span>
+            <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="javascript:void(0)" onclick="showSection('command')">
+                <i data-lucide="terminal" class="w-5 h-5 mr-3"></i>
+                <span class="font-medium">Command Center</span>
             </a>
-            <a class="nav-item" href="javascript:void(0)" onclick="showSection('hierarchy')">
-                <i data-lucide="layers"></i>
-                <span>Chain of Command</span>
+            <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="javascript:void(0)" onclick="showSection('hierarchy')">
+                <i data-lucide="users" class="w-5 h-5 mr-3"></i>
+                <span class="font-medium">Chain of Command</span>
             </a>
-            <a class="nav-item" href="javascript:void(0)" onclick="showSection('architect')">
-                <i data-lucide="sparkles"></i>
-                <span>AI Architect</span>
+            <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="javascript:void(0)" onclick="showSection('architect')">
+                <i data-lucide="sparkles" class="w-5 h-5 mr-3"></i>
+                <span class="font-medium">AI Architect</span>
             </a>
-            <a class="nav-item" href="javascript:void(0)" onclick="showSection('memory')">
-                <i data-lucide="database"></i>
-                <span>Memory Hub</span>
+            <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="javascript:void(0)" onclick="showSection('memory')">
+                <i data-lucide="database" class="w-5 h-5 mr-3"></i>
+                <span class="font-medium">Memory Vault</span>
             </a>
-            <a class="nav-item" href="javascript:void(0)" onclick="showSection('agents')">
-                <i data-lucide="users"></i>
-                <span>Agents Hub</span>
+            <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="javascript:void(0)" onclick="showSection('agents')">
+                <i data-lucide="box" class="w-5 h-5 mr-3"></i>
+                <span class="font-medium">Claw Hub</span>
             </a>
-            <div class="mt-auto pt-10 border-t border-white/5 opacity-40">
-                <p class="px-6 text-[8px] font-black uppercase tracking-[0.3em] mb-4">External Links</p>
-                <a class="nav-item !py-2" href="https://discord.com" target="_blank">
-                    <i data-lucide="message-square"></i>
-                    <span class="text-[10px]">Discord</span>
-                </a>
-            </div>
         </nav>
-        <div class="sidebar-toggle" id="sidebar-toggle">
-            <i data-lucide="chevron-left" id="toggle-icon"></i>
+        <div class="p-4 border-t border-slate-200">
+            <div class="bg-slate-100 rounded-full px-4 py-2 flex items-center justify-between">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">System Status</span>
+                <div class="flex items-center">
+                    <span class="text-[10px] font-bold text-brand-teal mr-2" id="status-text">NOMINAL</span>
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-teal opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-teal"></span>
+                    </span>
+                </div>
+            </div>
         </div>
     </aside>
 
     <!-- BEGIN: Main Content Stage -->
-    <main class="main-stage">
-        
-        <!-- --- SECTION: OVERVIEW (PULSE) --- -->
-        <div id="section-overview" class="section-content flex flex-col h-full">
-            <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
-                <div>
-                    <h1 class="text-4xl font-light tracking-tight text-white">Mission Control</h1>
-                    <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Real-time neural monitoring & deployment oversight.</p>
-                </div>
-                <div class="flex space-x-6">
-                    <div class="glass-card-white !p-2 !rounded-2xl flex items-center space-x-4 border-white/5 !bg-white/5">
-                        <div class="w-12 h-12 rounded-xl bg-brand-teal flex items-center justify-center font-black text-white shadow-lg">EL</div>
-                        <div class="pr-4 text-left">
-                            <div class="text-[10px] font-black leading-none text-white tracking-wider">ELVISON CLAW</div>
-                            <div class="text-[9px] text-brand-teal leading-none mt-2 uppercase font-black">Commander</div>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <div class="flex-1 grid grid-cols-3 grid-rows-[auto_1fr] gap-8 overflow-y-auto pr-4 custom-scrollbar">
-                <!-- Panel 1: API Cost -->
-                <section class="glass-card-white flex flex-col">
-                    <div class="flex justify-between items-start mb-10">
-                        <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em]">API Cost Audit</h2>
-                        <span class="text-brand-teal text-2xl font-mono" id="cost-value">$1,482.20</span>
-                        <div id="agent-cost-list" class="hidden flex-col gap-2 w-full mt-4">
-                            <div class="flex justify-between text-[10px] font-bold"><span class="text-white/40">Nexus-01</span><span class="text-brand-teal">$842.10</span></div>
-                            <div class="flex justify-between text-[10px] font-bold"><span class="text-white/40">Claw-Builder</span><span class="text-brand-teal">$420.05</span></div>
-                        </div>
-                    </div>
-                    <div class="mt-auto flex justify-between items-end">
-                        <div class="flex gap-1" id="cost-toggle">
-                            <button class="toggle-btn active" data-view="total">TOTAL</button>
-                            <button class="toggle-btn" data-view="agent">AGENT</button>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Panel 2: Task Pulse -->
-                <section class="glass-card-white flex flex-col">
-                    <div class="flex justify-between items-center mb-10">
-                        <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em]">Task Pulse</h2>
-                    </div>
-                    <div class="flex-1 flex flex-col justify-center gap-10">
-                        <div class="flex items-center gap-6">
-                            <div class="flex-1">
-                                <span class="text-4xl font-light">248</span>
-                                <div class="text-[9px] text-brand-teal font-black uppercase tracking-[0.2em] mt-2">Accomplished</div>
-                            </div>
-                            <div class="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
-                                <div class="h-full bg-brand-teal w-3/4"></div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-6">
-                            <div class="flex-1">
-                                <span class="text-4xl font-light">12</span>
-                                <div class="text-[9px] text-brand-teal font-black uppercase tracking-[0.2em] mt-2">Active Nodes</div>
-                            </div>
-                            <div class="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
-                                <div class="h-full bg-brand-teal w-1/4 animate-pulse"></div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Panel 3: Live Error Log -->
-                <section class="glass-card-white flex flex-col">
-                    <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em] mb-10">System Anomalies</h2>
-                    <div class="flex-1 space-y-6 overflow-y-auto pr-2 custom-scrollbar">
-                        <div class="p-6 bg-red-500/5 border border-red-500/10 rounded-3xl flex items-start space-x-5 transition-all hover:bg-red-500/10">
-                            <div class="w-2.5 h-2.5 rounded-full bg-red-500 mt-2 shadow-[0_0_12px_rgba(239,68,68,0.4)]"></div>
-                            <div class="flex-1">
-                                <div class="flex justify-between items-center mb-1">
-                                    <h3 class="text-[10px] font-black text-red-400 uppercase tracking-widest">Critical Alert</h3>
-                                    <span class="text-[9px] text-white/20 font-mono">14:22</span>
-                                </div>
-                                <p class="text-xs text-white/60 font-medium">Rate Limit Exceeded: OpenAI-API-Cluster-A</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="col-span-3 glass-card-white !p-12">
-                    <div class="flex justify-between items-center mb-12">
-                        <div>
-                            <h2 class="text-sm font-bold text-white/80 uppercase tracking-[0.3em]">Operational Directive</h2>
-                        </div>
-                        <div class="flex gap-6" id="report-source-toggle">
-                            <button class="text-[10px] font-black uppercase tracking-widest text-brand-teal border-b-2 border-brand-teal pb-1 toggle-btn active" data-src="system">System</button>
-                            <button class="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors toggle-btn" data-src="project">Project</button>
-                        </div>
-                    </div>
-                    <div class="relative z-10" id="report-content">
-                        <p class="text-brand-teal text-[10px] font-black uppercase tracking-[0.4em] mb-6">Commander,</p>
-                        <p class="text-4xl font-light text-white leading-tight max-w-4xl">
-                            All neural nodes are functional. Optimization phase in progress.
-                        </p>
-                    </div>
-                </section>
-            </div>
+    <main class="flex-1 relative overflow-hidden bg-brand-dark flex flex-col">
+        <!-- Background Gradients -->
+        <div class="absolute inset-0 z-0 pointer-events-none">
+            <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-brand-teal/10 rounded-full blur-[120px]"></div>
         </div>
 
-        <!-- --- SECTION: COMMAND CENTER (CHAT & VPS) --- -->
-        <div id="section-command" class="section-content hidden flex flex-col h-full">
-            <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
-                <div>
-                    <h1 class="text-4xl font-light tracking-tight text-white">Neural Hub</h1>
-                    <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Integrated Agent Console & VPS Subsystem</p>
+        <!-- Header -->
+        <header class="relative z-10 px-10 pt-10 pb-6 flex justify-between items-end">
+            <div>
+                <h1 id="page-title" class="text-3xl font-light tracking-tight text-white">Mission Control</h1>
+                <p id="page-subtitle" class="text-slate-500 text-sm mt-1">Real-time neural monitoring & deployment oversight.</p>
+            </div>
+            <div class="flex space-x-4">
+                <div class="glass-card p-2 rounded-lg flex items-center space-x-2 border border-white/5">
+                    <div class="w-8 h-8 rounded-full bg-slate-800 border border-white/20 flex items-center justify-center font-bold text-[10px] text-white">EL</div>
+                    <div class="pr-2 text-left">
+                        <div class="text-[10px] font-bold leading-none">ELVISON CLAW</div>
+                        <div class="text-[9px] text-brand-teal leading-none mt-1 uppercase">Admin Access</div>
+                    </div>
                 </div>
-            </header>
-            
-            <div class="command-pane-set flex-1 bg-white/5 rounded-[48px] border border-white/10 overflow-hidden flex shadow-2xl backdrop-blur-3xl">
+            </div>
+        </header>
+
+        <!-- --- SECTION: OVERVIEW --- -->
+        <div id="section-overview" class="section-content relative z-10 flex-1 p-10 grid grid-cols-3 grid-rows-[auto_1fr] gap-6">
+            <section class="glass-card rounded-3xl p-6 flex flex-col">
+                <div class="flex justify-between items-start mb-6">
+                    <h2 class="text-xs font-semibold text-white/80 uppercase tracking-wider">API Cost Audit</h2>
+                    <span class="text-brand-teal text-lg font-mono">$1,482.20</span>
+                </div>
+                <div class="space-y-6 flex-1">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-2 font-bold"><span class="text-slate-400 uppercase tracking-wide">Nexus-01</span><span class="text-white">$842.10</span></div>
+                        <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-brand-teal h-full rounded-full glow-teal w-3/4"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="glass-card rounded-3xl p-6 flex flex-col">
+                <h2 class="text-xs font-semibold text-white/80 uppercase tracking-wider mb-6">Task Pulse</h2>
+                <div class="grid grid-cols-1 gap-4 flex-1">
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-2xl">
+                        <div>
+                            <div class="text-2xl font-light text-white leading-none">248</div>
+                            <div class="text-[9px] text-brand-teal font-bold uppercase tracking-wider mt-1">Accomplished</div>
+                        </div>
+                        <div class="w-12 h-1 bg-white/10 rounded-full overflow-hidden"><div class="h-full bg-brand-teal w-3/4"></div></div>
+                    </div>
+                </div>
+            </section>
+            <section class="glass-card rounded-3xl p-6 flex flex-col">
+                <h2 class="text-xs font-semibold text-white/80 uppercase tracking-wider mb-6">Live Error Log</h2>
+                <div class="flex-1 space-y-3 overflow-y-auto custom-scrollbar">
+                    <div class="p-3 bg-red-500/5 border border-red-500/10 rounded-xl flex items-start space-x-3">
+                        <div class="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+                        <div class="flex-1 text-left">
+                            <div class="flex justify-between font-bold"><span class="text-[9px] text-red-400 uppercase">Critical</span><span class="text-[9px] text-slate-500">14:22</span></div>
+                            <p class="text-[10px] text-slate-300 mt-0.5 leading-tight">Rate Limit Exceeded</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="col-span-3 glass-card rounded-3xl p-8 flex flex-col relative overflow-hidden group">
+                <div class="absolute -top-24 -left-24 w-48 h-48 bg-brand-teal/20 rounded-full blur-[60px] group-hover:bg-brand-teal/30 transition-all duration-700"></div>
+                <div class="relative z-10 text-left">
+                    <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Unified Neural Node Telemetry</h2>
+                    <p class="text-2xl font-light text-white leading-relaxed tracking-tight max-w-4xl">
+                        <span class="text-brand-teal font-medium">Hey Elvison,</span> we've successfully deployed the latest neural node update. Currently, we're optimizing the memory pool for Agent Alpha and indexing the Memory Vault.
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <!-- --- SECTION: COMMAND --- -->
+        <div id="section-command" class="section-content hidden relative z-10 flex-1 p-10 flex flex-col">
+            <div class="flex-1 glass-card rounded-[48px] overflow-hidden flex shadow-2xl backdrop-blur-3xl">
                 <!-- Agent Command Pane -->
-                <section class="flex-1 flex flex-col p-12 border-r border-white/5 relative" id="pane-agent">
+                <section class="flex-1 flex flex-col p-12 border-r border-white/5 relative">
                     <div class="mb-10 flex flex-col gap-1">
-                        <h2 class="text-[12px] uppercase tracking-[0.3em] text-brand-teal font-black">Agent Execution</h2>
-                        <div class="flex items-center gap-4 mt-4">
-                            <select id="agent-selector" class="bg-white/5 border border-white/10 rounded-2xl py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-brand-teal outline-none transition-all focus:border-brand-teal/50">
-                                <option value="pm">Project Manager</option>
-                                <option value="cos">Chief of Staff</option>
-                                <option value="intel-scout">Intel Scout</option>
-                            </select>
-                            <div class="flex items-center gap-2 px-3 py-1 bg-green-500/10 rounded-full">
-                                <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                                <span class="text-[8px] font-black text-green-500 uppercase tracking-widest">Live Relay</span>
-                            </div>
-                        </div>
+                        <h2 class="text-[10px] uppercase tracking-[0.3em] text-brand-teal font-black">Neural Interface</h2>
+                        <select id="agent-selector" class="mt-4 bg-white/5 border border-white/10 rounded-2xl py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-brand-teal outline-none transition-all focus:border-brand-teal/50">
+                            <option value="pm">Project Manager</option>
+                            <option value="cos">Chief of Staff</option>
+                        </select>
                     </div>
-
-                    <div id="chat-feed" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 mb-8 pr-4">
-                        <div class="bg-white/5 p-6 rounded-[32px] rounded-tl-none border border-white/10 max-w-[90%] fade-in">
-                            <p class="text-sm text-white/80 leading-relaxed font-medium">Strategic neural link established. Ready for mission parameters.</p>
-                            <span class="text-[9px] text-white/20 mt-3 block font-bold uppercase tracking-widest">SYSTEM // NEXUS-01</span>
-                        </div>
-                    </div>
-
+                    <div id="chat-feed" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 mb-8 pr-4 text-left"></div>
                     <div class="relative mt-auto">
-                        <textarea id="agent-input" class="w-full bg-white/5 border border-white/10 rounded-[32px] py-6 px-8 pr-20 text-sm font-medium text-white placeholder:text-white/20 focus:outline-none focus:border-brand-teal transition-all shadow-xl resize-none" rows="1" placeholder="Type mission instructions..."></textarea>
-                        <button id="agent-send" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-brand-teal rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all">
-                            <i data-lucide="send" class="w-5 h-5 text-white"></i>
+                        <textarea id="agent-input" class="w-full bg-white/5 border border-white/10 rounded-[32px] py-6 px-8 pr-20 text-sm font-medium text-white placeholder:text-white/20 focus:outline-none focus:border-brand-teal transition-all resize-none" rows="1" placeholder="Type mission instructions..."></textarea>
+                        <button id="agent-send" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-brand-teal rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all text-white">
+                            <i data-lucide="send" class="w-5 h-5"></i>
                         </button>
                     </div>
                 </section>
-
                 <!-- VPS Terminal Pane -->
-                <section class="flex-1 flex flex-col p-12 bg-black/40" id="pane-vps">
-                    <h2 class="text-[12px] uppercase tracking-[0.3em] text-teal-400/50 font-black mb-10">Infrastructure Node</h2>
-                    <div id="terminal-output" class="flex-1 font-mono text-xs leading-relaxed overflow-y-auto custom-scrollbar pr-6 text-teal-400/80 mb-6">
-                        <div class="text-teal-900 border-b border-teal-900/20 pb-4 mb-4"># SYSTEM_OS: UBUNTU 24.04 // LINK: SECURE<br># NODE: MISSION_CONTROL_01</div>
-                    </div>
+                <section class="flex-1 flex flex-col p-12 bg-black/40">
+                    <h2 class="text-[10px] uppercase tracking-[0.3em] text-teal-400/50 font-black mb-10">Infrastructure Node</h2>
+                    <div id="terminal-output" class="flex-1 font-mono text-xs leading-relaxed overflow-y-auto custom-scrollbar pr-6 text-teal-400/80 mb-6 text-left"></div>
                     <div class="flex items-center gap-4 font-mono text-xs bg-white/5 border border-white/10 p-4 rounded-2xl">
                         <span class="text-teal-500 font-bold whitespace-nowrap">root@elvison:~$</span>
-                        <input type="text" id="vps-input" class="flex-1 bg-transparent border-none outline-none text-teal-400 placeholder:text-teal-900" placeholder="execute_command">
+                        <input type="text" id="vps-input" class="flex-1 bg-transparent border-none outline-none text-teal-400" placeholder="execute_command">
                     </div>
                 </section>
             </div>
         </div>
 
-        <!-- --- SECTION: HIERARCHY --- -->
-        <div id="section-hierarchy" class="section-content hidden flex flex-col h-full">
-            <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
-                <div>
-                    <h1 class="text-4xl font-light tracking-tight text-white">Chain of Command</h1>
-                    <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Strategic Agency Handoff // Operational Flow</p>
-                </div>
-                <div class="zoom-controls flex gap-4">
-                    <button class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-brand-teal/20 transition-all focus:outline-none" onclick="adjustZoom(0.1)"><i data-lucide="plus" class="w-4 h-4"></i></button>
-                    <button class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-brand-teal/20 transition-all focus:outline-none" onclick="adjustZoom(-0.1)"><i data-lucide="minus" class="w-4 h-4"></i></button>
-                </div>
-            </header>
-            <div class="flex-1 bg-white/5 rounded-[48px] border border-white/10 overflow-hidden relative backdrop-blur-3xl" id="hierarchy-viewport">
-                <!-- SVG Conduits Layer -->
-                <svg class="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible" id="conduit-svg"></svg>
-                
-                <div class="canvas relative origin-center h-full w-full flex items-center justify-center" id="hierarchy-canvas" style="transform: scale(0.8) translate(0px, 0px);">
-                    <!-- LEVEL 1: PROJECT MANAGER -->
-                    <div class="flex flex-col items-center">
-                        <div class="glass-card-white w-80 p-10 cursor-pointer relative !bg-white/5 border-white/10 !rounded-[48px] hover:!bg-white/10 transition-all shadow-2xl" id="node-PM" onclick="openAgentDeepDive('Project Manager')">
-                            <div class="port port-out" id="port-PM-out" style="bottom:-5px; left:50%; position:absolute;"></div>
-                            <span class="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em] block mb-4">Level 01</span>
-                            <h3 class="text-2xl font-light mb-1 text-white">Project Manager</h3>
-                            <p class="text-[11px] text-white/40 mb-12 italic tracking-wide">Orchestration Hub</p>
-                            <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-brand-teal h-full rounded-full" style="width: 85%"></div>
-                            </div>
-                        </div>
-
-                        <!-- LEVEL 2: C-SUITE -->
-                        <div class="flex gap-32 mt-40">
-                            <div class="glass-card-white w-72 p-10 cursor-pointer relative !bg-white/10 border-white/10 !rounded-[48px] hover:!bg-white/20 transition-all shadow-xl" id="node-COS" onclick="openAgentDeepDive('Chief of Staff')">
-                                 <div class="port port-in" id="port-COS-in" style="top:-5px; left:50%; position:absolute;"></div>
-                                 <span class="text-[10px] font-black text-white/30 uppercase tracking-widest block mb-2">Operations</span>
-                                 <h3 class="text-xl font-light mb-1 text-white">Chief of Staff</h3>
-                            </div>
-                            <div class="glass-card-white w-72 p-10 cursor-pointer relative !bg-white/10 border-white/10 !rounded-[48px] hover:!bg-white/20 transition-all shadow-xl" id="node-COF" onclick="openAgentDeepDive('Head of Finance')">
-                                <div class="port port-in" id="port-COF-in" style="top:-5px; left:50%; position:absolute;"></div>
-                                <span class="text-[10px] font-black text-white/30 uppercase tracking-widest block mb-2">Finance</span>
-                                <h3 class="text-xl font-light mb-1 text-white">Head of Finance</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- --- SECTION: AI ARCHITECT --- -->
-        <div id="section-architect" class="section-content hidden flex flex-col h-full">
-            <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
-                <div>
-                    <h1 class="text-4xl font-light tracking-tight text-white">AI Architect</h1>
-                    <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Neural Code Optimization & System Evolution</p>
-                </div>
-            </header>
-            <div class="flex-1 bg-white/5 rounded-[48px] border border-white/10 overflow-hidden p-12 flex flex-col backdrop-blur-3xl relative">
-                <div id="architect-chat-history" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 mb-8 pr-4">
-                    <div class="bg-white/5 p-10 rounded-[48px] rounded-tl-none border border-white/10 max-w-[80%] fade-in">
-                        <p class="text-lg text-white/90 leading-relaxed font-medium">Commander, I am Antigravity. I have direct access to our core VPS resources. What architectural evolution shall we initiate today?</p>
-                        <span class="text-[10px] text-white/20 mt-6 block font-black uppercase tracking-[0.2em]">NEURAL CORE // ANTIGRAVITY</span>
-                    </div>
-                </div>
+        <!-- --- SECTION: ARCHITECT --- -->
+        <div id="section-architect" class="section-content hidden relative z-10 flex-1 p-10 flex flex-col">
+            <div class="flex-1 glass-card rounded-[48px] p-12 flex flex-col backdrop-blur-3xl relative">
+                <div id="architect-chat-history" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 mb-8 pr-4 text-left"></div>
                 <div class="relative mt-auto">
                     <input type="text" id="architect-input" class="w-full bg-white/5 border border-white/10 rounded-[40px] py-8 px-12 text-lg font-medium text-white placeholder:text-white/20 focus:outline-none focus:border-brand-teal transition-all shadow-2xl" placeholder="Instruct the architect...">
-                    <button id="architect-send" class="absolute right-6 top-1/2 -translate-y-1/2 w-16 h-16 bg-brand-teal rounded-[32px] flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all text-white">
-                        <i data-lucide="arrow-up" class="w-8 h-8"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- --- SECTION: MEMORY & AGENTS --- -->
-        <div id="section-memory" class="section-content hidden flex flex-col h-full">
-            <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
-                <div>
-                    <h1 class="text-4xl font-light tracking-tight text-white">Memory Vault</h1>
-                    <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Persistent Neural Indexing</p>
-                </div>
-            </header>
-            <div class="flex-1 bg-white/5 rounded-[48px] border border-white/10 overflow-hidden p-12 overflow-y-auto custom-scrollbar">
-                <div id="memory-list" class="grid grid-cols-2 gap-8">
-                     <!-- Populated by JS -->
+                    <button id="architect-send" class="absolute right-6 top-1/2 -translate-y-1/2 w-16 h-16 bg-brand-teal rounded-[32px] flex items-center justify-center shadow-lg text-white"><i data-lucide="arrow-up" class="w-8 h-8"></i></button>
                 </div>
             </div>
         </div>

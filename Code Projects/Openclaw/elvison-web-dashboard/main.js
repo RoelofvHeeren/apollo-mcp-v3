@@ -16,8 +16,8 @@ function showSection(sectionId) {
     if (target) target.classList.remove('hidden');
     
     document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('onclick')?.includes(`'${sectionId}'`)) item.classList.add('active');
+        item.classList.remove('active-nav');
+        if (item.getAttribute('onclick')?.includes(`'${sectionId}'`)) item.classList.add('active-nav');
     });
 
     if (sectionId === 'command') initWebSocket();
