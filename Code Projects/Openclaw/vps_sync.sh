@@ -33,8 +33,16 @@ scp -o StrictHostKeyChecking=no "$REPO_DIR/.env" "$VPS_USER@$VPS_IP:$VPS_PATH/.e
 # 2. Trigger Pull & Restart on VPS via SSH
 echo "🛰️ [STAGE 2] Updating VPS via SSH..."
 ssh -o StrictHostKeyChecking=no "$VPS_USER@$VPS_IP" << EOF
-    # Sync Local to VPS (into the app's actual directory)
-    cd "$VPS_PATH/Code Projects/Openclaw" || { echo "❌ Subfolder not found on VPS"; exit 1; }
+    # Sync Local to VPS (first the whole repo root)
+    cd "$VPS_PATH" || { echo "❌ Folder not found on VPS"; exit 1; }
+    git pull origin main
+    
+    # Now go to the app's actual directory
+    cd "Code Projects/Openclaw" || { echo "❌ Subfolder not found on VPS"; exit 1; }
+    
+    # Install dependencies on the VPS
+    echo "📦 Installing dependencies on VPS..."
+    npm install --omit=dev
     
     # Restart the Gateway using PM2 for persistence
     echo "🔄 Refreshing OpenClaw Gateway (PM2)..."

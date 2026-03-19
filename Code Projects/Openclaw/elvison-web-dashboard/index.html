@@ -23,7 +23,6 @@
 </head>
 <body class="h-full flex overflow-hidden font-sans antialiased text-white">
     
-    <!-- 🎥 Global Cinematic Backdrop (Neutral Black Overlay) -->
     <!-- 🎥 Global Cinematic Backdrop -->
     <video id="bg-video" class="bg-video" autoplay muted loop playsinline>
         <source src="background.mp4" type="video/mp4">
@@ -39,177 +38,235 @@
             <span class="sidebar-title">Elvison Claw</span>
         </div>
         <nav class="nav-links">
-            <a class="nav-item active" href="index.html">
+            <a class="nav-item active" href="javascript:void(0)" onclick="showSection('overview')">
                 <i data-lucide="layout-grid"></i>
                 <span>Pulse Dashboard</span>
             </a>
-            <a class="nav-item" href="command.html">
+            <a class="nav-item" href="javascript:void(0)" onclick="showSection('command')">
                 <i data-lucide="terminal"></i>
                 <span>Command Center</span>
             </a>
-            <a class="nav-item" href="hierarchy.html">
+            <a class="nav-item" href="javascript:void(0)" onclick="showSection('hierarchy')">
                 <i data-lucide="layers"></i>
                 <span>Chain of Command</span>
             </a>
-            <a class="nav-item" href="architect.html">
+            <a class="nav-item" href="javascript:void(0)" onclick="showSection('architect')">
                 <i data-lucide="sparkles"></i>
                 <span>AI Architect</span>
             </a>
-            <a class="nav-item" href="#">
-                <i data-lucide="activity"></i>
-                <span>Operations</span>
-            </a>
-            <a class="nav-item" href="#">
+            <a class="nav-item" href="javascript:void(0)" onclick="showSection('memory')">
                 <i data-lucide="database"></i>
-                <span>Claw Hub</span>
+                <span>Memory Hub</span>
             </a>
-            <a class="nav-item" href="#">
-                <i data-lucide="settings"></i>
-                <span>Settings</span>
+            <a class="nav-item" href="javascript:void(0)" onclick="showSection('agents')">
+                <i data-lucide="users"></i>
+                <span>Agents Hub</span>
             </a>
+            <div class="mt-auto pt-10 border-t border-white/5 opacity-40">
+                <p class="px-6 text-[8px] font-black uppercase tracking-[0.3em] mb-4">External Links</p>
+                <a class="nav-item !py-2" href="https://discord.com" target="_blank">
+                    <i data-lucide="message-square"></i>
+                    <span class="text-[10px]">Discord</span>
+                </a>
+            </div>
         </nav>
         <div class="sidebar-toggle" id="sidebar-toggle">
             <i data-lucide="chevron-left" id="toggle-icon"></i>
         </div>
     </aside>
 
-    <!-- BEGIN: Main Content Stage (Restored Spacing) -->
+    <!-- BEGIN: Main Content Stage -->
     <main class="main-stage">
         
-        <!-- Header area (Restored Padding) -->
-        <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
-            <div>
-                <h1 class="text-4xl font-light tracking-tight text-white">Mission Control</h1>
-                <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Real-time neural monitoring & deployment oversight.</p>
-            </div>
-            <div class="flex space-x-6">
-                <button class="px-8 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest border border-white/10 hover:bg-white/5 transition-all text-white backdrop-blur-md">
-                    Deploy New Agent
-                </button>
-                <div class="glass-card-white !p-2 !rounded-2xl flex items-center space-x-4 border-white/5 !bg-white/5">
-                    <div class="w-12 h-12 rounded-xl bg-brand-teal flex items-center justify-center font-black text-white shadow-lg">EL</div>
-                    <div class="pr-4">
-                        <div class="text-[10px] font-black leading-none text-white tracking-wider">ELVISON CLAW</div>
-                        <div class="text-[9px] text-brand-teal leading-none mt-2 uppercase font-black">Commander</div>
+        <!-- --- SECTION: OVERVIEW (PULSE) --- -->
+        <div id="section-overview" class="section-content flex flex-col h-full">
+            <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
+                <div>
+                    <h1 class="text-4xl font-light tracking-tight text-white">Mission Control</h1>
+                    <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Real-time neural monitoring & deployment oversight.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <div class="glass-card-white !p-2 !rounded-2xl flex items-center space-x-4 border-white/5 !bg-white/5">
+                        <div class="w-12 h-12 rounded-xl bg-brand-teal flex items-center justify-center font-black text-white shadow-lg">EL</div>
+                        <div class="pr-4 text-left">
+                            <div class="text-[10px] font-black leading-none text-white tracking-wider">ELVISON CLAW</div>
+                            <div class="text-[9px] text-brand-teal leading-none mt-2 uppercase font-black">Commander</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
 
-        <!-- Content Grid (Transparency over video) -->
-        <div class="flex-1 grid grid-cols-3 grid-rows-[auto_1fr] gap-8 overflow-y-auto pr-4 custom-scrollbar">
-            <!-- Panel 1: API Cost -->
-            <section class="glass-card-white flex flex-col">
-                <div class="flex justify-between items-start mb-10">
-                    <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em]">API Cost Audit</h2>
-                    <span class="text-brand-teal text-2xl font-mono" id="cost-value">$1,482.20</span>
-                    <!-- Agent list hidden by default -->
-                    <div id="agent-cost-list" class="hidden flex-col gap-2 w-full mt-4">
-                        <div class="flex justify-between text-[10px] font-bold"><span class="text-white/40">Nexus-01</span><span class="text-brand-teal">$842.10</span></div>
-                        <div class="flex justify-between text-[10px] font-bold"><span class="text-white/40">Claw-Builder</span><span class="text-brand-teal">$420.05</span></div>
+            <div class="flex-1 grid grid-cols-3 grid-rows-[auto_1fr] gap-8 overflow-y-auto pr-4 custom-scrollbar">
+                <!-- Panel 1: API Cost -->
+                <section class="glass-card-white flex flex-col">
+                    <div class="flex justify-between items-start mb-10">
+                        <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em]">API Cost Audit</h2>
+                        <span class="text-brand-teal text-2xl font-mono" id="cost-value">$1,482.20</span>
+                        <div id="agent-cost-list" class="hidden flex-col gap-2 w-full mt-4">
+                            <div class="flex justify-between text-[10px] font-bold"><span class="text-white/40">Nexus-01</span><span class="text-brand-teal">$842.10</span></div>
+                            <div class="flex justify-between text-[10px] font-bold"><span class="text-white/40">Claw-Builder</span><span class="text-brand-teal">$420.05</span></div>
+                        </div>
                     </div>
-                </div>
-                <div class="mt-auto flex justify-between items-end">
-                    <div class="flex gap-1" id="cost-toggle">
-                        <button class="toggle-btn active" data-view="total">TOTAL</button>
-                        <button class="toggle-btn" data-view="agent">AGENT</button>
+                    <div class="mt-auto flex justify-between items-end">
+                        <div class="flex gap-1" id="cost-toggle">
+                            <button class="toggle-btn active" data-view="total">TOTAL</button>
+                            <button class="toggle-btn" data-view="agent">AGENT</button>
+                        </div>
                     </div>
-                    <div class="text-right">
-                        <p class="text-[9px] font-black text-white/20 uppercase tracking-widest">MTD Expenditure</p>
-                        <p class="text-[10px] font-bold text-brand-teal cursor-pointer hover:underline">VIEW LEDGER</p>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Panel 2: Task Pulse -->
-            <section class="glass-card-white flex flex-col">
-                <div class="flex justify-between items-center mb-10">
-                    <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em]">Task Pulse</h2>
-                    <div class="flex bg-white/5 p-1 rounded-xl border border-white/5" id="task-time-toggle">
-                        <button class="px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest bg-white/10 text-white">Day</button>
-                        <button class="px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors">Week</button>
+                <!-- Panel 2: Task Pulse -->
+                <section class="glass-card-white flex flex-col">
+                    <div class="flex justify-between items-center mb-10">
+                        <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em]">Task Pulse</h2>
                     </div>
-                </div>
-                <div class="flex-1 flex flex-col justify-center gap-10">
-                    <div class="flex items-center gap-6">
-                        <div class="flex-1">
-                            <span class="text-4xl font-light">248</span>
-                            <div class="text-[9px] text-brand-teal font-black uppercase tracking-[0.2em] mt-2">Accomplished</div>
-                        </div>
-                        <div class="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
-                            <div class="h-full bg-brand-teal w-3/4"></div>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-6">
-                        <div class="flex-1">
-                            <span class="text-4xl font-light">12</span>
-                            <div class="text-[9px] text-brand-teal font-black uppercase tracking-[0.2em] mt-2">Active Nodes</div>
-                        </div>
-                        <div class="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
-                            <div class="h-full bg-brand-teal w-1/4 animate-pulse"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Panel 3: Live Error Log -->
-            <section class="glass-card-white flex flex-col">
-                <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em] mb-10">System Anomalies</h2>
-                <div class="flex-1 space-y-6 overflow-y-auto pr-2 custom-scrollbar">
-                    <div class="p-6 bg-red-500/5 border border-red-500/10 rounded-3xl flex items-start space-x-5 transition-all hover:bg-red-500/10">
-                        <div class="w-2.5 h-2.5 rounded-full bg-red-500 mt-2 shadow-[0_0_12px_rgba(239,68,68,0.4)]"></div>
-                        <div class="flex-1">
-                            <div class="flex justify-between items-center mb-1">
-                                <h3 class="text-[10px] font-black text-red-400 uppercase tracking-widest">Critical Alert</h3>
-                                <span class="text-[9px] text-white/20 font-mono">14:22</span>
+                    <div class="flex-1 flex flex-col justify-center gap-10">
+                        <div class="flex items-center gap-6">
+                            <div class="flex-1">
+                                <span class="text-4xl font-light">248</span>
+                                <div class="text-[9px] text-brand-teal font-black uppercase tracking-[0.2em] mt-2">Accomplished</div>
                             </div>
-                            <p class="text-xs text-white/60 font-medium">Rate Limit Exceeded: OpenAI-API-Cluster-A</p>
-                        </div>
-                    </div>
-                    <div class="p-6 bg-amber-500/5 border border-amber-500/10 rounded-3xl flex items-start space-x-5 transition-all hover:bg-amber-500/10">
-                        <div class="w-2.5 h-2.5 rounded-full bg-amber-500 mt-2"></div>
-                        <div class="flex-1">
-                            <div class="flex justify-between items-center mb-1">
-                                <h3 class="text-[10px] font-black text-amber-400 uppercase tracking-widest">Warning</h3>
-                                <span class="text-[9px] text-white/20 font-mono">13:58</span>
+                            <div class="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
+                                <div class="h-full bg-brand-teal w-3/4"></div>
                             </div>
-                            <p class="text-xs text-white/60 font-medium">Latency optimization required: node-secure-london-04</p>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <div class="flex-1">
+                                <span class="text-4xl font-light">12</span>
+                                <div class="text-[9px] text-brand-teal font-black uppercase tracking-[0.2em] mt-2">Active Nodes</div>
+                            </div>
+                            <div class="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
+                                <div class="h-full bg-brand-teal w-1/4 animate-pulse"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Panel 4: System Report -->
-            <section class="col-span-3 glass-card-white !p-12">
-                <div class="flex justify-between items-center mb-12">
-                    <div>
-                        <h2 class="text-sm font-bold text-white/80 uppercase tracking-[0.3em]">Operational Directive</h2>
-                        <p class="text-[9px] text-white/30 mt-2 uppercase tracking-widest font-black">Unified Neural Node Status Report</p>
+                <!-- Panel 3: Live Error Log -->
+                <section class="glass-card-white flex flex-col">
+                    <h2 class="text-[11px] font-bold text-white/50 uppercase tracking-[0.2em] mb-10">System Anomalies</h2>
+                    <div class="flex-1 space-y-6 overflow-y-auto pr-2 custom-scrollbar">
+                        <div class="p-6 bg-red-500/5 border border-red-500/10 rounded-3xl flex items-start space-x-5 transition-all hover:bg-red-500/10">
+                            <div class="w-2.5 h-2.5 rounded-full bg-red-500 mt-2 shadow-[0_0_12px_rgba(239,68,68,0.4)]"></div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center mb-1">
+                                    <h3 class="text-[10px] font-black text-red-400 uppercase tracking-widest">Critical Alert</h3>
+                                    <span class="text-[9px] text-white/20 font-mono">14:22</span>
+                                </div>
+                                <p class="text-xs text-white/60 font-medium">Rate Limit Exceeded: OpenAI-API-Cluster-A</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex gap-6" id="report-source-toggle">
-                        <button class="text-[10px] font-black uppercase tracking-widest text-brand-teal border-b-2 border-brand-teal pb-1 toggle-btn active" data-src="system">System</button>
-                        <button class="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors toggle-btn" data-src="project">Project</button>
-                        <button class="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors toggle-btn" data-src="agent">Agent</button>
-                    </div>
-                </div>
-                <div class="relative min-h-[220px]">
-                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
-                         <i data-lucide="shield" style="width: 200px; height: 200px;"></i>
+                </section>
+
+                <section class="col-span-3 glass-card-white !p-12">
+                    <div class="flex justify-between items-center mb-12">
+                        <div>
+                            <h2 class="text-sm font-bold text-white/80 uppercase tracking-[0.3em]">Operational Directive</h2>
+                        </div>
+                        <div class="flex gap-6" id="report-source-toggle">
+                            <button class="text-[10px] font-black uppercase tracking-widest text-brand-teal border-b-2 border-brand-teal pb-1 toggle-btn active" data-src="system">System</button>
+                            <button class="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors toggle-btn" data-src="project">Project</button>
+                        </div>
                     </div>
                     <div class="relative z-10" id="report-content">
                         <p class="text-brand-teal text-[10px] font-black uppercase tracking-[0.4em] mb-6">Commander,</p>
                         <p class="text-4xl font-light text-white leading-tight max-w-4xl">
-                            We've successfully deployed the latest neural node update. Currently, we're optimizing the memory pool for Agent Alpha and indexing the Memory Vault. All systems are nominal.
+                            All neural nodes are functional. Optimization phase in progress.
                         </p>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
         </div>
-    </main>
 
-    <style>
-        .toggle-btn.active { cursor: default; }
-    </style>
+        <!-- --- SECTION: COMMAND CENTER (CHAT & VPS) --- -->
+        <div id="section-command" class="section-content hidden flex flex-col h-full">
+            <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
+                <div>
+                    <h1 class="text-4xl font-light tracking-tight text-white">Neural Hub</h1>
+                    <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Integrated Agent Console & VPS Subsystem</p>
+                </div>
+            </header>
+            
+            <div class="command-pane-set flex-1 bg-white/5 rounded-[48px] border border-white/10 overflow-hidden flex shadow-2xl backdrop-blur-3xl">
+                <!-- Agent Command Pane -->
+                <section class="flex-1 flex flex-col p-12 border-r border-white/5 relative" id="pane-agent">
+                    <div class="mb-10 flex flex-col gap-1">
+                        <h2 class="text-[12px] uppercase tracking-[0.3em] text-brand-teal font-black">Agent Execution</h2>
+                        <div class="flex items-center gap-4 mt-4">
+                            <select id="agent-selector" class="bg-white/5 border border-white/10 rounded-2xl py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-brand-teal outline-none transition-all focus:border-brand-teal/50">
+                                <option value="pm">Project Manager</option>
+                                <option value="cos">Chief of Staff</option>
+                                <option value="intel-scout">Intel Scout</option>
+                            </select>
+                            <div class="flex items-center gap-2 px-3 py-1 bg-green-500/10 rounded-full">
+                                <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                                <span class="text-[8px] font-black text-green-500 uppercase tracking-widest">Live Relay</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="chat-feed" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 mb-8 pr-4">
+                        <div class="bg-white/5 p-6 rounded-[32px] rounded-tl-none border border-white/10 max-w-[90%] fade-in">
+                            <p class="text-sm text-white/80 leading-relaxed font-medium">Strategic neural link established. Ready for mission parameters.</p>
+                            <span class="text-[9px] text-white/20 mt-3 block font-bold uppercase tracking-widest">SYSTEM // NEXUS-01</span>
+                        </div>
+                    </div>
+
+                    <div class="relative mt-auto">
+                        <textarea id="agent-input" class="w-full bg-white/5 border border-white/10 rounded-[32px] py-6 px-8 pr-20 text-sm font-medium text-white placeholder:text-white/20 focus:outline-none focus:border-brand-teal transition-all shadow-xl resize-none" rows="1" placeholder="Type mission instructions..."></textarea>
+                        <button id="agent-send" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-brand-teal rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all">
+                            <i data-lucide="send" class="w-5 h-5 text-white"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- VPS Terminal Pane -->
+                <section class="flex-1 flex flex-col p-12 bg-black/40" id="pane-vps">
+                    <h2 class="text-[12px] uppercase tracking-[0.3em] text-teal-400/50 font-black mb-10">Infrastructure Node</h2>
+                    <div id="terminal-output" class="flex-1 font-mono text-xs leading-relaxed overflow-y-auto custom-scrollbar pr-6 text-teal-400/80 mb-6">
+                        <div class="text-teal-900 border-b border-teal-900/20 pb-4 mb-4"># SYSTEM_OS: UBUNTU 24.04 // LINK: SECURE<br># NODE: MISSION_CONTROL_01</div>
+                    </div>
+                    <div class="flex items-center gap-4 font-mono text-xs bg-white/5 border border-white/10 p-4 rounded-2xl">
+                        <span class="text-teal-500 font-bold whitespace-nowrap">root@elvison:~$</span>
+                        <input type="text" id="vps-input" class="flex-1 bg-transparent border-none outline-none text-teal-400 placeholder:text-teal-900" placeholder="execute_command">
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- --- SECTION: HIERARCHY --- -->
+        <div id="section-hierarchy" class="section-content hidden flex flex-col h-full">
+            <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
+                <div>
+                    <h1 class="text-4xl font-light tracking-tight text-white">Chain of Command</h1>
+                    <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Strategic Agency Handoff // Operational Flow</p>
+                </div>
+            </header>
+            <div class="flex-1 bg-white/5 rounded-[48px] border border-white/10 overflow-hidden relative backdrop-blur-3xl p-12">
+                <!-- Implementation of Hierarchy Canvas -->
+                <div class="flex items-center justify-center h-full">
+                    <p class="text-white/20 italic">Visualizing Command Structure...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- --- SECTION: MEMORY & AGENTS --- -->
+        <div id="section-memory" class="section-content hidden flex flex-col h-full">
+            <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
+                <div>
+                    <h1 class="text-4xl font-light tracking-tight text-white">Memory Vault</h1>
+                    <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Persistent Neural Indexing</p>
+                </div>
+            </header>
+            <div class="flex-1 bg-white/5 rounded-[48px] border border-white/10 overflow-hidden p-12 overflow-y-auto custom-scrollbar">
+                <div id="memory-list" class="grid grid-cols-2 gap-8">
+                     <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+    </main>
 
     <script src="main.js"></script>
     <script>lucide.createIcons();</script>

@@ -3,26 +3,47 @@ document.addEventListener('DOMContentLoaded', () => {
     initV4Toggles();
     initV4GlobalBackdrop();
     initCommandStation();
-    initAiArchitectV4();
+    initMissionControlData();
     lucide.createIcons();
 });
 
-// --- 🧭 NAVIGATION & SIDEBAR (Floating White) ---
+// --- 🧭 SPA NAVIGATION ---
+function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.section-content').forEach(section => {
+        section.classList.add('hidden');
+    });
+    // Show target section
+    const target = document.getElementById(`section-${sectionId}`);
+    if (target) {
+        target.classList.remove('hidden');
+    }
+    
+    // Update Sidebar
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        // Find the item that calls this sectionId
+        if (item.getAttribute('onclick')?.includes(`'${sectionId}'`)) {
+            item.classList.add('active');
+        }
+    });
+
+    // Specific Initialization
+    if (sectionId === 'command') {
+        initWebSocket();
+    }
+    
+    lucide.createIcons();
+}
+window.showSection = showSection;
+
 function initV4Navigation() {
     const sidebar = document.getElementById('sidebar');
     const toggle = document.getElementById('sidebar-toggle');
     if (!sidebar || !toggle) return;
 
-    // Check for saved state
-    const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
-    if (isCollapsed) {
-        sidebar.classList.add('collapsed');
-        updateToggleIcon(true);
-    }
-
     toggle.addEventListener('click', () => {
         const collapsed = sidebar.classList.toggle('collapsed');
-        localStorage.setItem('sidebar-collapsed', collapsed);
         updateToggleIcon(collapsed);
     });
 }
@@ -30,11 +51,7 @@ function initV4Navigation() {
 function updateToggleIcon(collapsed) {
     const icon = document.getElementById('toggle-icon');
     if (!icon) return;
-    if (collapsed) {
-        icon.setAttribute('data-lucide', 'chevron-right');
-    } else {
-        icon.setAttribute('data-lucide', 'chevron-left');
-    }
+    icon.setAttribute('data-lucide', collapsed ? 'chevron-right' : 'chevron-left');
     lucide.createIcons();
 }
 
@@ -58,87 +75,48 @@ function initV4Toggles() {
             }
         });
     });
-
-    // Strategy Report Toggle
-    const reportContent = document.getElementById('report-content');
-    const reports = {
-        system: `
-            <p class="text-brand-teal text-[10px] font-black uppercase tracking-[0.4em] mb-6">Commander,</p>
-            <p class="text-4xl font-light text-white leading-tight max-w-4xl">
-                We've successfully deployed the latest neural node update. Currently, we're optimizing the memory pool for Agent Alpha and indexing the Memory Vault. All systems are nominal.
-            </p>
-        `,
-        project: `
-            <p class="text-brand-teal text-[10px] font-black uppercase tracking-[0.4em] mb-6">Commander,</p>
-            <p class="text-4xl font-light text-white leading-tight max-w-4xl">
-                Project <b class="text-brand-teal">Stardust</b> is performing at 92% velocity. Agent Claw-Builder has successfully initialized the deployment pipeline.
-            </p>
-        `,
-        agent: `
-            <p class="text-brand-teal text-[10px] font-black uppercase tracking-[0.4em] mb-6">Commander,</p>
-            <p class="text-4xl font-light text-white leading-tight max-w-4xl">
-                 <b class="text-brand-teal">Agent Nexus-01</b> has handled 48 strategic requests since the last cycle. Neural link stability is perfect.
-            </p>
-        `
-    };
-    document.querySelectorAll('#report-source-toggle .toggle-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-             document.querySelectorAll('#report-source-toggle .toggle-btn').forEach(b => {
-                 b.classList.remove('active', 'text-brand-teal', 'border-b-2', 'border-brand-teal');
-                 b.classList.add('text-white/30');
-             });
-             btn.classList.add('active', 'text-brand-teal', 'border-b-2', 'border-brand-teal');
-             btn.classList.remove('text-white/30');
-             if (reportContent) reportContent.innerHTML = reports[btn.dataset.src];
-             lucide.createIcons();
-        });
-    });
 }
 
-// --- 🎥 THE VIDEO BACKDROP CONTROL (Robust) ---
+// --- 🎥 VIDEO BACKDROP ---
 function initV4GlobalBackdrop() {
     const video = document.getElementById('bg-video');
     if (!video) return;
+    video.play().catch(() => {
+        document.addEventListener('click', () => video.play(), { once: true });
+    });
+}
 
-    const startBackdrop = () => {
-        video.play().catch(() => { /* handled */ });
+// --- 📡 REAL-TIME WEBSOCKET HUB ---
+let socket = null;
+function initWebSocket() {
+    if (socket && socket.readyState === WebSocket.OPEN) return;
+
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}/chat-relay`;
+    
+    console.log(`Connecting to Mission Control Relay: ${wsUrl}`);
+    socket = new WebSocket(wsUrl);
+
+    socket.onopen = () => {
+        console.log('Neural Link Established via Relay');
     };
 
-    video.play().catch(() => {
-        document.addEventListener('click', startBackdrop, { once: true });
-    });
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.method === 'chat.response' || data.text) {
+            appendAgentMessage(data.text || data.params?.text || "Neural response captured.");
+        }
+    };
 
-    video.addEventListener('ended', () => {
-        video.currentTime = 0;
-        video.play();
-    });
+    socket.onclose = () => {
+        console.log('Neural Link Severed. Retrying...');
+        setTimeout(initWebSocket, 3000);
+    };
 }
-
-// --- 🖥 COMMAND PANE MAXIMIZER ---
-function maximizePane(side) {
-    const paneAgent = document.getElementById('pane-agent');
-    const paneVps = document.getElementById('pane-vps');
-    const divider = document.getElementById('divider');
-    const header = document.getElementById('command-header');
-    
-    if (side === 'agent') {
-        const isMax = paneAgent.classList.toggle('maximized');
-        paneVps.classList.toggle('minimized', isMax);
-        if (divider) divider.style.display = isMax ? 'none' : 'block';
-        if (header) header.style.display = isMax ? 'none' : 'flex';
-    } else {
-        const isMax = paneVps.classList.toggle('maximized');
-        paneAgent.classList.toggle('minimized', isMax);
-        if (divider) divider.style.display = isMax ? 'none' : 'block';
-        if (header) header.style.display = isMax ? 'none' : 'flex';
-    }
-    lucide.createIcons();
-}
-window.maximizePane = maximizePane;
 
 // --- ⌨ COMMAND STATION LOGIC ---
 function initCommandStation() {
-    const vpsInput = document.querySelector('.pane-dark input');
+    const vpsInput = document.getElementById('vps-input');
     const termOutput = document.getElementById('terminal-output');
     
     if (vpsInput && termOutput) {
@@ -148,7 +126,7 @@ function initCommandStation() {
                 if (!cmd) return;
                 vpsInput.value = '';
                 
-                termOutput.innerHTML += `<div class="mt-4"><span class="text-teal-500 font-bold">root@vps-infra:~$</span> ${cmd}</div>`;
+                termOutput.innerHTML += `<div class="mt-4"><span class="text-teal-500 font-bold">root@elvison:~$</span> ${cmd}</div>`;
                 termOutput.scrollTop = termOutput.scrollHeight;
 
                 try {
@@ -158,115 +136,96 @@ function initCommandStation() {
                         body: JSON.stringify({ command: cmd })
                     });
                     const data = await res.json();
-                    
-                    if (data.error) {
-                        termOutput.innerHTML += `<div class="text-red-500 mt-2 font-mono">[ERROR] ${data.error}</div>`;
-                    } else {
-                        const sanitized = data.output.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                        termOutput.innerHTML += `<pre class="text-teal-400 mt-2 font-mono whitespace-pre-wrap opacity-80">${sanitized}</pre>`;
-                    }
+                    const sanitized = (data.output || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    termOutput.innerHTML += `<pre class="text-teal-400 mt-2 font-mono whitespace-pre-wrap opacity-60">${sanitized || 'Command executed with no output.'}</pre>`;
                 } catch (err) {
-                    termOutput.innerHTML += `<div class="text-red-500 mt-2 font-mono">[CONNECTION LOST] Gateway unreachable.</div>`;
+                    termOutput.innerHTML += `<div class="text-red-500 mt-2 font-mono">Gateway disconnected.</div>`;
                 }
                 termOutput.scrollTop = termOutput.scrollHeight;
             }
         });
     }
 
-    const agentChatInput = document.querySelector('.pane-light textarea');
-    const sendBtn = document.querySelector('.pane-light button[data-lucide="send"]')?.parentElement;
-    const chatFeed = document.querySelector('.pane-light .flex-grow');
-
-    if (agentChatInput && sendBtn && chatFeed) {
-        const handleSend = async () => {
-            const msg = agentChatInput.value;
+    const agentInput = document.getElementById('agent-input');
+    const agentSend = document.getElementById('agent-send');
+    if (agentInput && agentSend) {
+        const handleSend = () => {
+            const msg = agentInput.value;
+            const agentId = document.getElementById('agent-selector')?.value || 'pm';
             if (!msg) return;
-            agentChatInput.value = '';
+            agentInput.value = '';
             
-            // Add User Message
-            chatFeed.innerHTML += `
-                <div class="bg-brand-teal/10 p-6 rounded-[32px] rounded-tr-none border border-brand-teal/20 shadow-sm ml-auto max-w-[90%] fade-in">
-                    <p class="text-sm text-slate-800 leading-relaxed font-bold">${msg}</p>
-                    <span class="text-[9px] text-brand-teal mt-3 block font-black uppercase tracking-widest text-right">COMMANDER // HUB</span>
-                </div>
-            `;
-            chatFeed.scrollTop = chatFeed.scrollHeight;
+            appendUserMessage(msg);
 
-            try {
-                const res = await fetch('/api/prompt', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        prompt: msg, 
-                        agent: 'pm', 
-                        realAgent: true // This triggers the local OpenClaw Gateway
-                    })
-                });
-                const data = await res.json();
-                
-                // Add Agent Response
-                chatFeed.innerHTML += `
-                    <div class="bg-white p-6 rounded-[32px] rounded-tl-none border border-slate-200 shadow-sm max-w-[90%] fade-in mt-4">
-                        <p class="text-sm text-slate-600 leading-relaxed font-medium">${data.response || data.output || "Neural link stable. Command indexed."}</p>
-                        <span class="text-[9px] text-slate-300 mt-3 block font-bold uppercase tracking-widest">SYSTEM // NEXUS-01</span>
-                    </div>
-                `;
-            } catch (e) {
-                chatFeed.innerHTML += `
-                    <div class="text-red-500 text-[10px] text-center mt-4 uppercase font-black tracking-widest">Gateway Disconnected</div>
-                `;
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({
+                    method: 'chat.send',
+                    params: { text: msg, agentId: agentId }
+                }));
+            } else {
+                appendAgentMessage("Neural Link Offline. Reconnecting...");
+                initWebSocket();
             }
-            chatFeed.scrollTop = chatFeed.scrollHeight;
         };
-
-        sendBtn.addEventListener('click', handleSend);
-        agentChatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
+        agentSend.addEventListener('click', handleSend);
+        agentInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
     }
 }
 
-// --- 🤖 AI ARCHITECT V4 ---
-function initAiArchitectV4() {
-    const aiIn = document.getElementById('ai-architect-input');
-    const aiSend = document.getElementById('ai-architect-send');
-    const aiHistory = document.getElementById('ai-architect-history');
-    
-    if (!aiIn || !aiHistory) return;
+function appendUserMessage(text) {
+    const feed = document.getElementById('chat-feed');
+    feed.innerHTML += `
+        <div class="bg-brand-teal/10 p-6 rounded-[32px] rounded-tr-none border border-brand-teal/20 shadow-sm ml-auto max-w-[90%] fade-in">
+            <p class="text-sm text-white leading-relaxed font-bold">${text}</p>
+            <span class="text-[9px] text-brand-teal mt-3 block font-black uppercase tracking-widest text-right">COMMANDER // HUB</span>
+        </div>
+    `;
+    feed.scrollTop = feed.scrollHeight;
+}
 
-    const addMessage = (text, type) => {
-        const msg = document.createElement('div');
-        msg.className = type === 'user' 
-            ? "bg-brand-teal/10 p-8 rounded-[40px] rounded-tr-none border border-brand-teal/20 ml-auto max-w-[80%] fade-in"
-            : "bg-white/5 backdrop-blur-3xl p-8 rounded-[40px] rounded-tl-none border border-white/10 max-w-[80%] fade-in";
-        
-        msg.innerHTML = `
-            <p class="text-base text-white leading-relaxed font-medium">${text}</p>
-            <span class="text-[10px] ${type === 'user' ? 'text-brand-teal' : 'text-white/30'} mt-4 block font-black uppercase tracking-[0.2em] ${type === 'user' ? 'text-right' : ''}">
-                ${type === 'user' ? 'COMMANDER // ARCHITECT' : 'NEURAL CORE // ANTIGRAVITY'}
-            </span>
-        `;
-        aiHistory.appendChild(msg);
-        aiHistory.scrollTop = aiHistory.scrollHeight;
-    };
+function appendAgentMessage(text) {
+    const feed = document.getElementById('chat-feed');
+    const agentId = document.getElementById('agent-selector')?.value || 'pm';
+    feed.innerHTML += `
+        <div class="bg-white/5 p-6 rounded-[32px] rounded-tl-none border border-white/10 max-w-[90%] fade-in mt-4">
+            <p class="text-sm text-white/80 leading-relaxed font-medium">${text}</p>
+            <span class="text-[9px] text-white/20 mt-3 block font-bold uppercase tracking-widest">AGENT // ${agentId.toUpperCase()}</span>
+        </div>
+    `;
+    feed.scrollTop = feed.scrollHeight;
+}
 
-    const handleSend = async () => {
-        const text = aiIn.value;
-        if (!text) return;
-        aiIn.value = '';
-        addMessage(text, 'user');
+// --- 🏛 SYSTEM DATA FETCHING ---
+async function initMissionControlData() {
+    try {
+        const [agentsRes, memoryRes] = await Promise.all([
+            fetch('/api/agents'),
+            fetch('/api/memory')
+        ]);
+        const agents = await agentsRes.json();
+        const memory = await memoryRes.json();
 
-        try {
-            const res = await fetch('/api/meta-dev', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: text })
-            });
-            const data = await res.json();
-            addMessage(data.response || "Neural link stable. Command received.", 'bot');
-        } catch (e) {
-            addMessage("Link Interrupted. Gateway unreachable.", 'bot');
-        }
-    };
+        renderMemory(memory);
+    } catch (e) {
+        console.error("Mission Control Sync Error:", e);
+    }
+}
 
-    if (aiSend) aiSend.addEventListener('click', handleSend);
-    aiIn.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
+function renderMemory(items) {
+    const list = document.getElementById('memory-list');
+    if (!list) return;
+    list.innerHTML = items.map(item => `
+        <div class="glass-card-white !p-8 border-white/5 !bg-white/5 flex flex-col gap-4 hover:border-brand-teal/30 transition-all cursor-pointer">
+            <div class="flex justify-between items-start">
+                <span class="text-[8px] font-black text-brand-teal uppercase tracking-widest">${item.category}</span>
+                <span class="text-[8px] text-white/20 font-mono">${item.date}</span>
+            </div>
+            <h3 class="text-sm font-bold text-white/80">${item.title}</h3>
+            <div class="mt-auto flex gap-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-brand-teal"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-white/10"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-white/10"></div>
+            </div>
+        </div>
+    `).join('');
 }

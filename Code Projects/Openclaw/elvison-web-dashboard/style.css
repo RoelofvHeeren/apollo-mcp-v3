@@ -215,6 +215,8 @@ body {
 .pane.maximized { flex: 100; }
 .pane.minimized { flex: 0; padding: 0; pointer-events: none; opacity: 0; }
 
+.hidden { display: none !important; }
+
 /* 🏷 Hierarchy Conduits Style */
 .conduit {
     fill: none;

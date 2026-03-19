@@ -4,6 +4,7 @@ const { exec } = require('child_process');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const WebSocket = require('ws');
 require('dotenv').config();
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.static(path.join(__dirname, 'elvison-web-dashboard')));
 
 const PORT = 8080; // Unified port for Caddy/Dashboard
 const OPENCLAW_API = process.env.OPENCLAW_API || 'http://127.0.0.1:18789'; // Real OpenClaw Gateway
+const OPENCLAW_WS = OPENCLAW_API.replace('http', 'ws');
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
 const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || 'openai/gpt-4o'; // Decoupled
 
@@ -75,6 +77,38 @@ registerRoute('/dashboard/reports', 'get', (req, res) => {
         summary: "Weekly performance is up by 15%. Agent 'pm' completed 12 tasks.",
         data: [ { date: "2026-03-17", value: 85 }, { date: "2026-03-16", value: 78 } ]
     });
+});
+
+// --- ADVANCED MISSION CONTROL ENDPOINTS ---
+
+// Fetch Agents List
+registerRoute('/agents', 'get', async (req, res) => {
+    try {
+        // Try to fetch from real Gateway if possible, otherwise return default elite 5
+        res.json([
+            { id: 'pm', name: 'Project Manager', emoji: '📋', role: 'Strategic Impact', status: 'ONLINE' },
+            { id: 'cos', name: 'Chief of Staff', emoji: '🕴️', role: 'Execution Lead', status: 'ONLINE' },
+            { id: 'finance', name: 'Head of Finance', emoji: '📉', role: 'ROI & Audit', status: 'STANDBY' },
+            { id: 'intel-scout', name: 'Intel Scout', emoji: '🔍', role: 'Deep Recon', status: 'ONLINE' },
+            { id: 'utility', name: 'Utility Specialist', emoji: '🛠️', role: 'Fast Tactics', status: 'ONLINE' }
+        ]);
+    } catch (e) {
+        res.status(500).json({ error: "Failed to fetch agents" });
+    }
+});
+
+// Fetch Memory Items
+registerRoute('/memory', 'get', async (req, res) => {
+    try {
+        // Mocking memory for now, could fetch from OpenClaw /api/memory if exists
+        res.json([
+            { id: 1, title: "Mission Control Unified", category: "System", date: "2026-03-19" },
+            { id: 2, title: "OpenRouter Token Optimization", category: "Finance", date: "2026-03-18" },
+            { id: 3, title: "VPS Deployment Pipeline Stable", category: "Infra", date: "2026-03-19" }
+        ]);
+    } catch (e) {
+        res.status(500).json({ error: "Failed to fetch memory" });
+    }
 });
 
 // --- STRATEGIC ENGINE ENDPOINTS ---
@@ -169,6 +203,38 @@ registerRoute('/prompt', 'post', async (req, res) => {
     }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`OpenClaw Gateway active on port ${PORT}`);
+});
+
+// --- WEBSOCKET RELAY (Bridge to OpenClaw 18789) ---
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws, req) => {
+    console.log(`New Dashboard WebSocket Connection: ${req.url}`);
+    
+    // Connect to the internal OpenClaw Gateway
+    const gatewayWs = new WebSocket(OPENCLAW_WS);
+    
+    gatewayWs.on('open', () => {
+        console.log('Successfully bridged to OpenClaw Gateway WS');
+    });
+
+    gatewayWs.on('message', (data) => {
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(data.toString());
+        }
+    });
+
+    ws.on('message', (data) => {
+        if (gatewayWs.readyState === WebSocket.OPEN) {
+            gatewayWs.send(data.toString());
+        }
+    });
+
+    ws.on('close', () => gatewayWs.close());
+    gatewayWs.on('close', () => ws.close());
+    
+    gatewayWs.on('error', (err) => console.error('Gateway WS Error:', err));
+    ws.on('error', (err) => console.error('Dashboard WS Error:', err));
 });
