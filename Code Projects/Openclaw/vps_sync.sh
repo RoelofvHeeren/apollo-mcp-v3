@@ -57,7 +57,7 @@ ssh -o StrictHostKeyChecking=no "$VPS_USER@$VPS_IP" << EOF
 
     # [NEW] Sync Elite Dashboard assets to Caddy Proxy
     echo "💎 Deploying Elite Dashboard assets to Proxy..."
-    ELITE_DASH_PATH="Code Projects/Openclaw/elvison-web-dashboard-elite"
+    ELITE_DASH_PATH="elvison-web-dashboard-elite" 
     if [ -d "$ELITE_DASH_PATH" ]; then
         docker exec elvison-proxy mkdir -p /etc/caddy/elite-dashboard
         docker cp "$ELITE_DASH_PATH/." elvison-proxy:/etc/caddy/elite-dashboard/

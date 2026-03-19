@@ -101,14 +101,26 @@ function adjustZoom(amount) {
 window.adjustZoom = adjustZoom;
 
 // --- 🕵️ AGENT DEEP-DIVE MODAL ---
-function openAgentDeepDive(agentName) {
+let currentAgentId = null;
+
+async function openAgentDeepDive(agentName) {
     const modal = document.getElementById('modal-deep-dive');
     const nameElem = document.getElementById('modal-agent-name');
     const roleElem = document.getElementById('modal-agent-role');
+    const modelSelect = document.getElementById('model-select');
 
     if (!modal || !nameElem) return;
 
     nameElem.innerHTML = `Agent <span class="font-normal text-white">${agentName}</span>`;
+    
+    // Map Name to ID
+    const agentMap = {
+        'Project Manager': 'pm',
+        'Chief of Staff': 'cos',
+        'Chief of Finance': 'finance'
+    };
+    currentAgentId = agentMap[agentName] || null;
+
     if (agentName === 'Project Manager') {
         roleElem.innerText = 'Master Orchestration Hub';
     } else if (agentName === 'Chief of Staff') {
@@ -117,9 +129,73 @@ function openAgentDeepDive(agentName) {
          roleElem.innerText = 'Financial Strategy Ledger';
     }
 
+    // Fetch current model from backend
+    if (currentAgentId) {
+        try {
+            const res = await fetch('/api/agents');
+            const agents = await res.json();
+            const agentData = agents.find(a => a.id === currentAgentId);
+            if (agentData && agentData.model && modelSelect) {
+                modelSelect.value = agentData.model;
+            }
+        } catch (err) {
+            console.error('Failed to fetch agent model:', err);
+        }
+    }
+
     modal.style.display = 'flex';
 }
 window.openAgentDeepDive = openAgentDeepDive;
+
+async function saveAgentModel() {
+    if (!currentAgentId) return;
+    
+    const modelSelect = document.getElementById('model-select');
+    const saveBtn = document.getElementById('save-model-btn');
+    if (!modelSelect || !saveBtn) return;
+
+    const newModel = modelSelect.value;
+    const originalBtnText = saveBtn.innerHTML;
+
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> SAVING...';
+    if (window.lucide) lucide.createIcons();
+
+    try {
+        const res = await fetch('/api/agent/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ agentId: currentAgentId, model: newModel })
+        });
+        
+        const data = await res.json();
+        if (data.success) {
+            saveBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> UPDATED';
+            saveBtn.classList.add('!bg-green-600');
+            if (window.lucide) lucide.createIcons();
+            setTimeout(() => {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalBtnText;
+                saveBtn.classList.remove('!bg-green-600');
+                if (window.lucide) lucide.createIcons();
+            }, 2000);
+        } else {
+            throw new Error(data.error || 'Update failed');
+        }
+    } catch (err) {
+        console.error('Save failed:', err);
+        saveBtn.innerHTML = '<i data-lucide="alert-circle" class="w-4 h-4"></i> FAILED';
+        saveBtn.classList.add('!bg-red-600');
+        if (window.lucide) lucide.createIcons();
+        setTimeout(() => {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalBtnText;
+            saveBtn.classList.remove('!bg-red-600');
+            if (window.lucide) lucide.createIcons();
+        }, 2000);
+    }
+}
+window.saveAgentModel = saveAgentModel;
 
 function closeAgentDeepDive(e) {
     const modal = document.getElementById('modal-deep-dive');

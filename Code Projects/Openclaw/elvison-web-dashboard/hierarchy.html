@@ -197,8 +197,27 @@
              </header>
 
              <div class="flex-1 flex overflow-hidden">
-                  <!-- Task List -->
+                  <!-- Task List & Config -->
                   <section class="w-[500px] border-r border-white/5 p-16 overflow-y-auto custom-scrollbar bg-white/[0.01]">
+                       <!-- Model Configuration -->
+                       <div class="mb-16 pb-16 border-b border-white/5">
+                            <h2 class="text-[11px] font-black text-brand-teal uppercase tracking-[0.4em] mb-12">Model Configuration</h2>
+                            <div class="space-y-6">
+                                <div class="bg-white/5 border border-white/5 p-8 rounded-[40px]">
+                                    <label class="text-[10px] text-white/30 uppercase tracking-widest font-black block mb-4">Primary Model</label>
+                                    <select id="model-select" class="w-full bg-slate-900 border border-white/10 p-4 rounded-2xl text-sm text-white focus:outline-none focus:border-brand-teal mb-6">
+                                        <option value="openrouter/moonshotai/kimi-k2.5">Kimi K2.5 (OpenRouter)</option>
+                                        <option value="openai/gpt-4o">GPT-4o (OpenAI)</option>
+                                        <option value="anthropic/claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+                                        <option value="google/gemini-pro-1.5">Gemini 1.5 Pro</option>
+                                    </select>
+                                    <button onclick="saveAgentModel()" id="save-model-btn" class="w-full bg-brand-teal text-white py-4 rounded-2xl font-bold text-sm hover:opacity-90 transition-all flex items-center justify-center gap-3">
+                                        <i data-lucide="save" class="w-4 h-4"></i>
+                                        SAVE CHANGES
+                                    </button>
+                                </div>
+                            </div>
+                       </div>
                        <h2 class="text-[11px] font-black text-brand-teal uppercase tracking-[0.4em] mb-12">Mission Protocols</h2>
                        <div class="space-y-16">
                             <div class="space-y-8">
