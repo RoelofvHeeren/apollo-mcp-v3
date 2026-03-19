@@ -9,9 +9,11 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+// Serve Dashboard Statically
+app.use(express.static(path.join(__dirname, 'elvison-web-dashboard')));
 
-const PORT = 777; // Hardcoded to 777 for your test as requested
-const OPENCLAW_API = process.env.OPENCLAW_API || 'http://127.0.0.1:8800';
+const PORT = 8080; // Unified port for Caddy/Dashboard
+const OPENCLAW_API = process.env.OPENCLAW_API || 'http://127.0.0.1:18789'; // Real OpenClaw Gateway
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
 const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || 'openai/gpt-4o'; // Decoupled
 
@@ -143,19 +145,25 @@ registerRoute('/meta-dev', 'post', async (req, res) => {
 
 // Agent Direct Proxy
 registerRoute('/prompt', 'post', async (req, res) => {
-    const { prompt, agent, model } = req.body;
+    const { prompt, agent, model, realAgent } = req.body;
     try {
-        if (OPENROUTER_KEY) {
-            const data = await neuralCompletion(prompt, `You are Elvison Agent ${agent || 'Nexus-01'}, a strategic operative in the Mission Control Hub.`, model);
-            return res.json({ 
-                response: data.choices?.[0]?.message?.content || "Neural link stable. Command indexed.",
-                model: model || OPENROUTER_MODEL 
+        // If realAgent is explicitly true, or if OpenRouter key is missing, talk to real OpenClaw
+        if (realAgent || !OPENROUTER_KEY) {
+            console.log(`OpenClaw Bridge: Routing to Real Agent ${agent || 'pm'}`);
+            // Use the Gateway's execute/prompt API
+            const response = await axios.post(`${OPENCLAW_API}/prompt`, {
+                prompt,
+                agent: agent || 'pm',
+                stream: false
             });
+            return res.json(response.data);
         }
-        
-        // Fallback to local OpenClaw if key is missing
-        const response = await axios.post(`${OPENCLAW_API}/prompt`, req.body);
-        res.json(response.data);
+
+        const data = await neuralCompletion(prompt, `You are Elvison Agent ${agent || 'Nexus-01'}, a strategic operative in the Mission Control Hub.`, model);
+        return res.json({ 
+            response: data.choices?.[0]?.message?.content || "Neural link stable. Command indexed.",
+            model: model || OPENROUTER_MODEL 
+        });
     } catch (error) {
         res.status(500).json({ error: 'Strategic link unreachable', details: error.message });
     }

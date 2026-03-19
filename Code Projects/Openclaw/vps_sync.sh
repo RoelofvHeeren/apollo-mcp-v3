@@ -44,7 +44,7 @@ ssh -o StrictHostKeyChecking=no "$VPS_USER@$VPS_IP" << EOF
     fi
     
     pm2 delete "openclaw-gateway" 2>/dev/null
-    PORT=777 pm2 start api_gateway.js --name "openclaw-gateway"
+    PORT=8080 pm2 start api_gateway.js --name "openclaw-gateway"
     pm2 save
     
     echo "✅ VPS Sync & Persistence Complete!"

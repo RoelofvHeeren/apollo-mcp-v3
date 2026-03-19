@@ -196,7 +196,11 @@ function initCommandStation() {
                 const res = await fetch('/api/prompt', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: msg, agent: 'pm' }) // Defaulting to PM agent
+                    body: JSON.stringify({ 
+                        prompt: msg, 
+                        agent: 'pm', 
+                        realAgent: true // This triggers the local OpenClaw Gateway
+                    })
                 });
                 const data = await res.json();
                 
