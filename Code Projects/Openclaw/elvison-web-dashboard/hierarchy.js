@@ -22,14 +22,8 @@ function initHierarchyEngine() {
         updateConduits();
     };
 
-    // 1. Mouse Wheel Zoom
-    viewport.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 0.9 : 1.1;
-        scale *= delta;
-        scale = Math.min(Math.max(0.3, scale), 2);
-        applyTransform();
-    }, { passive: false });
+    // 1. Zoom via buttons only (scroll/pinch disabled per request)
+    // viewport.addEventListener('wheel', (e) => { ... });
 
     // 2. Click-and-Drag Pan
     viewport.addEventListener('mousedown', (e) => {

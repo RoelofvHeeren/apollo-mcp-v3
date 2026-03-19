@@ -15,9 +15,33 @@
         .status { font-size: 12px; margin-bottom: 10px; }
         .success { color: #4ade80; }
         .error { color: #f87171; }
+        
+        /* 🎥 Shared Video Backdrop */
+        .bg-video {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            object-fit: cover;
+            z-index: -10;
+        }
+        .video-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -5;
+        }
+        .container { position: relative; z-index: 10; }
     </style>
 </head>
 <body>
+    <!-- 🎥 Global Cinematic Backdrop -->
+    <video id="bg-video" class="bg-video" autoplay muted loop playsinline>
+        <source src="background.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <div class="container">
     <h1>OpenClaw System Diagnostic</h1>
     <p>Use this tool to verify the API Gateway is correctly processing requests.</p>
 
@@ -119,5 +143,6 @@
             }
         }
     </script>
+    </div> <!-- end container -->
 </body>
 </html>

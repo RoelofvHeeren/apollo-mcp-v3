@@ -12,6 +12,36 @@ app.use(express.json());
 
 const PORT = 777; // Hardcoded to 777 for your test as requested
 const OPENCLAW_API = process.env.OPENCLAW_API || 'http://127.0.0.1:8800';
+const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
+const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || 'openai/gpt-4o'; // Decoupled
+
+// OpenRouter Neural Proxy
+const neuralCompletion = async (prompt, systemRole = "You are a strategic AI agent in the Elvison Mission Control Hub.", modelOverride = null) => {
+    if (!OPENROUTER_KEY) return { error: "Neural link offline (API key missing)" };
+    
+    const targetModel = modelOverride || OPENROUTER_MODEL;
+    console.log(`Neural Proxy: Routing to ${targetModel}`);
+
+    try {
+        const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
+            model: targetModel,
+            messages: [
+                { role: "system", content: systemRole },
+                { role: "user", content: prompt }
+            ]
+        }, {
+            headers: {
+                'Authorization': `Bearer ${OPENROUTER_KEY}`,
+                'HTTP-Referer': `http://localhost:${PORT}`,
+                'X-OpenRouter-Title': 'Elvison Mission Control'
+            }
+        });
+        return response.data;
+    } catch (err) {
+        console.error("Neural Error:", err.response?.data || err.message);
+        throw err;
+    }
+};
 
 // Helper to register routes with and without /api prefix
 const registerRoute = (routePath, method, handler) => {
@@ -88,22 +118,46 @@ registerRoute('/shell', 'post', (req, res) => {
 // AI Architect / Meta-Dev Endpoint
 registerRoute('/meta-dev', 'post', async (req, res) => {
     const { prompt } = req.body;
+    const logEntry = `[${new Date().toISOString()}] PROMPT: ${prompt}\n`;
+    
     console.log(`AI Architect received prompt: ${prompt}`);
-    // This is where we would trigger an agent that has file-system access (like Antigravity)
-    // For now, we simulate a response
-    res.json({
-        response: `Acknowledged. Processing architectural update: "${prompt}". Dashboard optimization in progress...`,
-        status: "executing"
-    });
+    
+    // Append to a specific architect task log for the "Shadow Architect" to read
+    try {
+        fs.appendFileSync(path.join(__dirname, 'architect_tasks.log'), logEntry);
+    } catch (err) {
+        console.error("Failed to write to architect_tasks.log", err);
+    }
+
+    try {
+        const data = await neuralCompletion(prompt, "You are Antigravity, the Strategic AI Architect of OpenClaw. You optimize codebases, VPS infrastructure, and neural nodes.", req.body.model);
+        res.json({
+            response: data.choices?.[0]?.message?.content || "Connection stable, but response incomplete.",
+            status: "neural-computed",
+            model: req.body.model || OPENROUTER_MODEL
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Neuromorphic link failure', details: error.message });
+    }
 });
 
 // Agent Direct Proxy
 registerRoute('/prompt', 'post', async (req, res) => {
+    const { prompt, agent, model } = req.body;
     try {
+        if (OPENROUTER_KEY) {
+            const data = await neuralCompletion(prompt, `You are Elvison Agent ${agent || 'Nexus-01'}, a strategic operative in the Mission Control Hub.`, model);
+            return res.json({ 
+                response: data.choices?.[0]?.message?.content || "Neural link stable. Command indexed.",
+                model: model || OPENROUTER_MODEL 
+            });
+        }
+        
+        // Fallback to local OpenClaw if key is missing
         const response = await axios.post(`${OPENCLAW_API}/prompt`, req.body);
         res.json(response.data);
     } catch (error) {
-        res.status(500).json({ error: 'OpenClaw API unreachable', details: error.message });
+        res.status(500).json({ error: 'Strategic link unreachable', details: error.message });
     }
 });
 
