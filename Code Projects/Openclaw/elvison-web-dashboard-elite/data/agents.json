@@ -1,0 +1,34 @@
+{
+  "agents": [
+    {
+      "id": "alpha",
+      "name": "Agent Alpha",
+      "role": "Research Lead",
+      "model": "GPT-4o",
+      "status": "active",
+      "currentTask": "Processing daily brief",
+      "uptime": "4d 12h 34m",
+      "lastActive": "2026-03-18T11:15:00Z"
+    },
+    {
+      "id": "bravo",
+      "name": "Agent Bravo", 
+      "role": "Content Writer",
+      "model": "Claude 3.5",
+      "status": "active",
+      "currentTask": "Drafting article",
+      "uptime": "2d 8h 12m",
+      "lastActive": "2026-03-18T11:10:00Z"
+    },
+    {
+      "id": "vision",
+      "name": "Vision Node",
+      "role": "Image Analysis",
+      "model": "Gemini 1.5",
+      "status": "idle",
+      "currentTask": null,
+      "uptime": "5d 2h 45m",
+      "lastActive": "2026-03-18T09:30:00Z"
+    }
+  ]
+}

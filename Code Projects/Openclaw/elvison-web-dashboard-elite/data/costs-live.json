@@ -1,0 +1,26 @@
+{
+  "daily": {
+    "date": "2026-03-18",
+    "totalSpend": 2.56,
+    "breakdown": [
+      { "model": "kimi-k2.5", "provider": "openrouter", "cost": 1.80, "tokens": 12000000 },
+      { "model": "claude-3.5-sonnet", "provider": "openrouter", "cost": 0.50, "tokens": 150000 },
+      { "model": "perplexity", "provider": "openrouter", "cost": 0.26, "tokens": 50000 }
+    ]
+  },
+  "monthly": {
+    "budget": 500.00,
+    "spent": 2.56,
+    "remaining": 497.44,
+    "projected": 76.80,
+    "byAgent": [
+      { "agent": "Project Manager", "cost": 1.20, "percentage": 47 },
+      { "agent": "Chief of Staff", "cost": 0.50, "percentage": 20 },
+      { "agent": "Design Manager", "cost": 0.30, "percentage": 12 },
+      { "agent": "Researcher", "cost": 0.56, "percentage": 22 }
+    ]
+  },
+  "alerts": [],
+  "lastUpdated": "2026-03-18T13:40:00Z",
+  "note": "Live data from OpenClaw Control UI"
+}

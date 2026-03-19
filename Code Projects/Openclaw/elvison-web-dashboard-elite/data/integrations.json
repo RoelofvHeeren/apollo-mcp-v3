@@ -1,0 +1,134 @@
+{
+  "integrations": {
+    "social_media": [
+      {
+        "name": "Instagram",
+        "icon": "instagram",
+        "status": "available",
+        "difficulty": "medium",
+        "method": "Meta Graph API + Manychat/Kevit",
+        "notes": "Limited DM automation via official API. Use Manychat for full automation. Business/Creator accounts only.",
+        "cost": "$0-50/month via third-party",
+        "endpoints": ["DM auto-replies", "Comment moderation", "Story replies", "Business discovery"]
+      },
+      {
+        "name": "Facebook",
+        "icon": "facebook",
+        "status": "available",
+        "difficulty": "easy",
+        "method": "Meta Graph API",
+        "notes": "Better API support than Instagram. Messenger automation available.",
+        "cost": "Free",
+        "endpoints": ["Messenger bots", "Page posts", "Comments", "Insights"]
+      },
+      {
+        "name": "LinkedIn",
+        "icon": "linkedin",
+        "status": "available",
+        "difficulty": "medium",
+        "method": "Linked API / useArtemis / Official API",
+        "notes": "Official API limited. Use Linked API ($49/mo) for full automation including connection requests and messaging.",
+        "cost": "$49-99/month for advanced tools",
+        "endpoints": ["Profile data", "Connection requests", "Messaging", "Lead search", "Content posting"]
+      }
+    ],
+    "google_workspace": [
+      {
+        "name": "Gmail",
+        "icon": "mail",
+        "status": "available",
+        "difficulty": "easy",
+        "method": "Gmail API",
+        "notes": "Full email automation. 1000 sends/day quota. OAuth 2.0 required.",
+        "cost": "Free",
+        "endpoints": ["Send emails", "Read inbox", "Manage labels", "Create drafts", "Search"]
+      },
+      {
+        "name": "Google Calendar",
+        "icon": "calendar",
+        "status": "available",
+        "difficulty": "easy",
+        "method": "Calendar API v3",
+        "notes": "Full event management. Supports recurring events, reminders, attendees.",
+        "cost": "Free",
+        "endpoints": ["Create events", "List events", "Update events", "Delete events", "Working locations"]
+      }
+    ],
+    "crm_automation": [
+      {
+        "name": "GoHighLevel",
+        "icon": "briefcase",
+        "status": "available",
+        "difficulty": "medium",
+        "method": "HighLevel API V2",
+        "notes": "Comprehensive CRM automation. OAuth 2.0 for multi-location. Rate limits: 100 req/10sec, 200k/day.",
+        "cost": "Agency Pro plan required for advanced API",
+        "endpoints": ["Contacts", "Conversations", "Calendars", "Workflows", "Opportunities", "Payments", "Webhooks"]
+      }
+    ],
+    "meeting_tools": [
+      {
+        "name": "Fathom",
+        "icon": "mic",
+        "status": "available",
+        "difficulty": "easy",
+        "method": "Fathom API",
+        "notes": "Meeting notes, transcripts, summaries. Works with Zoom, Meet, Teams. Zapier integration available.",
+        "cost": "Free tier available",
+        "endpoints": ["Meeting transcripts", "Summaries", "Action items", "CRM sync", "Recordings"]
+      }
+    ],
+    "ai_image_generation": [
+      {
+        "name": "Google Vertex AI Imagen 3",
+        "icon": "image",
+        "status": "available",
+        "difficulty": "medium",
+        "method": "Vertex AI API",
+        "notes": "Highest quality image generation. Imagen 3 released Dec 2024. Supports editing, upscaling, brand customization.",
+        "cost": "$0.02-0.05 per image",
+        "endpoints": ["Text-to-image", "Image editing", "Upscaling", "Custom models", "Logo generation"]
+      },
+      {
+        "name": "OpenAI DALL-E 3",
+        "icon": "image",
+        "status": "available",
+        "difficulty": "easy",
+        "method": "OpenAI API",
+        "notes": "High quality images. Better prompt understanding. Standard/Revised quality options.",
+        "cost": "$0.04-0.08 per image",
+        "endpoints": ["Text-to-image", "Variations", "Edits"]
+      },
+      {
+        "name": "Midjourney",
+        "icon": "image",
+        "status": "limited",
+        "difficulty": "hard",
+        "method": "Discord API (unofficial)",
+        "notes": "No official API. Must use Discord bot automation. Risk of ToS violation.",
+        "cost": "$10-60/month",
+        "endpoints": ["Discord bot commands", "Image generation via prompts"]
+      }
+    ],
+    "coding": [
+      {
+        "name": "GitHub Copilot / Anthropic",
+        "icon": "code",
+        "status": "available",
+        "difficulty": "easy",
+        "method": "API or IDE extension",
+        "notes": "AI coding assistants. Claude 3.5 Sonnet via API for code generation.",
+        "cost": "$20/month Copilot / API costs",
+        "endpoints": ["Code completion", "Code generation", "Code review", "Refactoring"]
+      }
+    ]
+  },
+  "recommended_stack": {
+    "lead_gen": ["LinkedIn (Linked API)", "Instagram (Manychat)", "GoHighLevel"],
+    "scheduling": ["Google Calendar", "GoHighLevel"],
+    "outreach": ["Gmail", "LinkedIn", "GoHighLevel"],
+    "meetings": ["Fathom", "Google Calendar"],
+    "content": ["Google Vertex AI Imagen 3", "OpenAI DALL-E 3"],
+    "crm": ["GoHighLevel"]
+  }
+}

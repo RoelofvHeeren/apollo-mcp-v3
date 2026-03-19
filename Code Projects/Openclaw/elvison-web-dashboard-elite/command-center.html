@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html class="h-full" lang="en">
+<head>
+<link rel="stylesheet" href="css/animated-bg.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Command Center - Mission Control</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { background: #0a0a0a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+.sidebar { background: rgba(255, 255, 255, 0.98); width: 280px; border-right: 1px solid rgba(0,0,0,0.08); }
+.card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; transition: all 0.3s ease; }
+.card:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(19, 145, 135, 0.3); transform: translateY(-2px); }
+.progress-fill { background: linear-gradient(90deg, #139187, #17a598); height: 100%; border-radius: 4px; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+</style>
+</head>
+<body class="h-full flex antialiased text-slate-200">
+
+<aside class="sidebar flex-shrink-0 flex flex-col h-full">
+    <div class="p-6 border-b border-black/5 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold text-sm">E</div>
+            <span class="font-bold tracking-wider text-sm text-slate-800">ELVISON CLAW</span>
+        </div>
+    </div>
+    <nav class="flex-1 p-4 space-y-1">
+        <a href="index.html" class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-width="2"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="command-center.html" class="flex items-center px-4 py-3 rounded-xl bg-teal-50 text-teal-700 border border-teal-200">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.75 17L9 21h6l-.75-4M3 13h18" stroke-width="2"/></svg>
+            <span class="font-medium">Command Center</span>
+        </a>
+        <a href="chain-of-command.html" class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7" stroke-width="2"/></svg>
+            <span>Chain of Command</span>
+        </a>
+        <a href="operations.html" class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2z" stroke-width="2"/></svg>
+            <span>Operations</span>
+        </a>
+        <a href="integrations.html" class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" stroke-width="2"/></svg>
+            <span>Integrations</span>
+        </a>
+        <a href="agent-chat.html" class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-width="2"/></svg>
+            <span>Agent Chat</span>
+        </a>
+    </nav>
+</aside>
+
+<main class="flex-1 flex flex-col h-full overflow-hidden">
+    <header class="px-8 py-6 border-b border-white/5 flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-light text-white">Command Center</h1>
+            <p class="text-slate-500 text-sm">Deploy and manage agents</p>
+        </div>
+    </header>
+    
+    <div class="flex-1 p-8 overflow-y-auto">
+        <div class="max-w-6xl mx-auto grid grid-cols-2 gap-6">
+            <div class="card p-6">
+                <h2 class="text-lg font-semibold text-slate-200 mb-4">Quick Deploy</h2>
+                <select class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 mb-4 text-slate-200">
+                    <option>Select Agent...</option>
+                    <option>Researcher</option>
+                    <option>Template Copier</option>
+                    <option>Website Builder</option>
+                </select>
+                <textarea class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 mb-4 h-24 text-slate-200" placeholder="Enter task instructions..."></textarea>
+                <div class="flex gap-3">
+                    <select class="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-slate-200">
+                        <option>Kimi K2.5 ($0.01/1K)</option>
+                    </select>
+                    <button class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-3 rounded-lg transition-all">DEPLOY</button>
+                </div>
+            </div>
+            
+            <div class="card p-6">
+                <h2 class="text-lg font-semibold text-slate-200 mb-4">Active Agents</h2>
+                <p class="text-slate-500 text-center py-8">No active agents</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

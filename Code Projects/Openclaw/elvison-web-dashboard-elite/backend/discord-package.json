@@ -1,0 +1,13 @@
+{
+  "name": "mission-control-backend",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "cors": "^2.8.5",
+    "@supabase/supabase-js": "^2.38.0",
+    "dotenv": "^16.3.1",
+    "node-cron": "^3.0.2",
+    "discord.js": "^14.13.0"
+  }
+}

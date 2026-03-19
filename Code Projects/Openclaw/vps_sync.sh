@@ -54,8 +54,17 @@ ssh -o StrictHostKeyChecking=no "$VPS_USER@$VPS_IP" << EOF
     pm2 delete "openclaw-gateway" 2>/dev/null
     PORT=8080 pm2 start api_gateway.js --name "openclaw-gateway"
     pm2 save
+
+    # [NEW] Sync Elite Dashboard assets to Caddy Proxy
+    echo "💎 Deploying Elite Dashboard assets to Proxy..."
+    ELITE_DASH_PATH="Code Projects/Openclaw/elvison-web-dashboard-elite"
+    if [ -d "$ELITE_DASH_PATH" ]; then
+        docker exec elvison-proxy mkdir -p /etc/caddy/elite-dashboard
+        docker cp "$ELITE_DASH_PATH/." elvison-proxy:/etc/caddy/elite-dashboard/
+        docker exec elvison-proxy caddy reload --config /etc/caddy/Caddyfile
+    fi
     
     echo "✅ VPS Sync & Persistence Complete!"
 EOF
 
-echo "✨ [LINK STABLE] Dashboard and VPS are now in sync."
+echo "✨ [LINK STABLE] Elite Dashboard and Neural Gateway are now in sync."

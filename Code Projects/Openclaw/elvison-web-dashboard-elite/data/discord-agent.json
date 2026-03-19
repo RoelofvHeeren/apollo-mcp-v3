@@ -1,0 +1,63 @@
+{
+  "name": "discord-manager-agent",
+  "description": "Discord Manager Agent - Sets up server structure and manages multi-agent workflows via Discord",
+  "role": "Server Administrator & Workflow Orchestrator",
+  "capabilities": [
+    "Create/manage Discord channels and categories",
+    "Route messages between users and OpenClaw agents",
+    "Track agent progress and report to dashboard",
+    "Spawn new agent sessions via OpenClaw API",
+    "Generate daily reports and post to logbook"
+  ],
+  "triggers": [
+    "@DiscordManager setup server",
+    "@DiscordManager deploy [agent] to [task]",
+    "@DiscordManager status",
+    "@DiscordManager create channel",
+    "Messages in agent-specific channels"
+  ],
+  "channel_structure": {
+    "MISSION CONTROL": {
+      "channels": ["dashboard-alerts", "cost-tracking", "system-status"],
+      "purpose": "System-wide monitoring and alerts"
+    },
+    "PROJECT MANAGER": {
+      "channels": ["pm-chat", "pm-tasks"],
+      "purpose": "Strategic planning and delegation"
+    },
+    "CHIEF OF STAFF": {
+      "channels": ["cos-chat", "cos-deployments"],
+      "purpose": "Operations and agent deployment"
+    },
+    "FINANCE": {
+      "channels": ["cfo-chat", "cfo-reports"],
+      "purpose": "Cost tracking and budget management"
+    },
+    "DESIGN DEPT": {
+      "channels": ["design-chat", "research-tasks", "template-library", "build-queue"],
+      "purpose": "Website design and development"
+    },
+    "LEAD GEN": {
+      "channels": ["leadgen-chat", "lead-finding", "outreach"],
+      "purpose": "Lead generation and sales"
+    },
+    "KNOWLEDGE BASE": {
+      "channels": ["skills", "logbook", "resources"],
+      "purpose": "Documentation and daily reports"
+    }
+  },
+  "workflows": {
+    "lead_to_website": {
+      "description": "Full pipeline from lead discovery to website delivery",
+      "steps": [
+        {"step": 1, "channel": "lead-finding", "agent": "lead-finder", "action": "Find prospects"},
+        {"step": 2, "channel": "outreach", "agent": "outreach-specialist", "action": "Contact leads"},
+        {"step": 3, "channel": "leadgen-chat", "agent": "leadgen-mgr", "action": "Qualify"},
+        {"step": 4, "channel": "research-tasks", "agent": "researcher", "action": "Research client"},
+        {"step": 5, "channel": "template-library", "agent": "template-copier", "action": "Select template"},
+        {"step": 6, "channel": "build-queue", "agent": "website-builder", "action": "Build site"},
+        {"step": 7, "channel": "outreach", "agent": "outreach-specialist", "action": "Deliver & schedule"}
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "agents": [
+    {
+      "id": "alpha",
+      "name": "Agent Alpha",
+      "model": "GPT-4o",
+      "role": "Research Lead",
+      "status": "active",
+      "cost": 842.10,
+      "percentage": 65,
+      "color": "#139187"
+    },
+    {
+      "id": "bravo", 
+      "name": "Agent Bravo",
+      "model": "Claude 3.5",
+      "role": "Content Writer",
+      "status": "active",
+      "cost": 420.05,
+      "percentage": 35,
+      "color": "#94a3b8"
+    },
+    {
+      "id": "vision",
+      "name": "Vision Node",
+      "model": "Gemini 1.5",
+      "role": "Image Analysis",
+      "status": "idle",
+      "cost": 220.05,
+      "percentage": 15,
+      "color": "#60a5fa"
+    }
+  ],
+  "totalCost": 1482.20,
+  "cycleDaysLeft": 12
+}

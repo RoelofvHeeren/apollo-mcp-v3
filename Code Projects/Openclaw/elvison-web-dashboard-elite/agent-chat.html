@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html class="h-full" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Agent Chat - Elvison Claw</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <link rel="stylesheet" href="css/animated-bg.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .sidebar { background: rgba(255, 255, 255, 0.98); width: 280px; border-right: 1px solid rgba(0,0,0,0.08); }
+        .card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; transition: all 0.3s ease; }
+        .card:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(19, 145, 135, 0.3); transform: translateY(-2px); }
+        .active-agent { border-color: #14b8a6 !important; background: rgba(20, 184, 166, 0.1) !important; }
+        .msg-user { background: rgba(20, 184, 166, 0.15); border: 1px solid rgba(20, 184, 166, 0.2); padding: 12px 16px; border-radius: 16px 16px 4px 16px; margin-left: auto; max-width: 80%; }
+        .msg-agent { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 16px; border-radius: 16px 16px 16px 4px; max-width: 80%; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    </style>
+</head>
+<body class="h-full flex antialiased text-slate-200" style="background: #0a0a0a;">
+
+<aside class="sidebar flex-shrink-0 flex flex-col h-full">
+    <div class="p-6 border-b border-black/5 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold text-sm">E</div>
+            <span class="font-bold tracking-wider text-sm text-slate-800">ELVISON CLAW</span>
+        </div>
+    </div>
+    <nav class="flex-1 p-4 space-y-1">
+        <a href="index.html" class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-width="2"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="command-center.html" class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.75 17L9 21h6l-.75-4M3 13h18" stroke-width="2"/></svg>
+            <span>Command Center</span>
+        </a>
+        <a href="chain-of-command.html" class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7" stroke-width="2"/></svg>
+            <span>Chain of Command</span>
+        </a>
+        <a href="operations.html" class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2z" stroke-width="2"/></svg>
+            <span>Operations</span>
+        </a>
+        <a href="integrations.html" class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" stroke-width="2"/></svg>
+            <span>Integrations</span>
+        </a>
+        <a href="agent-chat.html" class="flex items-center px-4 py-3 rounded-xl bg-teal-50 text-teal-700 border border-teal-200">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-width="2"/></svg>
+            <span class="font-medium">Agent Chat</span>
+        </a>
+    </nav>
+</aside>
+
+<main class="flex-1 flex flex-col h-full overflow-hidden">
+    <header class="px-8 py-6 border-b border-white/5 flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-light text-white">Agent Chat</h1>
+            <p class="text-slate-500 text-sm">Direct neural link with deployed operatives</p>
+        </div>
+        <div id="status-badge" class="flex items-center space-x-2 bg-teal-500/10 px-3 py-1.5 rounded-full border border-teal-500/20">
+            <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
+            <span class="text-xs font-medium text-teal-400">Neural Link Active</span>
+        </div>
+    </header>
+
+    <div class="flex-1 flex overflow-hidden">
+        <!-- Agent List -->
+        <div class="w-72 border-r border-white/5 p-6 overflow-y-auto space-y-4">
+            <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Operatives</h3>
+            <div id="agent-list" class="space-y-2">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="flex-1 flex flex-col bg-black/20">
+            <div id="messages" class="flex-1 overflow-y-auto p-8 space-y-6">
+                <div class="flex flex-col items-center justify-center h-full text-center">
+                    <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4 border border-white/10">
+                        <svg class="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-width="2"/></svg>
+                    </div>
+                    <p class="text-slate-400">Select an operative to establish neural link</p>
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-white/5 bg-black/40">
+                <div class="flex gap-4">
+                    <input id="msgInput" type="text" placeholder="Transmit command..." disabled
+                           class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500/50 transition-all placeholder:text-slate-600">
+                    <button id="sendBtn" onclick="sendMessage()" disabled
+                            class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-teal-500/10">
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    const socket = io(window.location.origin); // Connect to same domain (proxy will handle)
+    let currentAgent = null;
+
+    const agents = [
+        { id: 'pm', name: 'Project Manager', role: 'Strategy', avatar: 'PM' },
+        { id: 're', name: 'Researcher', role: 'Data Ana', avatar: 'RE' },
+        { id: 'wb', name: 'Website Builder', role: 'Dev ops', avatar: 'WB' },
+        { id: 'cos', name: 'Chief of Staff', role: 'Execution', avatar: 'CS' }
+    ];
+
+    function init() {
+        const list = document.getElementById('agent-list');
+        list.innerHTML = agents.map(a => `
+            <div id="agent-${a.id}" class="card p-4 cursor-pointer" onclick="selectAgent('${a.id}')">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-300">${a.avatar}</div>
+                    <div>
+                        <p class="text-sm font-medium text-white">${a.name}</p>
+                        <p class="text-[10px] text-teal-400 uppercase tracking-tighter">${a.role}</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // Check for agentId in URL
+        const params = new URLSearchParams(window.location.search);
+        const agentId = params.get('agentId');
+        if (agentId) selectAgent(agentId);
+    }
+
+    function selectAgent(id) {
+        currentAgent = agents.find(a => a.id === id);
+        if (!currentAgent) return;
+
+        // UI Updates
+        document.querySelectorAll('#agent-list .card').forEach(c => c.classList.remove('active-agent'));
+        document.getElementById(`agent-${id}`).classList.add('active-agent');
+        
+        document.getElementById('msgInput').disabled = false;
+        document.getElementById('sendBtn').disabled = false;
+        document.getElementById('msgInput').placeholder = `Command to ${currentAgent.name}...`;
+        document.getElementById('msgInput').focus();
+
+        const container = document.getElementById('messages');
+        container.innerHTML = `<div class="msg-agent">Neural link established with ${currentAgent.name}. Awaiting commands.</div>`;
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('msgInput');
+        const text = input.value.trim();
+        if (!text || !currentAgent) return;
+
+        appendMessage('user', text);
+        input.value = '';
+
+        // Emit to backend
+        socket.emit('agent:prompt', {
+            agentId: currentAgent.id,
+            prompt: text
+        });
+    }
+
+    function appendMessage(role, text) {
+        const container = document.getElementById('messages');
+        const div = document.createElement('div');
+        div.className = role === 'user' ? 'msg-user' : 'msg-agent';
+        div.textContent = text;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    socket.on('agent:response', (data) => {
+        if (currentAgent && data.agentId === currentAgent.id) {
+            appendMessage('agent', data.response);
+        }
+    });
+
+    socket.on('connect_error', () => {
+        document.getElementById('status-badge').innerHTML = `
+            <span class="w-2 h-2 rounded-full bg-red-400"></span>
+            <span class="text-xs font-medium text-red-400">Neural Link Offline</span>
+        `;
+    });
+
+    document.getElementById('msgInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    init();
+</script>
+</body>
+</html>

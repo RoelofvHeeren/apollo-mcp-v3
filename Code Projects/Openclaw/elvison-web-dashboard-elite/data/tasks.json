@@ -1,0 +1,35 @@
+{
+  "today": {
+    "accomplished": 248,
+    "activeNodes": 12,
+    "scheduled": 84
+  },
+  "weekly": {
+    "accomplished": 1420,
+    "activeNodes": 12,
+    "scheduled": 340
+  },
+  "tasks": [
+    {
+      "id": "task-001",
+      "title": "Daily Brief Generation",
+      "status": "completed",
+      "agent": "alpha",
+      "timestamp": "2026-03-18T09:00:00Z"
+    },
+    {
+      "id": "task-002",
+      "title": "Content Draft - AI Trends",
+      "status": "in-progress",
+      "agent": "bravo",
+      "timestamp": "2026-03-18T10:30:00Z"
+    },
+    {
+      "id": "task-003",
+      "title": "Mission Control Build",
+      "status": "in-progress",
+      "agent": "alpha",
+      "timestamp": "2026-03-18T11:00:00Z"
+    }
+  ]
+}

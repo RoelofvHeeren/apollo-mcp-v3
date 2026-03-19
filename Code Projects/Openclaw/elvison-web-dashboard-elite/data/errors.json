@@ -1,0 +1,32 @@
+{
+  "errors": [
+    {
+      "id": "err-001",
+      "level": "critical",
+      "message": "Rate Limit Exceeded",
+      "timestamp": "14:22",
+      "resolved": false
+    },
+    {
+      "id": "err-002",
+      "level": "warning",
+      "message": "High Latency US-E1",
+      "timestamp": "14:15",
+      "resolved": false
+    },
+    {
+      "id": "err-003",
+      "level": "info",
+      "message": "DB Handshake OK",
+      "timestamp": "13:58",
+      "resolved": true
+    },
+    {
+      "id": "err-004",
+      "level": "warning",
+      "message": "Memory Usage 78%",
+      "timestamp": "13:42",
+      "resolved": false
+    }
+  ]
+}

@@ -207,8 +207,55 @@ const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`OpenClaw Gateway active on port ${PORT}`);
 });
 
+// --- SOCKET.IO NEURAL BRIDGE (Elite Chat) ---
+const io = require('socket.io')(server, {
+    cors: { origin: "*", methods: ["GET", "POST"] }
+});
+
+io.on('connection', (socket) => {
+    console.log(`[NEURAL BRIDGE] Elite Dashboard connected: ${socket.id}`);
+
+    socket.on('agent:prompt', async (data) => {
+        const { agentId, prompt, model } = data;
+        console.log(`[NEURAL BRIDGE] Prompt for ${agentId}: ${prompt}`);
+
+        try {
+            const result = await neuralCompletion(
+                prompt, 
+                `You are Elvison Agent ${agentId}, a strategic operative in the Mission Control Hub.`,
+                model
+            );
+            
+            socket.emit('agent:response', {
+                agentId,
+                response: result.choices?.[0]?.message?.content || "Neural link stable. Response cached."
+            });
+        } catch (error) {
+            console.error("[NEURAL BRIDGE] Error:", error.message);
+            socket.emit('agent:response', {
+                agentId,
+                response: "Error: Neural link disrupted. Please retry."
+            });
+        }
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`[NEURAL BRIDGE] Elite Dashboard disconnected: ${socket.id}`);
+    });
+});
+
 // --- WEBSOCKET RELAY (Bridge to OpenClaw 18789) ---
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ noServer: true });
+
+server.on('upgrade', (request, socket, head) => {
+    const pathname = new URL(request.url, `http://${request.headers.host}`).pathname;
+
+    if (pathname === '/ws') {
+        wss.handleUpgrade(request, socket, head, (ws) => {
+            wss.emit('connection', ws, request);
+        });
+    }
+});
 
 wss.on('connection', (ws, req) => {
     console.log(`[WS RELAY] Dashboard connected: ${req.url}`);

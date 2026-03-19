@@ -1,0 +1,133 @@
+{
+  "hierarchy": {
+    "projectManager": {
+      "id": "pm",
+      "name": "Project Manager",
+      "role": "CEO / Strategist",
+      "avatar": "PM",
+      "status": "working",
+      "model": "kimi-k2.5",
+      "responsibilities": ["Strategic Planning", "Delegation", "Oversight"],
+      "currentTask": "Building Mission Control System",
+      "taskProgress": 72
+    },
+    "chiefOfStaff": {
+      "id": "cos",
+      "name": "Chief of Staff",
+      "role": "COO / Operations",
+      "avatar": "CS",
+      "status": "idle",
+      "model": "claude-3.5-sonnet",
+      "responsibilities": ["Agent Deployment", "Team Assembly", "Model Selection"],
+      "currentTask": null,
+      "taskProgress": 0
+    },
+    "chiefOfFinance": {
+      "id": "cfo",
+      "name": "Chief of Finance",
+      "role": "CFO / Cost Optimization",
+      "avatar": "CF",
+      "status": "idle",
+      "model": "gpt-4o-mini",
+      "responsibilities": ["Cost Tracking", "ROI Analysis", "Budget Allocation"],
+      "currentTask": null,
+      "taskProgress": 0
+    },
+    "departments": [
+      {
+        "id": "design",
+        "name": "Design Department",
+        "manager": {
+          "id": "design-mgr",
+          "name": "Design Manager",
+          "role": "Web Design Lead",
+          "avatar": "DM",
+          "status": "idle",
+          "model": "claude-3.5-sonnet",
+          "responsibilities": ["Website Design", "Template Library", "Quality Control"],
+          "currentTask": null,
+          "taskProgress": 0
+        },
+        "agents": [
+          {
+            "id": "researcher",
+            "name": "Researcher",
+            "role": "Lead Researcher",
+            "avatar": "RE",
+            "status": "idle",
+            "model": "perplexity",
+            "responsibilities": ["Scrape social media", "Analyze competitors", "Extract content"],
+            "currentTask": null,
+            "taskProgress": 0
+          },
+          {
+            "id": "template-copier",
+            "name": "Template Copier",
+            "role": "Template Engineer",
+            "avatar": "TC",
+            "status": "idle",
+            "model": "gpt-4o",
+            "responsibilities": ["Copy website designs", "Create reusable templates", "Maintain template library"],
+            "currentTask": null,
+            "taskProgress": 0
+          },
+          {
+            "id": "website-builder",
+            "name": "Website Builder",
+            "role": "Full-Stack Developer",
+            "avatar": "WB",
+            "status": "idle",
+            "model": "claude-3.5-sonnet",
+            "responsibilities": ["Build websites from templates", "Customize per research", "Deploy sites"],
+            "currentTask": null,
+            "taskProgress": 0
+          }
+        ]
+      },
+      {
+        "id": "leadgen",
+        "name": "Lead Generation",
+        "manager": {
+          "id": "leadgen-mgr",
+          "name": "Lead Gen Manager",
+          "role": "Sales Operations Lead",
+          "avatar": "LG",
+          "status": "idle",
+          "model": "gpt-4o",
+          "responsibilities": ["Lead Pipeline", "Coordination", "Conversion Tracking"],
+          "currentTask": null,
+          "taskProgress": 0
+        },
+        "agents": [
+          {
+            "id": "lead-finder",
+            "name": "Lead Finder",
+            "role": "Lead Scout",
+            "avatar": "LF",
+            "status": "idle",
+            "model": "perplexity",
+            "responsibilities": ["Scrape Apollo/LinkedIn", "Find Instagram prospects", "Build lead lists"],
+            "currentTask": null,
+            "taskProgress": 0
+          },
+          {
+            "id": "outreach-specialist",
+            "name": "Outreach Specialist",
+            "role": "Sales Development Rep",
+            "avatar": "OS",
+            "status": "idle",
+            "model": "claude-3.5-sonnet",
+            "responsibilities": ["Draft outreach messages", "Handle conversations", "Optimize scripts", "Schedule calls"],
+            "currentTask": null,
+            "taskProgress": 0
+          }
+        ]
+      }
+    ]
+  },
+  "workflows": [],
+  "metrics": {
+    "daily": { "websitesBuilt": 0, "leadsContacted": 0, "leadsQualified": 0, "callsScheduled": 0, "revenue": 0 },
+    "monthly": { "websitesBuilt": 0, "leadsContacted": 0, "conversionRate": 0, "revenue": 0 }
+  }
+}
