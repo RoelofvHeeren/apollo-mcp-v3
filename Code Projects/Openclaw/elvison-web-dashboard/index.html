@@ -1,224 +1,304 @@
 <!DOCTYPE html>
-<html class="h-full bg-slate-950" lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Mission Control - Elvison Claw</title>
-    <!-- BEGIN: Tailwind CSS & Plugins -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-          theme: {
-            extend: {
-              colors: {
-                brand: { teal: '#139187', dark: '#0a0a0a' },
-              },
-              backdropBlur: { 'glass': '20px' }
-            }
+
+<html class="h-full bg-slate-950" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mission Control - Elvison Claw</title>
+<!-- BEGIN: Tailwind CSS & Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- END: Tailwind CSS & Plugins -->
+<!-- BEGIN: Custom Configuration & Styles -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              teal: '#139187',
+              dark: '#0a0a0a',
+            },
+          },
+          backdropBlur: {
+            'glass': '20px',
           }
         }
-    </script>
-    <style>
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-        .glass-sidebar {
-            background: rgba(248, 250, 252, 0.95);
-            backdrop-filter: blur(10px);
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .active-nav {
-            background: rgba(19, 145, 135, 0.08) !important;
-            border: 1px solid rgba(19, 145, 135, 0.2) !important;
-            color: #139187 !important;
-        }
-        .glow-teal { box-shadow: 0 0 15px rgba(19, 145, 135, 0.4); }
-        .hidden { display: none !important; }
-    </style>
+      }
+    }
+  </script>
+<style data-purpose="glassmorphism">
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    .glass-sidebar {
+      background: rgba(248, 250, 252, 0.95);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .active-nav {
+      background: rgba(19, 145, 135, 0.08);
+      border: 1px solid rgba(19, 145, 135, 0.2);
+      color: #139187;
+    }
+    .glow-teal {
+      box-shadow: 0 0 15px rgba(19, 145, 135, 0.4);
+    }
+    /* Custom Scrollbar for the dark theme */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+  </style>
+<!-- END: Custom Configuration & Styles -->
 </head>
 <body class="h-full flex overflow-hidden font-sans antialiased text-slate-200">
-    
-    <!-- Video Backdrop from Elvison -->
-    <video id="bg-video" class="bg-video" autoplay muted loop playsinline>
-        <source src="background.mp4" type="video/mp4">
-    </video>
-    <div class="video-overlay"></div>
-
-    <!-- BEGIN: Sidebar -->
-    <aside class="w-64 glass-sidebar flex-shrink-0 flex flex-col h-full z-20" id="sidebar">
-        <div class="p-8 flex items-center space-x-3">
-            <div class="w-8 h-8 bg-black rounded flex items-center justify-center">
-                <i data-lucide="shield" class="w-5 h-5 text-white"></i>
-            </div>
-            <span class="text-black font-bold tracking-widest text-sm uppercase">Elvison Claw</span>
-        </div>
-        <nav class="flex-1 px-4 mt-4 space-y-2 overflow-y-auto" id="nav-list">
-            <a class="nav-item flex items-center px-4 py-3 rounded-xl active-nav transition-all duration-200" href="javascript:void(0)" onclick="showSection('overview')">
-                <i data-lucide="zap" class="w-5 h-5 mr-3"></i>
-                <span class="font-semibold">Pulse Dashboard</span>
-            </a>
-            <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="javascript:void(0)" onclick="showSection('command')">
-                <i data-lucide="terminal" class="w-5 h-5 mr-3"></i>
-                <span class="font-medium">Command Center</span>
-            </a>
-            <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="javascript:void(0)" onclick="showSection('hierarchy')">
-                <i data-lucide="users" class="w-5 h-5 mr-3"></i>
-                <span class="font-medium">Chain of Command</span>
-            </a>
-            <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="javascript:void(0)" onclick="showSection('architect')">
-                <i data-lucide="sparkles" class="w-5 h-5 mr-3"></i>
-                <span class="font-medium">AI Architect</span>
-            </a>
-            <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="javascript:void(0)" onclick="showSection('memory')">
-                <i data-lucide="database" class="w-5 h-5 mr-3"></i>
-                <span class="font-medium">Memory Vault</span>
-            </a>
-            <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="javascript:void(0)" onclick="showSection('agents')">
-                <i data-lucide="box" class="w-5 h-5 mr-3"></i>
-                <span class="font-medium">Claw Hub</span>
-            </a>
-        </nav>
-        <div class="p-4 border-t border-slate-200">
-            <div class="bg-slate-100 rounded-full px-4 py-2 flex items-center justify-between">
-                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">System Status</span>
-                <div class="flex items-center">
-                    <span class="text-[10px] font-bold text-brand-teal mr-2" id="status-text">NOMINAL</span>
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-teal opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-teal"></span>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </aside>
-
-    <!-- BEGIN: Main Content Stage -->
-    <main class="flex-1 relative overflow-hidden bg-brand-dark flex flex-col">
-        <!-- Background Gradients -->
-        <div class="absolute inset-0 z-0 pointer-events-none">
-            <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-brand-teal/10 rounded-full blur-[120px]"></div>
-        </div>
-
-        <!-- Header -->
-        <header class="relative z-10 px-10 pt-10 pb-6 flex justify-between items-end">
-            <div>
-                <h1 id="page-title" class="text-3xl font-light tracking-tight text-white">Mission Control</h1>
-                <p id="page-subtitle" class="text-slate-500 text-sm mt-1">Real-time neural monitoring & deployment oversight.</p>
-            </div>
-            <div class="flex space-x-4">
-                <div class="glass-card p-2 rounded-lg flex items-center space-x-2 border border-white/5">
-                    <div class="w-8 h-8 rounded-full bg-slate-800 border border-white/20 flex items-center justify-center font-bold text-[10px] text-white">EL</div>
-                    <div class="pr-2 text-left">
-                        <div class="text-[10px] font-bold leading-none">ELVISON CLAW</div>
-                        <div class="text-[9px] text-brand-teal leading-none mt-1 uppercase">Admin Access</div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <!-- --- SECTION: OVERVIEW --- -->
-        <div id="section-overview" class="section-content relative z-10 flex-1 p-10 grid grid-cols-3 grid-rows-[auto_1fr] gap-6">
-            <section class="glass-card rounded-3xl p-6 flex flex-col">
-                <div class="flex justify-between items-start mb-6">
-                    <h2 class="text-xs font-semibold text-white/80 uppercase tracking-wider">API Cost Audit</h2>
-                    <span class="text-brand-teal text-lg font-mono">$1,482.20</span>
-                </div>
-                <div class="space-y-6 flex-1">
-                    <div>
-                        <div class="flex justify-between text-[10px] mb-2 font-bold"><span class="text-slate-400 uppercase tracking-wide">Nexus-01</span><span class="text-white">$842.10</span></div>
-                        <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-brand-teal h-full rounded-full glow-teal w-3/4"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="glass-card rounded-3xl p-6 flex flex-col">
-                <h2 class="text-xs font-semibold text-white/80 uppercase tracking-wider mb-6">Task Pulse</h2>
-                <div class="grid grid-cols-1 gap-4 flex-1">
-                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-2xl">
-                        <div>
-                            <div class="text-2xl font-light text-white leading-none">248</div>
-                            <div class="text-[9px] text-brand-teal font-bold uppercase tracking-wider mt-1">Accomplished</div>
-                        </div>
-                        <div class="w-12 h-1 bg-white/10 rounded-full overflow-hidden"><div class="h-full bg-brand-teal w-3/4"></div></div>
-                    </div>
-                </div>
-            </section>
-            <section class="glass-card rounded-3xl p-6 flex flex-col">
-                <h2 class="text-xs font-semibold text-white/80 uppercase tracking-wider mb-6">Live Error Log</h2>
-                <div class="flex-1 space-y-3 overflow-y-auto custom-scrollbar">
-                    <div class="p-3 bg-red-500/5 border border-red-500/10 rounded-xl flex items-start space-x-3">
-                        <div class="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
-                        <div class="flex-1 text-left">
-                            <div class="flex justify-between font-bold"><span class="text-[9px] text-red-400 uppercase">Critical</span><span class="text-[9px] text-slate-500">14:22</span></div>
-                            <p class="text-[10px] text-slate-300 mt-0.5 leading-tight">Rate Limit Exceeded</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="col-span-3 glass-card rounded-3xl p-8 flex flex-col relative overflow-hidden group">
-                <div class="absolute -top-24 -left-24 w-48 h-48 bg-brand-teal/20 rounded-full blur-[60px] group-hover:bg-brand-teal/30 transition-all duration-700"></div>
-                <div class="relative z-10 text-left">
-                    <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Unified Neural Node Telemetry</h2>
-                    <p class="text-2xl font-light text-white leading-relaxed tracking-tight max-w-4xl">
-                        <span class="text-brand-teal font-medium">Hey Elvison,</span> we've successfully deployed the latest neural node update. Currently, we're optimizing the memory pool for Agent Alpha and indexing the Memory Vault.
-                    </p>
-                </div>
-            </section>
-        </div>
-
-        <!-- --- SECTION: COMMAND --- -->
-        <div id="section-command" class="section-content hidden relative z-10 flex-1 p-10 flex flex-col">
-            <div class="flex-1 glass-card rounded-[48px] overflow-hidden flex shadow-2xl backdrop-blur-3xl">
-                <!-- Agent Command Pane -->
-                <section class="flex-1 flex flex-col p-12 border-r border-white/5 relative">
-                    <div class="mb-10 flex flex-col gap-1">
-                        <h2 class="text-[10px] uppercase tracking-[0.3em] text-brand-teal font-black">Neural Interface</h2>
-                        <select id="agent-selector" class="mt-4 bg-white/5 border border-white/10 rounded-2xl py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-brand-teal outline-none transition-all focus:border-brand-teal/50">
-                            <option value="pm">Project Manager</option>
-                            <option value="cos">Chief of Staff</option>
-                        </select>
-                    </div>
-                    <div id="chat-feed" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 mb-8 pr-4 text-left"></div>
-                    <div class="relative mt-auto">
-                        <textarea id="agent-input" class="w-full bg-white/5 border border-white/10 rounded-[32px] py-6 px-8 pr-20 text-sm font-medium text-white placeholder:text-white/20 focus:outline-none focus:border-brand-teal transition-all resize-none" rows="1" placeholder="Type mission instructions..."></textarea>
-                        <button id="agent-send" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-brand-teal rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all text-white">
-                            <i data-lucide="send" class="w-5 h-5"></i>
-                        </button>
-                    </div>
-                </section>
-                <!-- VPS Terminal Pane -->
-                <section class="flex-1 flex flex-col p-12 bg-black/40">
-                    <h2 class="text-[10px] uppercase tracking-[0.3em] text-teal-400/50 font-black mb-10">Infrastructure Node</h2>
-                    <div id="terminal-output" class="flex-1 font-mono text-xs leading-relaxed overflow-y-auto custom-scrollbar pr-6 text-teal-400/80 mb-6 text-left"></div>
-                    <div class="flex items-center gap-4 font-mono text-xs bg-white/5 border border-white/10 p-4 rounded-2xl">
-                        <span class="text-teal-500 font-bold whitespace-nowrap">root@elvison:~$</span>
-                        <input type="text" id="vps-input" class="flex-1 bg-transparent border-none outline-none text-teal-400" placeholder="execute_command">
-                    </div>
-                </section>
-            </div>
-        </div>
-
-        <!-- --- SECTION: ARCHITECT --- -->
-        <div id="section-architect" class="section-content hidden relative z-10 flex-1 p-10 flex flex-col">
-            <div class="flex-1 glass-card rounded-[48px] p-12 flex flex-col backdrop-blur-3xl relative">
-                <div id="architect-chat-history" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 mb-8 pr-4 text-left"></div>
-                <div class="relative mt-auto">
-                    <input type="text" id="architect-input" class="w-full bg-white/5 border border-white/10 rounded-[40px] py-8 px-12 text-lg font-medium text-white placeholder:text-white/20 focus:outline-none focus:border-brand-teal transition-all shadow-2xl" placeholder="Instruct the architect...">
-                    <button id="architect-send" class="absolute right-6 top-1/2 -translate-y-1/2 w-16 h-16 bg-brand-teal rounded-[32px] flex items-center justify-center shadow-lg text-white"><i data-lucide="arrow-up" class="w-8 h-8"></i></button>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <script src="main.js"></script>
-    <script>lucide.createIcons();</script>
-</body>
-</html>
+<!-- BEGIN: Sidebar -->
+<aside class="w-64 glass-sidebar flex-shrink-0 flex flex-col h-full z-20" data-purpose="navigation-sidebar">
+<div class="p-8 flex items-center space-x-3">
+<!-- Logo Placeholder -->
+<div class="w-8 h-8 bg-black rounded flex items-center justify-center">
+<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<span class="text-black font-bold tracking-widest text-sm uppercase">Elvison Claw</span>
+</div>
+<nav class="flex-1 px-4 mt-4 space-y-2 overflow-y-auto">
+<a class="flex items-center px-4 py-3 rounded-xl active-nav transition-all duration-200" data-purpose="active-menu-item" href="#">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-semibold">Pulse Dashboard</span>
+</a>
+<a class="flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="#">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.75 17L9 21h6l-.75-4M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-medium">Command Center</span>
+</a>
+<a class="flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="#">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-medium">Chain of Command</span>
+</a>
+<a class="flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="#">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-medium">Operations</span>
+</a>
+<a class="flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="#">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-medium">Claw Hub</span>
+</a>
+<a class="flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="#">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-medium">Memory Vault</span>
+</a>
+<a class="flex items-center px-4 py-3 text-slate-500 hover:text-black hover:bg-slate-100 rounded-xl transition-all duration-200" href="#">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-medium">Core Engine</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200">
+<div class="bg-slate-100 rounded-full px-4 py-2 flex items-center justify-between">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">System Status</span>
+<div class="flex items-center">
+<span class="text-[10px] font-bold text-brand-teal mr-2">NOMINAL</span>
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-teal opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-brand-teal"></span>
+</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: Main Content Container -->
+<main class="flex-1 relative overflow-hidden bg-brand-dark flex flex-col" data-purpose="main-content">
+<!-- Background Gradient Grids -->
+<div class="absolute inset-0 z-0 pointer-events-none">
+<div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-brand-teal/10 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[100px]"></div>
+</div>
+<!-- Header / Title Area -->
+<header class="relative z-10 px-10 pt-10 pb-6 flex justify-between items-end">
+<div>
+<h1 class="text-3xl font-light tracking-tight text-white">Mission Control</h1>
+<p class="text-slate-500 text-sm mt-1">Real-time neural monitoring &amp; deployment oversight.</p>
+</div>
+<div class="flex space-x-4">
+<button class="glass-card px-4 py-2 rounded-lg text-xs font-semibold hover:bg-white/10 transition-colors uppercase tracking-widest border border-white/5">
+          Deploy New Agent
+        </button>
+<div class="glass-card p-2 rounded-lg flex items-center space-x-2 border border-white/5">
+<div class="w-8 h-8 rounded-full bg-slate-800 border border-white/20"></div>
+<div class="pr-2">
+<div class="text-[10px] font-bold leading-none">ELVISON CLAW</div>
+<div class="text-[9px] text-brand-teal leading-none mt-1 uppercase">Admin Access</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Grid -->
+<div class="relative z-10 flex-1 p-10 grid grid-cols-3 grid-rows-[auto_1fr] gap-6" data-purpose="dashboard-grid">
+<!-- TOP ROW: Box 1 - API Cost Breakdown -->
+<section class="glass-card rounded-3xl p-6 flex flex-col" data-purpose="api-cost-breakdown">
+<div class="flex justify-between items-start mb-6">
+<h2 class="text-xs font-semibold text-white/80 uppercase tracking-wider">API Cost Breakdown</h2>
+<span class="text-brand-teal text-lg font-mono">$1,482.20</span>
+</div>
+<div class="space-y-6 flex-1">
+<!-- Agent A -->
+<div>
+<div class="flex justify-between text-[10px] mb-2">
+<span class="text-slate-400 uppercase tracking-wide">Agent Alpha (GPT-4o)</span>
+<span class="text-white">$842.10</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-brand-teal h-full rounded-full glow-teal" style="width: 65%"></div>
+</div>
+</div>
+<!-- Agent B -->
+<div>
+<div class="flex justify-between text-[10px] mb-2">
+<span class="text-slate-400 uppercase tracking-wide">Agent Bravo (Claude 3.5)</span>
+<span class="text-white">$420.05</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-slate-400 h-full rounded-full" style="width: 35%"></div>
+</div>
+</div>
+<!-- Agent C -->
+<div>
+<div class="flex justify-between text-[10px] mb-2">
+<span class="text-slate-400 uppercase tracking-wide">Vision Node (Gemini 1.5)</span>
+<span class="text-white">$220.05</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-blue-400 h-full rounded-full" style="width: 15%"></div>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-white/5 text-[9px] text-slate-500 flex justify-between uppercase">
+<span>Cycle: 12 days left</span>
+<a class="text-brand-teal hover:underline" href="#">Invoices</a>
+</div>
+</section>
+<!-- TOP ROW: Box 2 - Task Overview -->
+<section class="glass-card rounded-3xl p-6 flex flex-col" data-purpose="task-overview">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xs font-semibold text-white/80 uppercase tracking-wider">Task Overview</h2>
+<div class="flex bg-white/5 p-1 rounded-lg">
+<button class="px-2 py-1 text-[9px] font-bold rounded-md bg-white/10 text-white uppercase">Today</button>
+<button class="px-2 py-1 text-[9px] font-bold rounded-md text-slate-500 hover:text-white uppercase">Weekly</button>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-4 flex-1">
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-2xl">
+<div>
+<div class="text-2xl font-light text-white leading-none">248</div>
+<div class="text-[9px] text-brand-teal font-bold uppercase tracking-wider mt-1">Accomplished</div>
+</div>
+<div class="w-12 h-1 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-brand-teal w-3/4"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-2xl">
+<div>
+<div class="text-2xl font-light text-white leading-none">12</div>
+<div class="text-[9px] text-blue-400 font-bold uppercase tracking-wider mt-1">Active Nodes</div>
+</div>
+<div class="w-12 h-1 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-blue-400 w-1/4 animate-pulse"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-2xl">
+<div>
+<div class="text-2xl font-light text-white leading-none">84</div>
+<div class="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-1">Scheduled</div>
+</div>
+<div class="w-12 h-1 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-slate-500 w-1/2"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- TOP ROW: Box 3 - System Errors -->
+<section class="glass-card rounded-3xl p-6 flex flex-col" data-purpose="system-errors">
+<h2 class="text-xs font-semibold text-white/80 uppercase tracking-wider mb-6">Live Error Log</h2>
+<div class="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar">
+<!-- Error Item -->
+<div class="p-3 bg-red-500/5 border border-red-500/10 rounded-xl flex items-start space-x-3">
+<div class="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-[9px] font-bold text-red-400 uppercase">Critical</span>
+<span class="text-[9px] text-slate-500">14:22</span>
+</div>
+<p class="text-[10px] text-slate-300 mt-0.5 leading-tight">Rate Limit Exceeded</p>
+</div>
+</div>
+<!-- Warning Item -->
+<div class="p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl flex items-start space-x-3">
+<div class="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-[9px] font-bold text-amber-400 uppercase">Warning</span>
+<span class="text-[9px] text-slate-500">14:15</span>
+</div>
+<p class="text-[10px] text-slate-300 mt-0.5 leading-tight">High Latency US-E1</p>
+</div>
+</div>
+<!-- Resolved Item -->
+<div class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-start space-x-3">
+<div class="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5"></div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-[9px] font-bold text-blue-400 uppercase">Resolved</span>
+<span class="text-[9px] text-slate-500">13:58</span>
+</div>
+<p class="text-[10px] text-slate-300 mt-0.5 leading-tight">DB Handshake OK</p>
+</div>
+</div>
+</div>
+</section>
+<!-- BOTTOM ROW: Full Width - System Report -->
+<section class="col-span-3 glass-card rounded-3xl p-8 flex flex-col" data-purpose="status-report">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h2 class="text-sm font-semibold text-white/80 uppercase tracking-widest">System Report</h2>
+<p class="text-[10px] text-slate-500 mt-1 uppercase tracking-tighter">Unified Neural Node Telemetry</p>
+</div>
+<div class="flex space-x-2">
+<button class="px-4 py-1.5 text-[10px] font-bold uppercase border border-brand-teal text-brand-teal rounded-lg bg-brand-teal/5 hover:bg-brand-teal/10 transition-colors">System</button>
+<button class="px-4 py-1.5 text-[10px] font-bold uppercase text-slate-500 hover:text-white transition-colors">Project</button>
+<button class="px-4 py-1.5 text-[10px] font-bold uppercase text-slate-500 hover:text-white transition-colors">Agent</button>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<div class="glass-card rounded-2xl p-10 relative overflow-hidden group">
+<!-- Subtle glow effect inside the text card -->
+<div class="absolute -top-24 -left-24 w-48 h-48 bg-brand-teal/20 rounded-full blur-[60px] group-hover:bg-brand-teal/30 transition-all duration-700"></div>
+<div class="relative z-10">
+<p class="text-xl md:text-2xl font-light text-white leading-relaxed tracking-tight">
+<span class="text-brand-teal font-medium">Hey Elvison,</span> we've successfully deployed the latest neural node update. Currently, we're working on optimizing the memory pool for Agent Alpha and indexing the Memory Vault. There's a slight latency increase in the US-East gateway that we should keep an eye on, but otherwise, everything is nominal.
+            </p>
+<div class="mt-8 flex items-center space-x-4">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-brand-teal glow-teal"></span>
+<span class="text-[10px] font-bold text-slate-300 uppercase tracking-[0.2em]">All Systems Nominal</span>
+</div>
+<div class="h-px w-12 bg-white/10"></div>
+<span class="text-[10px] text-slate-500 font-mono">TS-8842-X // LAST_SYNC: NOW</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- END: Main Content Container -->
+</body></html>
