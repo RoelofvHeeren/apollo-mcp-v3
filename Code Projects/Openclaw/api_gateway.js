@@ -211,13 +211,12 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws, req) => {
-    console.log(`New Dashboard WebSocket Connection: ${req.url}`);
+    console.log(`[WS RELAY] Dashboard connected: ${req.url}`);
     
-    // Connect to the internal OpenClaw Gateway
     const gatewayWs = new WebSocket(OPENCLAW_WS);
     
     gatewayWs.on('open', () => {
-        console.log('Successfully bridged to OpenClaw Gateway WS');
+        console.log('[WS RELAY] Successfully bridged to OpenClaw Engine');
     });
 
     gatewayWs.on('message', (data) => {
@@ -227,14 +226,24 @@ wss.on('connection', (ws, req) => {
     });
 
     ws.on('message', (data) => {
+        console.log(`[WS RELAY] Data from dashboard: ${data}`);
         if (gatewayWs.readyState === WebSocket.OPEN) {
             gatewayWs.send(data.toString());
+        } else {
+            console.warn('[WS RELAY] Gateway bridge not ready');
         }
     });
 
-    ws.on('close', () => gatewayWs.close());
-    gatewayWs.on('close', () => ws.close());
+    ws.on('close', () => {
+        console.log('[WS RELAY] Dashboard connection closed');
+        gatewayWs.close();
+    });
+
+    gatewayWs.on('close', () => {
+        console.log('[WS RELAY] Gateway bridge closed');
+        ws.close();
+    });
     
-    gatewayWs.on('error', (err) => console.error('Gateway WS Error:', err));
-    ws.on('error', (err) => console.error('Dashboard WS Error:', err));
+    gatewayWs.on('error', (err) => console.error('[WS RELAY] Gateway Error:', err.message));
+    ws.on('error', (err) => console.error('[WS RELAY] Dashboard Error:', err.message));
 });

@@ -242,11 +242,66 @@
                     <h1 class="text-4xl font-light tracking-tight text-white">Chain of Command</h1>
                     <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Strategic Agency Handoff // Operational Flow</p>
                 </div>
+                <div class="zoom-controls flex gap-4">
+                    <button class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-brand-teal/20 transition-all focus:outline-none" onclick="adjustZoom(0.1)"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                    <button class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-brand-teal/20 transition-all focus:outline-none" onclick="adjustZoom(-0.1)"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                </div>
             </header>
-            <div class="flex-1 bg-white/5 rounded-[48px] border border-white/10 overflow-hidden relative backdrop-blur-3xl p-12">
-                <!-- Implementation of Hierarchy Canvas -->
-                <div class="flex items-center justify-center h-full">
-                    <p class="text-white/20 italic">Visualizing Command Structure...</p>
+            <div class="flex-1 bg-white/5 rounded-[48px] border border-white/10 overflow-hidden relative backdrop-blur-3xl" id="hierarchy-viewport">
+                <!-- SVG Conduits Layer -->
+                <svg class="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible" id="conduit-svg"></svg>
+                
+                <div class="canvas relative origin-center h-full w-full flex items-center justify-center" id="hierarchy-canvas" style="transform: scale(0.8) translate(0px, 0px);">
+                    <!-- LEVEL 1: PROJECT MANAGER -->
+                    <div class="flex flex-col items-center">
+                        <div class="glass-card-white w-80 p-10 cursor-pointer relative !bg-white/5 border-white/10 !rounded-[48px] hover:!bg-white/10 transition-all shadow-2xl" id="node-PM" onclick="openAgentDeepDive('Project Manager')">
+                            <div class="port port-out" id="port-PM-out" style="bottom:-5px; left:50%; position:absolute;"></div>
+                            <span class="text-[10px] font-black text-brand-teal uppercase tracking-[0.3em] block mb-4">Level 01</span>
+                            <h3 class="text-2xl font-light mb-1 text-white">Project Manager</h3>
+                            <p class="text-[11px] text-white/40 mb-12 italic tracking-wide">Orchestration Hub</p>
+                            <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-brand-teal h-full rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <!-- LEVEL 2: C-SUITE -->
+                        <div class="flex gap-32 mt-40">
+                            <div class="glass-card-white w-72 p-10 cursor-pointer relative !bg-white/10 border-white/10 !rounded-[48px] hover:!bg-white/20 transition-all shadow-xl" id="node-COS" onclick="openAgentDeepDive('Chief of Staff')">
+                                 <div class="port port-in" id="port-COS-in" style="top:-5px; left:50%; position:absolute;"></div>
+                                 <span class="text-[10px] font-black text-white/30 uppercase tracking-widest block mb-2">Operations</span>
+                                 <h3 class="text-xl font-light mb-1 text-white">Chief of Staff</h3>
+                            </div>
+                            <div class="glass-card-white w-72 p-10 cursor-pointer relative !bg-white/10 border-white/10 !rounded-[48px] hover:!bg-white/20 transition-all shadow-xl" id="node-COF" onclick="openAgentDeepDive('Head of Finance')">
+                                <div class="port port-in" id="port-COF-in" style="top:-5px; left:50%; position:absolute;"></div>
+                                <span class="text-[10px] font-black text-white/30 uppercase tracking-widest block mb-2">Finance</span>
+                                <h3 class="text-xl font-light mb-1 text-white">Head of Finance</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- --- SECTION: AI ARCHITECT --- -->
+        <div id="section-architect" class="section-content hidden flex flex-col h-full">
+            <header class="relative z-10 pt-4 pb-8 flex justify-between items-end">
+                <div>
+                    <h1 class="text-4xl font-light tracking-tight text-white">AI Architect</h1>
+                    <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-widest font-bold">Neural Code Optimization & System Evolution</p>
+                </div>
+            </header>
+            <div class="flex-1 bg-white/5 rounded-[48px] border border-white/10 overflow-hidden p-12 flex flex-col backdrop-blur-3xl relative">
+                <div id="architect-chat-history" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 mb-8 pr-4">
+                    <div class="bg-white/5 p-10 rounded-[48px] rounded-tl-none border border-white/10 max-w-[80%] fade-in">
+                        <p class="text-lg text-white/90 leading-relaxed font-medium">Commander, I am Antigravity. I have direct access to our core VPS resources. What architectural evolution shall we initiate today?</p>
+                        <span class="text-[10px] text-white/20 mt-6 block font-black uppercase tracking-[0.2em]">NEURAL CORE // ANTIGRAVITY</span>
+                    </div>
+                </div>
+                <div class="relative mt-auto">
+                    <input type="text" id="architect-input" class="w-full bg-white/5 border border-white/10 rounded-[40px] py-8 px-12 text-lg font-medium text-white placeholder:text-white/20 focus:outline-none focus:border-brand-teal transition-all shadow-2xl" placeholder="Instruct the architect...">
+                    <button id="architect-send" class="absolute right-6 top-1/2 -translate-y-1/2 w-16 h-16 bg-brand-teal rounded-[32px] flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all text-white">
+                        <i data-lucide="arrow-up" class="w-8 h-8"></i>
+                    </button>
                 </div>
             </div>
         </div>
